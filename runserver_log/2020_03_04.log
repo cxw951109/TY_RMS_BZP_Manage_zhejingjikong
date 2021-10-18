@@ -1,0 +1,8 @@
+具体时间:[2020-03-04 09:34:42,130][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2020-03-04 12:14:05,607][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+

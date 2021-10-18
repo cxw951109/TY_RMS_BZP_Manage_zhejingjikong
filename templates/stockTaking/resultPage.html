@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+    th,td{
+        white-space:nowrap;
+    }
+</style>
+
+<div class="ibox float-e-margins">
+
+ <div class="mail-box-header">
+
+        <h2 style="text-align: center">经核对库存数量有误的类别如下</h2>
+     <div class="mail-tools tooltip-demo">
+         <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新日志列表">
+             <i class="fa fa-refresh"></i> 刷新
+         </button>
+
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableDrugRecord" data-placement="top" title="查看流转记录">
+                <i class="fa fa-eye"> 查看流转记录</i>
+            </button>
+        </div>
+    </div>
+            <div class="col-sm-12">
+                <table   id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>模板ID</th>
+                            <th>类别</th>
+                            <th>纯度</th>
+                            <th>错误数量(瓶)</th>
+                            <th>库存数量(瓶)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+{% load static %}
+
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        var storage = window.localStorage;
+        var stockData = storage['stockData'];
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            "bPaginate": true,
+           ajax: {
+                url: " {% url 'stockTaking:getResultListJson' %}",
+               type: 'POST',
+                data: { stockData: stockData },
+                dataSrc: 'data',
+            },
+            columns: [
+            { data: 'VarietyId' },
+            { data: 'name' },
+            { data: 'Purity' },
+            { data: 'error_number' },
+            { data: 'value' },
+            ],
+            columnDefs: [
+                    {
+                        "targets": [0],
+                        "visible": false
+                    }
+            ]
+        });
+        $('#btnTableReload').click(function () {
+           location.href = '{% url 'stockTaking:resultPage' %}'
+        });
+
+         $("#btnTableDrugRecord").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要查看的数据！");
+                return;
+            }
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "类别“" + selectRow.name + "”的流转记录",
+                shift: 2,
+                type: 2,
+                area: ['900px', '565px'],
+                //
+                content: ['/home/homeDrugRecord/?VarietyId=' + selectRow.VarietyId],
+                end:function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                }
+            });
+        });
+
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+
+
+{% endblock %}

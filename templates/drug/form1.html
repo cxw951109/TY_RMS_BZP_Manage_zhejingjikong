@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+</style>
+{% load static %}
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <input type="hidden" id="drug_id" value="{{ drug_obj.MedicamentId }}">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_host">条码编号*</label>
+            <div class="col-sm-4">
+                <input class="form-control" disabled="disabled" type="text" required="required" value="{% firstof drug_obj.BarCode '' %}" />
+                <input class="form-control" id="RFID" name="RFID" type="hidden" value="{% firstof drug_obj.BarCode '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_name">CAS码*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="CASNumber" name="CASNumber" required="required" type="text" value="{% firstof drug_obj.CASNumber '' %}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">试剂名称*</label>
+            <div class="col-sm-4">
+                <input class="form-control" disabled="disabled" id="Name" name="Name" required="required" type="text" value="{% firstof drug_obj.Name '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">英文名称*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="EnglishName" name="EnglishName" required="required" type="text" value="{% firstof drug_obj.EnglishName '' %}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">纯度*</label>
+            <div class="col-sm-4">
+                <input class="form-control" disabled="disabled" id="purity" type="text" required="required" value="{% firstof drug_obj.Purity '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">生产日期*</label>
+            <div class="col-sm-4">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" id="ProductionDate" name="ProductionDate" required="required" value="{% firstof drug_obj.ProductionDate '' %}" data-mask="9999-99-99">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">过期日期*</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="ExpirationDate" name="ExpirationDate" required="required" value="{% firstof drug_obj.ExpirationDate '' %}" data-mask="9999-99-99" readonly>
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">保质期*</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" id="ShelfLife" name="ShelfLife" oninput="this.value=this.value.replace(/[^0-9]+/,'');" type="number" required="required" value="{% firstof drug_obj.ShelfLife '' %}" />
+                    <span class="input-group-addon">天</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_password">生产厂商</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Manufacturer" name="Manufacturer" type="text" value="{% firstof drug_obj.Manufacturer '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">经销商</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Distributor" name="Distributor" type="text" value="{% firstof drug_obj.Distributor '' %}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">进价</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" id="Price" oninput="this.value=this.value.replace(/[^0-9.]+/,'');" name="Price" type="number" step="0.01"  value="{% firstof drug_obj.Price '0' %}" />
+                    <span class="input-group-addon">元</span>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">说明1</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark1" name="Remark1" type="text" value="{% firstof drug_obj.Remark1 '' %}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_password">说明2</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark2" name="Remark2" type="text" value="{% firstof drug_obj.Remark2 '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">说明3</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark3" name="Remark3" type="text" value="{% firstof drug_obj.Remark3 '' %}" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-sm-2 control-label" for="ds_password">是否监管</label>
+            <div class="col-sm-4">
+                {% if drug_obj.IsSupervise == 1 %}
+
+                        <input type="checkbox" class="js-switch_2" id="IsSuperviseSwich" checked />
+                {% else %}
+                        <input type="checkbox" class="js-switch_2" id="IsSuperviseSwich" />
+
+
+                {% endif %}
+                <input type="hidden" id="IsSupervise" name="IsSupervise" value="{{ drug_obj.IsSupervise }}" />
+
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username"></label>
+            <div class="col-sm-4">
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2">
+                <button class="btn btn-primary" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $("#IsSuperviseSwich").change(function () {
+            $("#IsSupervise").val($("#IsSuperviseSwich").is(":checked") ? 1 : 0);
+        });
+        $(".myForm").submit(function () {
+         /*   let eng = $('#EnglishName').val();
+            let reg = /^[a-zA-Z 0-9]+$/;
+            if(!reg.test(eng)){
+               msg('请输入英文名! ');
+                return false
+            }   */
+
+            var loadIndex = layer.load(2);
+            $.post("/drug/" + $('#drug_id').val()  + "/form/", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败");
+                }
+            });
+            return false;
+        });
+        $('#ShelfLife').blur(function () {
+            var ShelfLife = $('#ShelfLife').val();
+            var ProductionDate = $('#ProductionDate').val();
+            var beginDate = new Date(Date.parse(ProductionDate.replace(/-/g, '/')));
+            var date1 = Date.parse(ProductionDate.replace(/-/g, '/'))  + Number(ShelfLife) * 24 * 60 * 60 * 1000
+             Date.prototype.format= function (fmt) { // author: meizz
+                  var o = {
+                    "M+": this.getMonth() + 1, // 月份
+                    "d+": this.getDate(), // 日
+                    "h+": this.getHours(), // 小时
+                    "m+": this.getMinutes(), // 分
+                    "s+": this.getSeconds(), // 秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+                    "S": this.getMilliseconds() // 毫秒
+                  };
+                  if (/(y+)/.test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                  for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                  return fmt;
+             };
+            // 计算生产时间 和保质期的天数 得到 过期日期
+            commonTime = new Date( date1 ) .format('yyyy-MM-dd');
+            $('#ExpirationDate').val(commonTime)
+
+        });
+
+         $('#ProductionDate').change(function () {
+            var ShelfLife = $('#ShelfLife').val();
+            var ProductionDate = $('#ProductionDate').val();
+            var beginDate = new Date(Date.parse(ProductionDate.replace(/-/g, '/')));
+            var date1 = Date.parse(ProductionDate.replace(/-/g, '/'))  + Number(ShelfLife) * 24 * 60 * 60 * 1000
+             Date.prototype.format= function (fmt) { // author: meizz
+                  var o = {
+                    "M+": this.getMonth() + 1, // 月份
+                    "d+": this.getDate(), // 日
+                    "h+": this.getHours(), // 小时
+                    "m+": this.getMinutes(), // 分
+                    "s+": this.getSeconds(), // 秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+                    "S": this.getMilliseconds() // 毫秒
+                  };
+                  if (/(y+)/.test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                  for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                  return fmt;
+             };
+            // 计算生产时间 和保质期的天数 得到 过期日期
+            commonTime = new Date( date1 ) .format('yyyy-MM-dd');
+            $('#ExpirationDate').val(commonTime)
+
+        });
+
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+{% endblock %}

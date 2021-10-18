@@ -1,0 +1,40 @@
+具体时间:[2021-05-27 10:08:52,109][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-05-27 10:08:52,472][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-05-27 10:08:53,730][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-05-27 10:15:33,744][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-05-27 10:15:36,118][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-05-27 10:39:01,604][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-05-27 11:21:54,794][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-05-27 11:22:34,229][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-05-27 22:42:17,123][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-05-27 22:42:20,786][default:INFO(181)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_BZP_Manage_yanshi_new\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+

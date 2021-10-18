@@ -1,0 +1,237 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="MedicamentId" type="hidden" value="{{ drug_obj.MedicamentId }}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">条码编号*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="BarCode" readonly value="{% firstof drug_obj.BarCode '' %}" lay-verify="required" placeholder="条码编号" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">CAS码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CASNumber" value="{% firstof drug_obj.CASNumber '' %}" placeholder="CAS码" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">试剂名称*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Name" value="{% firstof drug_obj.Name '' %}" lay-verify="required" placeholder="请输入试剂名称" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">英文名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="EnglishName" value="{% firstof drug_obj.EnglishName '' %}" placeholder="请输入英文名称" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">证书图片</label>
+        <div class="layui-input-inline" style="width:290px">
+            <input type="text" name="ImageUrl" id="ImageUrl" readonly value="{% firstof drug_obj.ImageUrl '' %}"  placeholder="请上传证书图片" autocomplete="off"
+                class="layui-input">
+
+        </div>
+        <div class="layui-btn-container">
+            <button type="button" class="layui-btn layui-btn-primary" id="btnPhotograph">拍照上传</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="btnViewPicture" >查看图片</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">纯度*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Purity" value="{% firstof drug_obj.Purity '' %}" lay-verify="required" placeholder="请输入纯度" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">进价</label>
+        <div class="layui-input-inline" style="width: 130px;">
+            <input type="text" name="Price" value="{% firstof drug_obj.Price '' %}" placeholder="请输入进价" autocomplete="off"
+                class="layui-input">
+            
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="width: 50px;">单位元</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">生产日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ProductionDate" value="{% firstof drug_obj.ProductionDate '' %}"  placeholder="请输入生产日期" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">过期日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ExpirationDate" value="{% firstof drug_obj.ExpirationDate '' %}"  placeholder="请输入过期日期" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">生产厂商</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Manufacturer" value="{% firstof drug_obj.Manufacturer '' %}" placeholder="请输入生产厂商" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">经销商</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Distributor" value="{% firstof drug_obj.Distributor '' %}" placeholder="请输入经销商" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">说明1</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Remark1" value="{% firstof drug_obj.Remark1 '' %}" lay-verify="required" placeholder="请输入说明1" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">说明2</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Remark2" value="{% firstof drug_obj.Remark2 '' %}" lay-verify="required" placeholder="请输入说明2" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">说明3</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Remark3" value="{% firstof drug_obj.Remark3 '' %}" lay-verify="required" placeholder="请输入说明3" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">申请理由</label>
+        <div class="layui-input-block">
+          <textarea type="text" name="Description" autocomplete="off" class="layui-textarea"></textarea>
+        </div>
+      </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</form>
+<div id="approveContent" class="layui-hide">
+    <style>
+        #approveContentTable .laytable-cell-1-0-1{
+            width: 230px !important;
+        }
+    </style>
+    <table class="layui-hide" id="approveContentTable" lay-filter="approveContentTable"></table>
+</div>
+<script>
+    var updateData=[];
+    var table=null;
+    layui.use(['table', 'form'], function(){
+        table = layui.table;
+        var form = layui.form;
+        table.render({
+            elem: '#approveContentTable'
+            ,data: updateData
+            ,height: 280
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,defaultToolbar: []
+            ,title: '用户数据表'
+            ,cols: [[
+            {type:'numbers'}
+            ,{field:'updateField', width:150, title: '修改项'}
+            ,{field:'oldValue', width:200, title: '原始值'}
+            ,{field:'newValue', width:200, title: '修改值'}
+            ]]
+        });
+    });
+</script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var staticPath="{% static '/' %}";
+    layui.use(['index', 'form'], function () {
+        var model = {};
+        var modelArray = $("#layuiadmin-form-admin").serializeArray();
+        $.each(modelArray, function() {
+            model[this.name] = this.value;
+        });
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            updateData=[];
+            var fieldData= obj.field;
+            var updateCount=0;
+        　　for(var key in fieldData){
+                if(key=="Description")
+                {
+                    continue;
+                }
+                if(fieldData[key] !=model[key])
+                {
+                    updateCount+=1;
+                    var fieldName= $("input[name="+key+"]").parent().prev().text();
+                    updateData.unshift({"updateField":fieldName,"oldValue":model[key],"newValue":fieldData[key]})
+                    table.reload('approveContentTable',{data:updateData});
+                }
+
+        　　}
+            if(updateCount==0)
+            {
+                layer.msg("未做任何更改，不能提交申请！");
+                return false;
+            }
+            fieldData.approveContent=$("#approveContent").html();
+            //提交修改
+            $.post("{% url 'drug_form' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("提交申请成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("申请失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+        
+        $("#btnPhotograph").click(function(){
+            top.layer.open({
+                type: 2
+                ,title: '签字验收单拍照上传'
+                ,content: "{% url 'standard:photographForm' %}"
+                ,area: ['800px', '630px']
+                ,shade: [0.1, '#000']
+                ,offset: '30px'
+                ,btn: ['保存', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                    var submitID = 'LAY-user-front-submit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                    // //监听提交
+                    // iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+
+                    //     // form.render();
+                    //     layer.close(index); //关闭弹层
+                    //     // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                    //     // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                    //     // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                    //     // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                    // });  
+                    submit.trigger('click');
+                }
+                ,end:function(){
+                    var photographDataSrc= sessionStorage.getItem("photographDataSrc");
+                    if(photographDataSrc!=null)
+                    {
+                        var psrc=staticPath+photographDataSrc;
+                        $("#ImageUrl").val(psrc);
+                        sessionStorage.removeItem("photographDataSrc")             
+                    }
+                }        
+            }); 
+        });
+        $("#btnViewPicture").click(function(){
+            layer.photos({
+                photos: { "data": [{"src": $("#ImageUrl").val()}] }
+                ,offset:'auto'
+            });
+        });
+    })
+</script>
+{% endblock %}

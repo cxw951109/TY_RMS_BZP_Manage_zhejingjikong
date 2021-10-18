@@ -1,0 +1,28 @@
+具体时间:[2019-05-19 19:30:42,822][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-05-19 19:30:43,371][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-05-19 19:30:50,907][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-05-19 20:02:04,944][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-05-19 20:02:05,234][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-05-19 20:02:12,457][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-05-19 20:51:12,555][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+

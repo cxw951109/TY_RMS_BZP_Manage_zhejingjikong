@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% load static %}
+<script src="{% static 'js/plugins/echarts/echarts.min.js' %}"></script>
+<script src="{% static '/js/plugins/echarts/shine.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+</style>
+<div style="width:100%;height:100%;padding:10px">
+    <div class="chart-title" style="height:30px;margin-bottom:10px;position:relative">
+        <div class="input-group" style="position:absolute;right:5px">
+            <select required="required" id="sYear" class="chosen-select" style="width:130px;height: 35px">
+                        {% for year in nearly_three_year %}
+                        <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+
+            </select>&nbsp;
+
+        </div>
+    </div>
+    <div class="echarts" id="echarts" style="width:100%"></div>
+</div>
+
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#echarts").height($(document).height() - $(".chart-title").height() - 50)
+        SetChart($("#sYear").val(), $("#sMonth").val());
+        $("#sYear").change(function () {
+            SetChart($("#sYear").val(), $("#sMonth").val());
+        });
+        $("#sMonth").change(function () {
+            SetChart($("#sYear").val(), $("#sMonth").val());
+        })
+
+    });
+    function SetChart(year,month)
+    {
+
+        var lineChart = echarts.init(document.getElementById("echarts"), "shine");
+        $.get('/dataReport/getDrugRecordChartJson/', { year: year, month: month }, function (obj) {
+            option = {
+                title: {
+                    text: '试剂流转记录统计',
+                    subtext: ''
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['入库', '领用', '归还']
+                },
+                //toolbox: {
+                //    show: true,
+                //    feature: {
+                //        dataZoom: {
+                //            yAxisIndex: 'none'
+                //        },
+                //        dataView: { readOnly: false },
+                //        magicType: { type: ['line', 'bar'] },
+                //        restore: {},
+                //        saveAsImage: {}
+                //    }
+                //},
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: obj.data.xAxisList,
+                    axisLabel: {
+                        interval: 0,//横轴信息全部显示
+                        rotate: -30,//-30度角倾斜显示
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        formatter: '{value} 瓶'
+                    }
+                },
+                series: [
+                    {
+                        name: '入库',
+                        type: 'line',
+                        data: obj.data.putInCountList,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' },
+                                { type: 'average', name: '平均值' }
+                            ]
+                        }
+                    },
+                    {
+                        name: '领用',
+                        type: 'line',
+                        data: obj.data.useCountList,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        },
+                        markLine: {
+
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' },
+                                { type: 'average', name: '平均值' }
+                            ]
+                        }
+                    },
+                    {
+                        name: '归还',
+                        type: 'line',
+                        data: obj.data.returnCountList,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' }
+                            ]
+                        },
+                        markLine: {
+                            data: [
+                                { type: 'max', name: '最大值' },
+                                { type: 'min', name: '最小值' },
+                                { type: 'average', name: '平均值' }
+                            ]
+                        }
+                    }
+                ]
+            };
+            var lineoption = option;
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        });
+
+
+    }
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,174 @@
+::-webkit-scrollbar-track {
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #999;
+}
+.fa:before{
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
+
+/****** Bootstrap 按钮样式开始 ******/
+
+.boot-btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+
+.boot-btn-default:focus, .boot-btn-default.focus {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #8c8c8c;
+}
+
+.boot-btn-default:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+.boot-btn-default:active, .boot-btn-default.active, .open>.dropdown-toggle.boot-btn-default {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+
+.boot-btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
+.boot-btn-primary:focus, .boot-btn-primary.focus {
+    color: #fff;
+    background-color: #286090;
+    border-color: #122b40;
+}
+
+.boot-btn-primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+.boot-btn-primary:active, .boot-btn-primary.active, .open>.dropdown-toggle.boot-btn-primary {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+
+.boot-btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+
+.boot-btn-success:focus, .boot-btn-success.focus {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #255625;
+}
+
+.boot-btn-success:hover {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.boot-btn-success:active, .boot-btn-success.active, .open>.dropdown-toggle.boot-btn-success {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+
+.boot-btn-info {
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+
+.boot-btn-info:focus, .boot-btn-info.focus {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #1b6d85;
+}
+
+.boot-btn-info:hover {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #269abc;
+}
+
+.boot-btn-info:active, .boot-btn-info.active, .open>.dropdown-toggle.boot-btn-info {
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #269abc;
+}
+
+.boot-btn-warning {
+    color: #fff;
+    background-color: #f0ad4e;
+    border-color: #eea236;
+}
+
+.boot-btn-warning:focus, .boot-btn-warning.focus {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #985f0d;
+}
+
+.boot-btn-warning:hover {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+
+.boot-btn-warning:active, .boot-btn-warning.active, .open>.dropdown-toggle.boot-btn-warning {
+    color: #fff;
+    background-color: #ec971f;
+    border-color: #d58512;
+}
+
+.boot-btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+
+.boot-btn-danger:focus, .boot-btn-danger.focus {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #761c19;
+}
+
+.boot-btn-danger:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.boot-btn-danger:active, .boot-btn-danger.active, .open>.dropdown-toggle.boot-btn-danger {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+
+.boot-btn-link, .boot-btn-link:hover, .boot-btn-link:focus, .boot-btn-link:active {
+    border-color: transparent;
+}
+
+.boot-btn-link:hover, .boot-btn-link:focus {
+    color: #23527c;
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+/****** Bootstrap 按钮样式结束 ******/

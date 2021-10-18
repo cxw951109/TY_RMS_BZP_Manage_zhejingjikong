@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+<style type="text/css">
+    .layui-form-item {
+        width: 10px;
+        height: ;
+
+    }
+
+</style>
+
+{% block content %}
+    <div class="ibox-content" style="height:520px;padding:20px 20px 20px 20px;">
+        <h3>药剂基本信息</h3>
+        <form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 20px 20px 20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">条码编号:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.BarCode '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">C&nbsp;A&nbsp;S&ensp;码:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.CASNumber '' %}</spen></label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">试剂名称:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Name '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">英文名称:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.EnglishName '' %}</spen></label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">纯&emsp;&emsp;度:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Purity '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">试剂规格:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Speci '' %}</spen></label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">生产日期:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.ProductionDate '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">保&ensp;质&ensp;期:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.ShelfLife '' %}</spen></label>
+            </div>
+        
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">生产厂商:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Manufacturer '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">经&ensp;销&ensp;商:<spen style="font-weight:normal; padding-left:10px; display: inline-block;"></spen></label>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">入库时间:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.PutInDate '' %}</spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">出库状态</spen>&nbsp;&nbsp;&nbsp;<button type="button" onclick="do_guihuan()" class="btn btn-default">点击归还</button></label>
+            </div>
+
+        </form>
+        <hr>
+        <h3>药剂流转记录</h3>
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+            <tr>
+                <th>试剂条码编号</th>
+                <th>CAS码</th>
+                <th>试剂名称</th>
+                <th>纯度</th>
+                <th>操作时间</th>
+                <th>操作类型</th>
+                <th>操作人</th>
+                <th>位置</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/warning.js' %}"></script>
+
+    <script type="text/javascript">
+
+
+        $(function () {
+
+            var tableModel = $('#dataTableModel').DataTable({
+                searching: false,
+                lengthChange: false,
+                select: true,
+                order: [4, 'desc'],
+                "bPaginate": true,
+                iDisplayLength: 10,
+                "info": true,
+                "scrollY": "460px",
+                "scrollCollapse": true,
+                ajax: {
+                    url: "{% url 'home:getRecordTypeDrugRecordListJson' %}",
+                    data: {recordType: '{{ recordType }}', BarCode: '{{ BarCode }}', varietyId: '{{ varietyId }}'},
+                    dataSrc: 'data',
+                },
+                columns: [
+                    {data: 'BarCode'},
+                    {data: 'CASNumber'},
+                    {data: 'Name'},
+                    {data: 'Purity'},
+                    {data: 'CreateDate'},
+                    {data: 'RecordType'},
+                    {data: 'CreateUserName'},
+                    {data: 'Place'}
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    $(row).children('td').eq(4).html(get_date(data.CreateDate));
+                    $(row).children('td').eq(5).html(get_recordType(data.RecordType));
+                    $(row).children('td').eq(7).html(data.ClientCode ? data.ClientCode + '号终端' + (data.Place ? data.Place : '') : '')
+                }
+
+            });
+
+            function get_recordType(params) {
+                switch (params) {
+                    case 1:
+                        return '入库';
+                    case 2:
+                        return '领用';
+                    case 3:
+                        return '归还';
+                }
+            }
+
+            // 格式化sqlAlchemy的时间格式
+            function get_date(params) {
+                if (params) {
+                    return params.replace('T', ' ')
+                }
+            }
+
+        });
+        function do_guihuan(){
+
+top.layer.open({
+type: 2
+, title: '试剂归还存放示意'
+, content: "{% url 'keyCabinet:mapFlowView' %}"
+, area: ['1100px', '600px']
+, btn: []
+//   , yes: function (index, layero) {
+//     // var submitID = 'LAY-user-front-submit'
+//     //   , submit = layero.find('iframe').contents().find('#' + submitID);
+//     // submit.trigger('click');
+//     layero.find('iframe')[0].contentWindow.location.reload(true);
+//   },cancel:function(){
+//     // alert("fdfdf1");
+//   }
+, end: function () {
+waitUseList = [];
+table.reload('LAY-datatable'); //数据刷新
+table.reload('LAY-datatable-use', { data: waitUseList });
+}
+});
+}
+    </script>
+
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="ibox-content animated wobble" style="height:520px;padding:5px">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th width="100">条码编号</th>
+                    <th width="100">CAS码</th>
+                    <th width="100">中文名称</th>
+                    <th width="100">英文名称</th>
+                    <th width="100">纯度</th>
+                    <th width="100">余量</th>
+                    <th width="100">操作人员</th>
+                    <th width="100">操作类型</th>
+                    <th width="100">目前状态</th>
+                    <th width="100">位置</th>
+                    <th width="100">记录时间</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>条码编号</th>
+                    <th>CAS码</th>
+                    <th>中文名称</th>
+                    <th>英文名称</th>
+                    <th>纯度</th>
+                    <th>余量</th>
+                    <th>操作人员</th>
+                    <th>操作类型</th>
+                    <th>目前状态</th>
+                    <th>位置</th>
+                    <th>记录时间</th>
+                </tr>
+            </tfoot>
+        </table>
+
+</div>
+    {% load static %}
+    <script src="{% static 'js/warning.js' %}"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+         var tableModel = $('#dataTableModel').DataTable({
+            //searching: false,
+            lengthChange: false,
+            select: true,
+            "scrollX": true,
+             scrollY:400,
+            "scrollCollapse": true,
+            "ordering": false,
+            bAutoWidth: false,
+            ajax: {
+                url: '{% url 'home:homeDescriptionJson' %}',
+                data: { CreateUserName: '{{ CreateUserName }}',startDate:'{{ startDate }}',endDate:'{{ endDate }}'},
+                dataSrc: 'data',
+
+            },
+            columns: [
+            { data: 'BarCode' },
+            { data: 'CASNumber' },
+            { data: 'Name' },
+            { data: 'EnglishName' },
+            { data: 'Purity' },
+            { data: 'RecordRemain' },
+            { data: 'CreateUserName' },
+            { data: 'RecordType' },
+            { data: 'Status' },
+            { data: 'Place' },
+            { data: 'CreateDate' },
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(10).html(format_date(data.CreateDate));
+                $(row).children('td').eq(7).html(formatRecordType(data.RecordType));
+                $(row).children('td').eq(8).html(formatStatus(data.Status));
+                $(row).children('td').eq(9).html(data.ClientCode?data.ClientCode + '号终端' + (data.Place?data.Place:''):'')
+            }
+
+        });
+
+         function format_date(date1) {
+            return date1.replace('T', ' ')
+        }
+
+        function formatRecordType(params) {
+            switch (params) {
+                case 1:
+                    return '入库';
+                case 2:
+                    return '领用';
+                case 3:
+                    return '归还';
+                default:
+                    return params
+            }
+
+        }
+
+         function formatStatus(params) {
+            switch (params) {
+                case 1:
+                    return '在库';
+                case 2:
+                    return '出库';
+                case 3:
+                    return '空瓶';
+                case 5:
+                return '预备入库';
+                default:
+                    return params
+            }
+        }
+    });
+</script>
+{% endblock %}

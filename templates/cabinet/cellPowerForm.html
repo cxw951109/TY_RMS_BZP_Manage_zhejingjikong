@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static  %}
+<style type="text/css">
+    .todo-list li {
+
+        width:190px;
+        float:left;
+        margin-right:8px;
+        padding-right:2px;
+
+    }
+
+</style>
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <div class="ibox-content" style="height:500px">
+            <div>
+                <!-- <h2 style="float:left">用户列表</h2> -->
+                <input class="form-control" type="hidden" id="ClientId" value="{{ ClientId }}" />
+
+                <div class="input-group" style="width:300px; float:right">
+                    <input type="text" class="form-control input-sm" id="searchValue" name="searchValue" value="{{ searchValue }}" placeholder="搜索用户名称、工号">
+                    <div class="input-group-btn">
+                        <button type="button" id="btnTableSearch" class="btn btn-sm btn-primary">
+                            搜索
+                        </button>
+                    </div>
+                </div>
+                <div class="input-group" style="width:300px; float:left">
+                    <span class="input-group-addon"> &nbsp;&nbsp;抽屉：</span>
+                    <select data-placeholder="选择抽屉..." id="cabinetCellSelect" required="required" class="chosen-select" style="width:200px;height:20px">
+                        <option value="1">1层左侧</option>
+                        <option value="2">1层右侧</option>
+                        <option value="3">2层左侧</option>
+                        <option value="4">2层右侧</option>
+                        <option value="5">3层左侧</option>
+                        <option value="6">3层右侧</option>
+                        <option value="7">4层左侧</option>
+                        <option value="8">4层右侧</option>
+                        <option value="9">5层左侧</option>
+                        <option value="10">5层右侧</option>
+                        <option value="11">6层左侧</option>
+                        <option value="12">6层右侧</option>
+                    </select>
+                </div>
+                <div style="clear:both"></div>
+                <div class="col-md-12">
+                <input type="checkbox" id="all_checked"  style=""> &nbsp;&nbsp;全选
+                </div>
+            </div>
+            <input class="form-control" type="hidden" id="UserId" value="@ViewBag.UserId" />
+
+            <ul class="todo-list m-t" id="userCheckList" style="height:280px;overflow-y:scroll">
+
+                {% for user in user_list %}
+                    {% if user.IsEnabled %}
+                        <li>
+                            <input type="checkbox" value="{{ user.UserId }}" class="power i-checks">
+                            <span class="m-l-xs">{{ user.RealName }}({{ user.UserCode }})</span>
+                        </li>
+
+                    {% endif %}
+                {% endfor %}
+
+                <!-- @*<li>
+                        <input type="checkbox" value="" name="" class="i-checks" checked />
+                        <span class="m-l-xs">试剂领用</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="" name="" class="i-checks" />
+                        <span class="m-l-xs">试剂归还</span>
+                    </li>*@ -->
+            </ul>
+        </div>
+        <div style="position:absolute; left:13px; bottom:10px;width:832px">
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button class="btn btn-primary" id="saveData" type="submit">保存当前抽屉权限设置</button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $(".chosen-select").chosen({
+        no_results_text: "没有找到",
+        disable_search: true,
+        allow_single_deselect: true
+        });
+        $("#cabinetCellSelect").change(function(){
+            $("#userCheckList input").prop("checked",false);
+            $.get('{% url 'cabinet:getCabinetCellPowerListJson' %}'+'?clientId='+$("#ClientId").val()+'&clientCellCode='+$(this).val(),function(data){
+                $(data.data).each(function(index,obj){
+                    $("#userCheckList input[value="+obj+"]").prop("checked",true);
+
+                });
+
+            });
+        });
+        $("#cabinetCellSelect").trigger("change");
+        $("#searchValue").keyup(function () {
+            $(".todo-list .m-l-xs").each(function () {
+
+                if ($(this).text().indexOf($("#searchValue").val()) == -1) {
+                    $(this).parent().hide();
+                }
+                else {
+                    $(this).parent().show();
+                }
+            })
+
+        })
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            var powerValue = "";
+            $(".power:checked").each(function (index, obj) {
+                if (powerValue != "") {
+                    powerValue += ",";
+                }
+                powerValue += $(".power:checked").eq(index).val();
+            });
+
+            $.post('{% url 'cabinet:saveCellPowerData' %}', { clientId: $("#ClientId").val(),clientCellCode:$('#cabinetCellSelect').val(), powerValue: powerValue }, function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("当前抽屉权限保存成功", function () {
+
+                    });
+                }
+                else {
+                    msg("保存失败");
+                }
+            });
+            return false;
+        });
+
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+        $('#all_checked').click(function () {
+                flag_ = $(this).is(':checked');
+                if (flag_){
+                    $('.power').prop('checked', true)
+                }else{
+                    $('.power').prop('checked', false)
+                }
+
+        })
+    });
+</script>
+
+
+
+
+
+
+
+{% endblock %}

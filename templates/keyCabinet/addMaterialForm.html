@@ -1,0 +1,176 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<style>
+    .selectFlow{
+        display: none;
+    }
+</style>
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <input type="hidden" value="" id="ClientId" name="ClientId"  lay-verify="required" class="layui-input">
+        <input type="hidden" value="" id="FlowPositionCode" name="FlowPositionCode"  lay-verify="required" class="layui-input">
+        <label class="layui-form-label">入库位置</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Place" value="" id="displayPlace" disabled lay-verify="required" placeholder="" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label selectFlow">层</label>
+        <div class="layui-input-inline selectFlow">
+            <select name="selectFlow" id="selectFlow">
+                <option value="上层">上层</option>
+                <option value="中层">中层</option>
+                <option value="下层">下层</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">试剂名称*</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Name" value="" lay-verify="required" id="drugTypeSelect" placeholder="请输入试剂名称" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">英文名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="EnglishName" id="EnglishName" value="" placeholder="请输入英文名称" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">批号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Remark5" id="Remark5" value=""  placeholder="请输入批号"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">过期日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ExpirationDate" value=""  placeholder="请输入过期日期" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">CAS码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CASNumber" id="CASNumber" value="" placeholder="请输入CAS码" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">纯度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Purity" id="Purity" value=""  placeholder="请输入纯度" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">包装大小</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Speci" id="Speci" value="" placeholder="请输入包装大小" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">包装单位</label>
+        <div class="layui-input-inline">
+            <input type="text" name="SpeciUnit" id="SpeciUnit" value=""  placeholder="请输入包装单位" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">生产厂商</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Manufacturer" id="Manufacturer" value="" placeholder="请输入生产厂商" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">经销商</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Distributor" id="Distributor" value="" placeholder="请输入经销商" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+
+        <label class="layui-form-label">入库数量</label>
+        <div class="layui-input-inline">
+            <input type="number" name="Count" value="1"  placeholder="请输入数量" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</form>
+<link href="{% static 'plugins/autosuggestjs/autosuggest.css' %}" rel="stylesheet" />
+<script src="{% static 'plugins/autosuggestjs/autosuggest-native.js' %}"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var staticPath="{% static '/' %}";
+    var stockInPlace = JSON.parse(localStorage.getItem("stockInPlace"));
+    console.log("stockInPlace",stockInPlace);
+    $("#displayPlace").val(stockInPlace.place);
+    $("#ClientId").val(stockInPlace.cabinetNo);
+    $("#FlowPositionCode").val(stockInPlace.flowNo);
+    if(stockInPlace.cabinetType==100){
+        $(".selectFlow").show();
+    }
+    layui.use(['index', 'form', 'laydate', 'table'], function () {
+        var $ = layui.$
+        , table = layui.table
+        , element = layui.element
+        , layer = layui.layer
+        , laydate = layui.laydate
+        , form = layui.form;
+        laydate.render({
+            elem: 'input[name=ExpirationDate]',
+            type: 'date', // 可选择：年、月、日、时、分、秒
+            format: 'yyyy-MM-dd', //指定时间格式
+            // showBottom: false,
+            // value: new Date(), // 指定值
+        });
+        $("#drugTypeSelect").autosuggest({
+            url: '{% url 'drugTemplate:autoSearchDrugList' %} ',
+            queryParamName: 'keyWord',
+            maxNum: 5,
+            firstSelected: true,
+            onSelect: function (obj) {
+                    console.log($(obj));
+                    $("#drugTypeSelect").val($(obj).attr("data-Name"));
+                    $("#EnglishName").val($(obj).attr("data-EnglishName"));
+                    $("#Purity").val($(obj).attr("data-Purity"));
+                    $("#Manufacturer").val($(obj).attr("data-Manufacturer"));
+                    $("#Distributor").val($(obj).attr("data-Distributor"));
+                    $("#Speci").val($(obj).attr("data-Speci"));
+                    $("#SpeciUnit").val($(obj).attr("data-SpeciUnit"));
+                    $("#CASNumber").val($(obj).attr("data-CASNumber"));
+
+
+            }
+        });
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            var fieldData= obj.field;
+            fieldData.CellPositionCode=stockInPlace.cabinetType;
+            console.log(fieldData);
+            if(stockInPlace.cabinetType==100){
+                fieldData.Place=fieldData.Place+fieldData.selectFlow;
+            }
+            //提交修改
+            $.post("{% url 'keyCabinet:materialStockInDo' %}",{drugInfo:JSON.stringify(fieldData)}, function (obj) {
+                if (obj.status == 0) {
+                    var stockInList= JSON.parse(localStorage.getItem("stockInList"));
+                    stockInList.push(fieldData);
+                    localStorage.setItem("stockInList",JSON.stringify(stockInList));
+                    msg("入库成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("入库失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .keyCabinetBox{
+        width: 700px;
+    }
+    .keyCabinetBox ul{
+        height: 430px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .keyCabinetBox li{
+        width: 135px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        background-color: green;
+        border-radius: 3px;
+        /* margin-right: 5px; */
+        color: #FFF;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    .keyCabinetBox li:hover{
+
+        background-color: goldenrod;
+        color: #FFF;
+        font-size: 22px;
+
+    }
+    .keyCabinetBox .keyCabinetTitle{
+        text-align: center;
+        line-height: 30px;
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+    .keyCabinetBox .keyCabinetTitle input{
+        text-align: center;
+    }
+</style>
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 0 0 0;width: 100%;">
+    <div style="display: flex; justify-content: center;width: 100%;">
+        <div class="keyCabinetBox">
+            <div class="keyCabinetTitle">
+                <select name="cabinetNo" id="cabinetNo">
+                </select>
+            </div>
+            <ul>
+                <li val="A1B1">A1B1</li><li val="A1B2">A1B2</li><li val="A1B3">A1B3</li><li val="A1B4">A1B4</li><li val="A1B5">A1B5</li>
+                <li val="A2B1">A2B1</li><li val="A2B2">A2B2</li><li val="A2B3">A2B3</li><li val="A2B4">A2B4</li><li val="A2B5">A2B5</li>
+                <li val="A3B1">A3B1</li><li val="A3B2">A3B2</li><li val="A3B3">A3B3</li><li val="A3B4">A3B4</li><li val="A3B5">A3B5</li>
+                <li val="A4B1">A4B1</li><li val="A4B2">A4B2</li><li val="A4B3">A4B3</li><li val="A4B4">A4B4</li><li val="A4B5">A4B5</li>
+                <li val="A5B1">A5B1</li><li val="A5B2">A5B2</li><li val="A5B3">A5B3</li><li val="A5B4">A5B4</li><li val="A5B5">A5B5</li>
+                <li val="A6B1">A6B1</li><li val="A6B2">A6B2</li><li val="A6B3">A6B3</li><li val="A6B4">A6B4</li><li val="A6B5">A6B5</li>
+            </ul>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+    </div>
+</form>
+
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var staticPath="{% static '/' %}";
+    layui.use(['index', 'form'], function () {
+
+        var form = layui.form;
+        $.get("{% url 'cabinet:getSelectClientListJson' %}",{type:'100'}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#cabinetNo").append("<option value='" + data.value + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+        var openDoorList=[];
+
+        $(".keyCabinetBox li").click(function(){
+            var loadIndex= LayerLoadMsg('获取状态...')
+            var waitOpenIndex=$(this).index()+1;
+            var that=this;
+            $.get("{% url 'cabinet:getOpenDoorList' %}", function (obj) {
+                    openDoorList=obj.data
+                    // alert(JSON.stringify(obj.data));
+                    layer.close(loadIndex);
+                    if(openDoorList.length>1||(openDoorList.length==1 && openDoorList[0]!=waitOpenIndex))
+                    {
+                        LayerErrorMsg("请先关闭其它柜门！");
+                        return;
+                    }
+                    var place= $("#cabinetNo").find("option:selected").text() +'-'+ $(that).text();
+                    var fieldData= {};
+                    fieldData.cabinetNo=$("#cabinetNo").val()
+                    fieldData.flowNo=$(that).attr("val")
+                    fieldData.place=place;
+                    fieldData.cabinetType=100;
+                    console.log(fieldData);
+                    localStorage.setItem("stockInPlace",JSON.stringify(fieldData));
+                    $.get("{% url 'cabinet:openDoor' %}",{doorIndex:waitOpenIndex}, function (obj) {
+                        LayerSuccessMsg("已打开");
+                    });
+                    top.layer.open({
+                        type: 2
+                        ,title: '入库试剂信息'
+                        ,content: "{% url 'keyCabinet:addMaterialForm' %}"
+                        ,area: ['680px', '600px']
+                        ,btn: ['确定', '取消']
+                        ,yes: function(index, layero){
+                            var submitID = 'LAY-user-front-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                            submit.trigger('click');
+                        }        
+                        ,end:function(){
+                            top.layer.close(index);
+                        }
+                    }); 
+            });
+
+        });
+        form.on('submit(LAY-user-front-submit)', function(obj){
+
+            return false;
+        });
+        
+    })
+</script>
+{% endblock %}

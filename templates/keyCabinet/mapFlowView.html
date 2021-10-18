@@ -1,0 +1,670 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+    {% load static %}
+    <style>
+        .keyCabinetBox {
+            width: 1000px;
+            display: flex;
+        }
+
+        .keyCabinetBox ul {
+            width: 700px;
+            height: 430px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .keyCabinetBox li {
+            width: 135px;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+            background-color: green;
+            border-radius: 30px;
+            /* margin-right: 5px; */
+            color: #FFF;
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid #000000;
+        }
+
+        .keyCabinetBoxView {
+
+            background-color: goldenrod !important;
+            color: #FFF;
+            font-size: 22px !important;
+
+        }
+
+        .keyCabinetBox .keyCabinetTitle {
+            text-align: center;
+            line-height: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .keyCabinetBox .keyCabinetTitle input {
+            text-align: center;
+        }
+
+        .flowdrugList {
+            /* background-color:rgb(185, 178, 178); */
+            background-color: rgb(223, 223, 215);
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .flowList {
+            width: 280px;
+            background-color: rgb(223, 223, 215);
+            border-radius: 5px;
+            margin-left: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+        }
+
+        .flowList .flowItem {
+            height: 60px;
+            line-height: 60px;
+            font-size: 20px;
+            width: 200px;
+            text-align: center;
+            background-color: #ffffff;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .flowItemHover {
+            background-color: #1E9FFF !important;
+            color: #FFFFFF !important;
+        }
+
+        .postionBoxUse {
+            background-color: green !important;
+            color: #FFFFFF !important;
+
+        }
+
+        .postionBoxSelect {
+            background-color: yellow !important;
+            color: #000000 !important;
+        }
+
+        .cabinetTitle {
+            line-height: 45px;
+            font-size: 20px;
+            color: gray;
+        }
+
+        .flowdrugListShow {
+            display: flex;
+            width: 700px;
+            height: 430px;
+        }
+
+        .flowdrugBlock {
+            display: flex;
+            margin-bottom: 6px;
+        }
+
+        .flowdrugBlock-left {
+            width: 80px;
+            height: 80px;
+            /* line-height: 80px; */
+            text-align: center;
+            background-color: rgb(231, 227, 227);
+
+            border-radius: 40px;
+            /* margin-right: 5px; */
+            /* color: #171116; */
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid #000000;
+        }
+
+        .flowdrugBlock-right {
+            height: 80px;
+            line-height: 80px;
+        }
+
+        .flowdrugBlock-name {
+            font-size: 18px;
+            height: 60px;
+            line-height: 70px;
+            display: none;
+        }
+
+        .flowdrugBlock-position {
+            font-size: 15px;
+            line-height: 80px;
+            /* color: #0a0707; */
+        }
+    </style>
+    <form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin"
+          style="padding: 20px 0 0 0;width: 100%;">
+        <div style="display: flex; justify-content: center;width: 100%;">
+            <div class="keyCabinetBox">
+                <div class="flowdrugList">
+                    <div class="flowdrugListShow">
+                        <!-- <div class="flowdrugColumn" style="margin-right:60px">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B1</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B1</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B1</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B1</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B1</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="flowdrugColumn" style="margin-right:5px">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B2</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B2</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B2</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B2</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B2</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div>
+                        <div class="flowdrugColumn" style="margin-right:70px">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B3</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B3</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B3</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B3</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B3</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="flowdrugColumn" style="margin-right:5px">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B4</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B4</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B4</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B4</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B4</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div>
+                        <div class="flowdrugColumn" style="margin-right:70px">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B5</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B5</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B5</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B5</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B5</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div>
+
+
+                        <div class="flowdrugColumn">
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A5B6</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A4B6</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A3B6</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A2B6</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                            <div class="flowdrugBlock">
+                                <div class="flowdrugBlock-left drugkx">
+                                    <div class="flowdrugBlock-name"></div>
+                                    <div class="flowdrugBlock-position">A1B6</div>
+                                </div>
+                                <div class="flowdrugBlock-right"></div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                </div>
+                <div class="flowList">
+                    <div class="cabinetTitle">6号柜</div>
+                    <div class="flowItem flowItemHover" val='1'>1层</div>
+                    <div class="flowItem" val='2'>2层</div>
+                    <div class="flowItem" val='3'>3层</div>
+                    <div class="flowItem" val='4'>4层</div>
+                    <div class="flowItem" val='5'>5层</div>
+                    <div class="flowItem" val='6'>6层</div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide">
+                <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit"
+                       value="确认">
+            </div>
+        </div>
+    </form>
+
+    <script>
+        var index = top.layer.getFrameIndex(window.name);
+        var showType = getUrlParam('showType');
+        var selectList = sessionStorage.getItem("selectList");
+        var returnDrugIdList = sessionStorage.getItem("returnDrugIdList")
+        var returnSelectCount = 0;
+        try {
+            selectList = JSON.parse(selectList);
+            if (!selectList) {
+                selectList = [];
+            }
+            ;
+
+        } catch (error) {
+            selectList = [];
+        }
+        try {
+            returnDrugIdList = JSON.parse(returnDrugIdList);
+            if (!returnDrugIdList) {
+                returnDrugIdList = [];
+            }
+            ;
+
+        } catch (error) {
+            returnDrugIdList = [];
+        }
+        for (let index = 0; index < selectList.length; index++) {
+            const element = selectList[index];
+            controlSwitch(element, '1');
+        }
+        console.log("selectList-=---------", selectList)
+        let rowCount = 5;
+        let columnCount = 6;
+        var putInPostion = "";
+        var putFlag = true;
+        var lastLabelData = null;
+        var lastPositionData = [];
+        sessionStorage.putInLable = "";
+
+
+        var useLableList = [];
+        sessionStorage.useLableList = "";
+        var usePositionList = []
+        sessionStorage.usePositionList = "";
+        $(function () {
+            // $(".flowdrugListShow").hide();
+            controlSwitch('31', "1");
+            $(".flowItem").eq(1).addClass("flowItemHover").siblings().removeClass("flowItemHover");
+            $(".flowItem").hover(function () {
+                $(this).addClass("flowItemHover").siblings().removeClass("flowItemHover");
+
+
+            });
+
+            getData();
+            setInterval(() => {
+                getData();
+
+            }, 2000);
+
+        });
+
+        function controlSwitch(num, kai) {
+            $.get("/cabinet/controlSwitch/?num=" + num + "&switch=" + kai, function (obj) {
+                console.log("controlSwitch:", obj);
+            });
+        }
+
+        function getData() {
+            $.get("/cabinet/getStayLabelJson/", function (obj) {
+                console.log("obj", obj)
+                let currentPositionData = obj.data[1];
+                let currentLabelData = obj.data[0];
+                if ($(".flowItemHover").attr('val') == '2') {
+                    createPositionBoxMap(2, currentPositionData, selectList);
+                } else {
+                    createPositionBoxMap(2, [], []);
+
+                }
+
+
+                if (lastLabelData) {
+
+
+                    if (showType == 1) {
+                        let newPutIn = array_difference(currentLabelData, lastLabelData);
+                        console.log('newPutIn:', JSON.stringify(newPutIn));
+                        if (newPutIn.length != 0) {
+                            sessionStorage.putInLable = newPutIn[0];
+                            sessionStorage.putInPosition = currentPositionData[currentLabelData.indexOf(newPutIn[0])];
+                            // controlSwitch(currentPositionData[currentLabelData.indexOf(newPutIn[0])], "0");
+                            top.layer.close(index);
+
+                        }
+
+                    } else if (showType == 2) {
+                        let useList = array_difference(lastLabelData, currentLabelData);
+                        console.log(useList);
+                        for (let i = 0; i < useList.length; i++) {
+                            console.log("label", useList[i]);
+                            console.log("lastPositionData", lastPositionData)
+                            console.log("lastLabelData", lastLabelData)
+                            console.log("useList[i]", useList[i])
+                            let Position = lastPositionData[lastLabelData.indexOf(useList[i])]
+                            $.ajax({
+                                type: 'POST',
+                                url: '{% url 'drug:drugUseView' %}',
+                                data: {drugId: useList[i], forceUse: true},
+                                success: function (data) {
+                                    // console.log('dataaaaaaaaaaaaaaa:', data);
+                                    if (data.status == 0) {
+
+
+                                        console.log("Position,---------", Position);
+                                        console.log("selectList-------------", selectList);
+                                        let index = selectList.indexOf(Position)
+                                        if (index !== -1) {
+                                            // controlSwitch(selectList[index], '0');
+                                            selectList.splice(index, 1)
+
+                                        }
+                                    } else {
+                                        LayerErrorMsg("领用失败" + data.message);
+                                    }
+                                },
+                            })
+                        }
+                        if (selectList.length === 0) {
+                            top.layer.close(index);
+                        }
+
+                    } else if (showType == 3) {
+                        let returnList = array_difference(currentLabelData, lastLabelData);
+                        for (let i = 0; i < returnList.length; i++) {
+                            console.log("label", returnList[i]);
+                            let Position = currentPositionData[currentLabelData.indexOf(returnList[i])]
+                            $.ajax({
+                                type: 'POST',
+                                url: '{% url 'drug:drugReturnView' %}',
+                                data: {drugId: returnList[i], Place: Position},
+                                success: function (data) {
+                                    // console.log('dataaaaaaaaaaaaaaa:', data);
+                                    if (data.status == 0) {
+
+
+                                        console.log("Position,---------", Position);
+                                        console.log("selectList-------------", selectList);
+                                        let index = selectList.indexOf(Position)
+                                        if (index !== -1) {
+                                            // controlSwitch(selectList[index], '0');
+                                            selectList.splice(index, 1)
+
+                                        }
+                                    } else {
+                                        LayerErrorMsg("归还失败" + data.message);
+                                    }
+                                },
+                            })
+                        }
+                        if (selectList.length === 0) {
+                            top.layer.close(index);
+                        }
+                    }
+
+                }
+
+                lastLabelData = currentLabelData;
+                lastPositionData = currentPositionData;
+                console.log("lastPositionData1", lastPositionData)
+
+            });
+        }
+
+
+        function createPositionBoxMap(flowNo, usePositionValList, selectPositionValList) {
+            console.log('selectPositionValList:', selectPositionValList);
+            putInPostion = "";
+            let uppercaseArray = [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E",
+                "F",
+                "G",
+                "H",
+                "I",
+                "J",
+                "K",
+                "L",
+                "M",
+                "N",
+                "O",
+                "P",
+                "Q",
+                "R",
+                "S",
+                "T",
+                "U",
+                "V",
+                "W",
+                "X",
+                "Y",
+                "Z"
+            ];
+            let postionHtml = '';
+            for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                let columnStyle = "";
+                switch (columnIndex) {
+                    case 0:
+                        columnStyle = "margin-right:60px";
+                        break;
+                    case 1:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 2:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 3:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 4:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 5:
+                        columnStyle = "";
+                        break;
+                }
+                postionHtml += '<div class="flowdrugColumn" style="' + columnStyle + '">'
+                for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                    let postionStr = (rowIndex + 1) + '_' + (columnIndex + 1);
+                    let classStr = "flowdrugBlock-left ";
+
+                    if (selectPositionValList.indexOf(postionStr) != -1) {
+                        classStr += "postionBoxSelect ";
+                        putFlag = false;
+                    }
+                    if (usePositionValList.indexOf(postionStr) != -1) {
+                        classStr += "postionBoxUse ";
+                        putFlag = false;
+                    }
+                    console.log('putFlag:', putFlag);
+                    console.log('putInPostion:', putInPostion);
+                    if (showType == '1' && putFlag == true && putInPostion == "") {
+                        console.log('ggggggggggggggggggggggggggggggggggggggggggggggggggggggg', postionStr);
+                        putInPostion = postionStr;
+                        controlSwitch(postionStr, '1');
+                        classStr += "postionBoxSelect ";
+                    } else if (showType == '3 ' && putFlag == true && selectList.length < 2) {
+                        selectList.push(postionStr)
+                        controlSwitch(postionStr, '1');
+                    }
+                    // if(rowIndex==0 && columnIndex>1 && columnIndex<8){
+
+                    //   classStr+="postionHidde ";
+                    // }
+                    postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div><div class="flowdrugBlock-position">';
+                    postionHtml += uppercaseArray[rowIndex] + (columnIndex + 1);
+                    postionHtml += '</div></div><div class="flowdrugBlock-right"></div></div>';
+
+                    putFlag = true;
+                }
+                postionHtml += '</div>'
+
+            }
+            $(".flowdrugListShow").html(postionHtml);
+        }
+
+    </script>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="RoleId" type="hidden" value="{% firstof role.RoleId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色代码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="RoleCode" value="{% firstof role.RoleCode '' %}" lay-verify="required" placeholder="请输入角色代码" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">角色名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="RoleName" value="{% firstof role.RoleName '' %}" lay-verify="required" placeholder="请输入角色名" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">系统权限</label>
+        <div class="layui-input-block">
+            {% for each_function_obj in sys_function_model_obj_list %}
+            {# 判断ModuleId 是否在后端传入的object_id_list里面, 如果在, 则选中 #}
+                {% if each_function_obj.ModuleId in sys_object_id_list %}
+                <input type="checkbox" checked value="{{ each_function_obj.ModuleId }}" class="SysLimits" lay-skin="primary" title="{{ each_function_obj.ModuleName }}">
+                {% else %}
+                <input type="checkbox" value="{{ each_function_obj.ModuleId }}" class="SysLimits" lay-skin="primary" title="{{ each_function_obj.ModuleName }}">
+                {% endif %}
+            {% endfor %}
+            <!-- <input type="checkbox" value="Home" class="SysLimits" lay-skin="primary" title="主页">
+            <input type="checkbox" value="UserManage" class="SysLimits" lay-skin="primary" title="试剂领用"> -->
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">终端权限</label>
+        <div class="layui-input-block">
+            {% for each_function_obj in client_function_model_obj_list %}
+            {# 判断ModuleId 是否在后端传入的object_id_list里面, 如果在, 则选中 #}
+                {% if each_function_obj.ModuleId in client_object_id_list %}
+                <input type="checkbox" checked value="{{ each_function_obj.ModuleId }}" class="ClientLimits" lay-skin="primary" title="{{ each_function_obj.ModuleName }}">
+                {% else %}
+                <input type="checkbox" value="{{ each_function_obj.ModuleId }}" class="ClientLimits" lay-skin="primary" title="{{ each_function_obj.ModuleName }}">
+                {% endif %}
+            {% endfor %}
+            <!-- <input type="checkbox" value="DrugWeigh" class="ClientLimits" lay-skin="primary" title="试剂称重">
+            <input type="checkbox" value="DrugUse" class="ClientLimits" lay-skin="primary" title="试剂领用">
+            <input type="checkbox" value="DrugReturn" class="ClientLimits" lay-skin="primary" title="试剂归还">
+            <input type="checkbox" value="DrugPutIn" class="ClientLimits" lay-skin="primary" title="试剂入库">
+            <input type="checkbox" value="MyDrug" class="ClientLimits" lay-skin="primary" title="我的试剂">
+            <input type="checkbox" value="DrugView" class="ClientLimits" lay-skin="primary" title="试剂查询">
+            <input type="checkbox" value="DataReport" class="ClientLimits" lay-skin="primary" title="报表数据">
+            <input type="checkbox" value="WarningData" class="ClientLimits" lay-skin="primary" title="预警管理">
+            <input type="checkbox" value="Camera" class="ClientLimits" lay-skin="primary" title="视频监控">
+            <input type="checkbox" value="UserManage" class="ClientLimits" lay-skin="primary" title="用户管理">
+            <input type="checkbox" value="RemoteManage" class="ClientLimits" lay-skin="primary" title="远程管理">
+            <input type="checkbox" value="SysSetting" class="ClientLimits" lay-skin="primary" title="运行日志">
+            <input type="checkbox" value="WarningConfig" class="ClientLimits" lay-skin="primary" title="系统设置">
+            <input type="checkbox" value="About" class="ClientLimits" lay-skin="primary" title="关于系统">
+            <input type="checkbox" value="quitSystem" class="ClientLimits" lay-skin="primary" title="退出系统"> -->
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">具体描述</label>
+        <div class="layui-input-block">
+          <textarea type="text" name="Description" autocomplete="off" class="layui-textarea">{% firstof role.Description '' %}</textarea>
+        </div>
+      </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            var fieldData= obj.field;
+            var SysPowerValue = "";
+            $(".SysLimits:checked").each(function (index, obj) {
+                if (SysPowerValue != "") {
+                    SysPowerValue += ",";
+                }
+                SysPowerValue += $(".SysLimits:checked").eq(index).val();
+            });
+            var ClientPowerValue = "";
+            $(".ClientLimits:checked").each(function (index, obj) {
+                if (ClientPowerValue != "") {
+                    ClientPowerValue += ",";
+                }
+                ClientPowerValue += $(".ClientLimits:checked").eq(index).val();
+            });
+            fieldData.SysPowerValue=SysPowerValue;
+            fieldData.ClientPowerValue=ClientPowerValue;
+            //提交修改
+            $.post("{% url 'user:saveRoleData' %}", fieldData, function (obj) {
+
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

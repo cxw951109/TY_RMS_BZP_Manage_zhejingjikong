@@ -1,0 +1,355 @@
+  {% extends 'base.html' %}
+
+
+  {% block content %}
+
+<style type="text/css">
+    .lasterYuJing {
+        height: 210px !important;
+
+    }
+        .lasterYuJing td {
+            overflow: hidden !important;
+            height: 35px !important;
+        }
+
+    .home-info {
+        cursor: pointer;
+    }
+</style>
+      {% load static %}
+
+<script src="{% static 'js/plugins/echarts/echarts-all.js'  %}"></script>
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeDrugRecord/?days=1&recordType=1">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right">今日</span>
+                            <h5>今日入库</h5>
+                        </div>
+                        <div class="ibox-content">
+{#                            firstof:输出第一个值不等于False的变量#}
+                            <h1 class="no-margins">{% firstof putInCount '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeDrugRecord/?days=1&recordType=2">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right">今日</span>
+                            <h5>今日领用</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{% firstof useCount '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeDrugRecord/?days=1&recordType=3">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right">今日</span>
+                            <h5>今日归还</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{% firstof returnCount '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeWarningRecord/?warningType=3">
+                        <div class="ibox-title">
+                            <span class="label label-warning pull-right">全部</span>
+                            <h5>库存预警</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{% firstof DurgSurplusEarlyWarning '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeWarningRecord/?warningType=2">
+                        <div class="ibox-title">
+                            <span class="label label-warning pull-right">全部</span>
+                            <h5>过期试剂</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{% firstof expireWarning '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="ibox float-e-margins home-info" value="/home/homeWarningRecord/?warningType=1">
+                        <div class="ibox-title">
+                            <span class="label label-warning pull-right">全部</span>
+                            <h5>保质期预警</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <h1 class="no-margins">{% firstof shelflifeWarning '0' %}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <span class="label label-success pull-right"></span>
+                            <h5>近期预警列表</h5>
+                        </div>
+                        <div class="ibox-content lasterYuJing">
+                            <table class="table table-hover no-margins">
+                                <thead>
+                                    <tr>
+                                        <th width="25%">日期</th>
+                                        <th width="20%">对象</th>
+                                        <th width="60%">内容</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="warningList">
+
+                                                <tr class="warning-item" style="cursor:pointer" val="@item.WarningId">
+                                                    <td><i class="fa fa-clock-o"></i>@item.WarningDate.ToString("MM/dd HH:mm")</td>
+                                                    <td>
+                                                        <small>@item.ObjectName</small>
+                                                    </td>
+                                                    <td>@Utils.CutString(item.WarningContent,30)</td>
+                                                </tr>
+
+
+                                   <tr>
+                                            <td><i class="fa fa-clock-o"></i> 5/20 11:20</td>
+                                            <td>
+                                                <small>温湿预警</small>
+                                            </td>
+                                            <td>姜岚昕</td>
+                                        </tr>
+
+                                    <tr>
+                                            <td><i class="fa fa-clock-o"></i> 5/20 11:20</td>
+                                            <td>
+                                                <span class="label label-primary">已完成</span>
+                                            </td>
+                                            <td>栾某某</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>温度监控折线图</h5>
+                    <div class="pull-right">
+                        <div class="btn-group" id="humitureSwich">
+                            <button type="button" class="btn btn-xs btn-white active" val="1">温度</button>
+                            <button type="button" style="display:none" class="btn btn-xs btn-white" val="2">湿度</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row" style="text-align: center;vertical-align: middle;">
+                        <div class="col-sm-12">
+                            <div class="echarts" id="echarts">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <script src="{% static 'js/warning.js' %}"></script>
+
+<script>
+
+    $(function () {
+        $(document).barCodeScanerModeEnter(function (barCode) {
+            var url = "/home/homeDrugDetail/?BarCode=1-A6B2&drug_id=24b34af4-74b6-11eb-a5c8-f8ac65d62af0";
+                parent.layer.open({
+                    title: "试剂“乙腈”的详情信息记录",
+                    shift: 2,
+                    type: 2,
+                    area: ['960px', '580px'],
+                    
+                    content: [url],
+                    end: function () {
+                        currentTime = 0;
+                        quiteTime = 600;
+                    }
+                });
+        });
+        $('#navTitle', window.parent.document).text('概况统计');
+        getWarningList();
+{#        模块跳动#}
+        $('.home-info').each(function () {
+            animationHover(this, 'bounce');
+        });
+        $('.home-info').click(function () {
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: $(this).find("h5").text(),
+                shift: 2,
+                type: 2,
+                
+                area: ['960px', '610px'],
+                content: [$(this).attr("value"), 'no'],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                }
+            });
+
+        })
+        getChartData(1);
+        $("#humitureSwich .btn").click(function () {
+            getChartData($(this).attr("val"));
+        })
+
+        //var lineoption = {
+        //    title: {
+        //        text: '最近24小时变化'
+        //    },
+        //    tooltip: {
+        //        trigger: 'axis'
+        //    },
+        //    legend: {
+        //        data: ['试剂柜1']
+        //    },
+        //    grid: {
+        //        x: 40,
+        //        x2: 40,
+        //        y2: 24
+        //    },
+        //    calculable: true,
+        //    xAxis: [
+        //        {
+        //            type: 'category',
+        //            boundaryGap: false,
+        //            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        //        }
+        //    ],
+        //    yAxis: [
+        //        {
+        //            type: 'value',
+        //            axisLabel: {
+        //                formatter: '{value} °C'
+        //            }
+        //        }
+        //    ],
+        //    series: [
+        //        {
+        //            name: '试剂柜1',
+        //            type: 'line',
+        //            data: [0, 20, 0, 0, 0, 0, 0],
+        //            markPoint: {
+        //                data: [
+        //                    { type: 'max', name: '最大值' },
+        //                    { type: 'min', name: '最小值' }
+        //                ]
+        //            },
+        //            markLine: {
+        //                data: [
+        //                    { type: 'average', name: '平均值' }
+        //                ]
+        //            }
+        //        }
+        //    ]
+        //};
+
+    });
+
+    function getChartData(_type) {
+       $('#echarts').html('<div class="" style="line-height: 250px;"><i class="fa fa-spinner fa-pulse fa-3x"></i></div>');
+
+        $.get('{% url 'humiture:getHumitureStatisticsJson' %}', { type: _type }, function (obj) {
+            $('#echarts').html('');
+            var lineChart = echarts.init(document.getElementById("echarts"));
+            var lineoption = obj.data;
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        });
+    }
+
+    Date.prototype.format= function (fmt) { // author: meizz
+  var o = {
+    "M+": this.getMonth() + 1, // 月份
+    "d+": this.getDate(), // 日
+    "h+": this.getHours(), // 小时
+    "m+": this.getMinutes(), // 分
+    "s+": this.getSeconds(), // 秒
+    "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+    "S": this.getMilliseconds() // 毫秒
+  };
+  if (/(y+)/.test(fmt))
+    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return fmt;
+};
+
+    function getWarningList() {
+        $("#warningList").html('');
+        $.get('{% url 'home:getWarningList' %}', { t: new Date().getTime() }, function (obj) {
+              console.log(obj.data)
+              if(obj.data.length == 0){
+                $("#warningList").append('<tr><td>暂无近期未解决预警</tr></td>')
+            }
+
+            $(obj.data).each(function (index, obj) {
+                // 格式化一个日期格式
+                if(obj.WarningDate){
+                    var warningData =  obj.WarningDate.substring(0, 10) + ' ' + obj.WarningDate.substring(11, 20)
+                }else{
+                     warningData = obj.WarningDate
+                }
+                // 长度大于20显示为省略号
+                if(obj.WarningContent){
+                if(obj.WarningContent.length > 30){
+                   var WarningContent = obj.WarningContent.substring(0, 30) + '...'
+                }else{
+                    WarningContent = obj.WarningContent
+                }
+                }else{
+                    WarningContent = ''
+                }
+                $("#warningList").append(' <tr class="warning-item" style="cursor:pointer" val="' + obj.WarningId + '"><td><i class="fa fa-clock-o"></i>' + warningData + '</td><td><small>' + obj.ObjectName + '</small></td> <td id="str_cut">' + WarningContent + '</td></tr>')
+
+            });
+
+            $(".warning-item").click(function () {
+                quiteTime = Infinity;
+                parent.layer.open({
+                    title: "预警详情",
+                    shift: 2,
+                    type: 2,
+                    area: ['860px', '510px'],
+                    
+                    content: ['/warning/form/?warning_id=' + $(this).attr("val") , 'no'],
+                    end: function () {
+                        currentTime = 0;
+                        quiteTime = 600;
+                        getWarningList();
+                    }
+                });
+
+            });
+        });
+    }
+</script>
+
+{% endblock %}

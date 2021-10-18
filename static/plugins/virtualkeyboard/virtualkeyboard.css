@@ -1,0 +1,201 @@
+/* * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+} */
+
+.virtualkeyboard {
+    font-family: "Microsoft Yahei", "Hiragino Sans GB", tahoma, arial;
+    position: absolute;
+    width: 1080px;
+    /* border: 1px solid #999; */
+    z-index: 99999;
+    /* top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+    bottom: 0;
+    user-select: none;
+}
+
+.inputZone {
+    background: #DBDBDB;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.inputZone > div {
+    display: flex;
+}
+
+/* .inputZone span {
+    font-size: 32px;
+    width: 64px;
+    border-radius: 4px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: white;
+    display: inline-block;
+    border: 1px solid #DBDBDB;
+    cursor: pointer;
+} */
+.inputZone span {
+    float: left;
+    font-size: 30px;
+    width: 84px;
+    border-radius: 10px;
+    height: 90px;
+    text-align: center;
+    line-height: 90px;
+    border: 1px solid #ccc;
+    margin: 5px;
+    background: white;
+    cursor: pointer;
+    box-shadow: 1px 1px 3px 2px rgba(0,0,0,0.1);
+    font-weight: bold;
+}
+
+/* .inputZone span:active {
+    background: #eee;
+} */
+.inputZone .func:active,.inputZone .blank:active {
+    background: #eee;
+}
+.inputZone .letter:active,.inputZone .number:active,.inputZone .symbol:active {
+    background: #eee;
+    line-height: 60px;
+    font-weight: bolder;
+    font-size: 60px;
+}
+/* .keyboardOp {
+    height: 44px;
+    line-height: 44px;
+    font-size: 20px;
+    cursor: move;
+    background-color: white;
+} */
+.keyboardOp {
+    height: 64px;
+    line-height: 64px;
+    font-size: 40px;
+    cursor: move;
+    background-color: white;
+}
+.keyboardOp > .slideDown {
+    float: right;
+    font-weight: bold;
+    color: darkviolet;
+    cursor: pointer;
+    padding: 0 20px;
+    border-left: 1px solid #DBDBDB;
+}
+
+.keyboardOp > .slideDown:active {
+    background-color: #DBDBDB;
+    color: red;
+}
+
+.outputZone {
+    display: none;
+    position: absolute;
+    width: 750px;
+    height: 40px;
+    left: -1px;
+    top: -40px;
+    border: 1px solid #999;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.outputZone .zh-pinyin-letter {
+    font-size: 30px;
+    font-weight: bold;
+    color: #dc4f42;
+    margin-left: 16px;
+}
+
+.outputZoneOp {
+    float: right;
+    height: 40px;
+    line-height: 40px;
+}
+
+.outputZoneOp > span {
+    display: inline-block;
+    height: 100%;
+    padding: 0 8px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.outputZoneOp > span:active {
+    color: red;
+    background-color: #cccccc;
+}
+
+.outputZoneOp .unclick {
+    color: #999;
+    cursor: not-allowed;
+}
+.output-ZH{
+    padding-left: 0px !important;
+    margin-bottom: 0px !important;;
+}
+/* .output-ZH > li {
+    padding: 0 12px;
+    cursor: pointer;
+    float: left;
+    list-style: none;
+} */
+.output-ZH > li {
+    padding: 0 16px;
+    cursor: pointer;
+    float: left;
+    list-style: none;
+    font-weight: bold;
+}
+.output-ZH > li:active {
+    color: red;
+    background-color: #cccccc;
+}
+
+.virtualkeyboard .hide {
+    display: none;
+}
+
+/* .virtualkeyboard .blank {
+    width: 260px;
+    font-size: 20px;
+} */
+.virtualkeyboard .blank {
+    width: 360px;
+    font-size: 20px;
+}
+
+.virtualkeyboard .symbol {
+    font-size: 18px;
+}
+
+.virtualkeyboard .func {
+    font-size: 20px;
+    color: #fd910a;
+}
+
+
+/*自定义*/
+.virtualkeyboard{
+    width: calc(1920px * 10/11) !important;
+    z-index: 999999999 !important;
+    /* bottom: 95px !important; */
+   }
+   .inputZone span{
+     width: calc(144px * 10/11);
+     height: calc(70px * 10/11);
+     line-height: calc(70px * 10/11);
+   }
+   .virtualkeyboard .blank
+   {
+     width: 600px;
+   }

@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .dl-horizontal dt {
+        line-height: 45px;
+        font-size: 15px;
+    }
+
+    .dl-horizontal dd {
+        line-height: 45px;
+        font-size: 15px;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInDown">
+
+    <div class="row">
+
+            <div class="col-md-5" style="text-align:center;padding-top:0">
+               <div> <i class="iconfont icon-RFID"></i></div>
+                <div><input type="text" style="color:#F3F3F4; background-color:#F3F3F4; border-width:0px;outline:none" id="barcode_s" /></div>
+                <div style="font-size:45px;padding-top: 0">请在此检测您的RFID标签</div>
+
+            </div>
+        <div class="col-md-5" style="margin-left:50px;padding-left:100px;padding-top:20px;border-left-color:#8B8989;border-left-width:1px;border-left-style:solid;height:auto;font-size: 16px;">
+
+                <div class="panel panel-default">
+                  <div class="panel-heading" style="height: 50px;line-height: 30px;font-size: 25px">试剂称重信息</div>
+                  <div class="panel-body">
+                        <div class="row">
+                          <div class="col-md-5">
+                              RFID编号
+                          </div>
+                          <div class="col-md-7">
+                              <span id="barcode"></span>
+                          </div>
+                        </div>
+                      <hr>
+                        <div class="row">
+                          <div class="col-md-5">
+                            试剂名称
+
+                          </div>
+                          <div class="col-md-7">
+                              <span id="Name"></span>
+                          </div>
+                        </div>
+
+                       <hr>
+                        <div class="row">
+                          <div class="col-md-5">
+                              英文名称
+                          </div>
+                          <div class="col-md-7">
+                              <span id="EnglishName"></span>
+                          </div>
+                        </div>
+                       <hr>
+                        <div class="row">
+                          <div class="col-md-5">
+                            CAS码
+                          </div>
+                          <div class="col-md-7">
+                              <span id="CASNumber"></span>
+                          </div>
+                        </div>
+                       <hr>
+                        <div class="row">
+                          <div class="col-md-5">
+                                纯度
+                          </div>
+                          <div class="col-md-7">
+                              <span id="Purity"></span>
+                          </div>
+                        </div>
+                       <hr>
+
+                        <div class="row">
+                          <div class="col-md-5">
+                                试剂余量
+                          </div>
+                          <div class="col-md-7">
+                              <span id="drug_margin"></span>
+                          </div>
+                        </div>
+                       <hr>
+
+                        <div class="row">
+                          <div class="col-md-5">
+                            当前状态
+
+                          </div>
+                          <div class="col-md-7">
+                              <span id="Status"></span>
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-5">
+                              所属终端
+  
+                            </div>
+                            <div class="col-md-7">
+                                <span id="ClientCode"></span>
+                            </div>
+                          </div>
+                       <hr>
+                         <div class="row">
+                          <div class="col-md-5">
+                            最后使用人
+
+                          </div>
+                          <div class="col-md-7">
+                              <span id="ByUserName"></span>
+                          </div>
+                        </div>
+
+                  </div>
+
+                </div>
+                <p style="margin-bottom: 10px">
+                <button type="button" onclick="initWeigh()" class="btn btn-info">去皮（初始化天平）</button> &nbsp; &nbsp;<button type="button" onclick="startWeigh()" class="btn btn-success">开始称量</button>
+                &nbsp; &nbsp;<button type="button" onclick="sdWeigh()" class="btn btn-success">手动输入</button>
+                &nbsp; &nbsp;<button type="button" onclick="setEmpty()" class="btn btn-warning">设为空瓶</button>
+                  </p>
+                  <p style="margin-top: 10px">
+                      称重方式:&nbsp;
+                      <label class="radio-inline">
+                        <input type="radio" name="czType" id="inlineRadio1" checked value="1"> 余量称重
+                      </label>
+                      <label class="radio-inline">
+                        <input type="radio" name="czType" id="inlineRadio2" value="2"> 用量称重
+                      </label>
+
+                  </p>
+        </div>
+    </div>
+</div>
+    {% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
+        <script src="{% static 'js/warning.js' %}"></script>
+
+
+
+<script type="text/javascript">
+var drugData=null;
+var flag_status = true;
+$(function () {
+        $('#barcode_s').focus();
+        var barcode_flag = true;
+     //挂钩jquery插件，实现条码识别
+        $(document).barCodeScanerModeEnter(function (barCode) {
+            flag_status = false;
+            if(barcode_flag){
+                 var index_barcode = layer.load(2);
+            $.get('{% url 'drug:GetDrugJson' %}', { drugId: barCode }, function (obj) {
+                if (obj.data.status == 0) {
+                     layer.close(index_barcode);
+                    msg(obj.data.message);
+                    flag_status = true;
+                    return;
+                }else{
+                    layer.close(index_barcode);
+                    console.log(obj.data,8888);
+                    obj.data = JSON.parse(obj.data.data?obj.data.data:'');
+                    if(obj.data){
+                    $("#barcode").text(obj.data.BarCode?obj.data.BarCode:'');
+                    $("#Name").text(obj.data.Name?obj.data.Name:'');
+                    $("#EnglishName").text(obj.data.EnglishName?obj.data.EnglishName:'');
+                    $("#CASNumber").text(obj.data.CASNumber?obj.data.CASNumber:'');
+                    $("#Purity").text(obj.data.Purity?obj.data.Purity:'');
+                    $("#drug_margin").text(obj.data.Remain + ' /g');
+                    $("#ClientCode").text(obj.data.ClientCode+"号终端");
+                    $("#Status").text(format_status(obj.data.Status));
+                    $("#ByUserName").text(obj.data.ByUserName?obj.data.ByUserName: '');
+                    $('#drug_margin').css({'color': 'red', 'font-weight': 'bold'});
+                    drugData = obj.data;
+                    barcode_flag = true;
+                    flag_status = true;
+                    }else{
+                        new $.flavr({ content : '请求数据为空！',autoclose : true, timeout : 2000 });
+                        flag_status = true;
+                    }
+                }
+            });
+            }
+
+        });
+
+
+    var socket = new WebSocket("ws:" + window.location.host + "/drug/drug_socket/");
+
+            socket.onopen = function () {
+
+                console.log('WebSocket open');//成功连接上Websocket
+                socket.send('adasdasda1。。。。');//发送数据到服务端
+
+
+                    setInterval(function () {
+                         if (flag_status){
+                             console.log(flag_status, 9999);
+                    socket.send('adasdasda1。。。。');
+                    }
+                }, 1000);
+
+
+            };
+
+             socket.onmessage = function (e) {
+                 console.log('message: ' + e.data);//打印服务端返回的数据
+
+                 if (e.data) {
+                     if (flag_status) {
+                    flag_status = false;
+                    barcode_flag = false;
+                    var index = '';
+                    index = parent.layer.load(2);
+                    $.get('{% url 'drug:GetDrugJson' %}', { drugId:  e.data }, function (obj) {
+                               parent.layer.close(index);
+                               if(obj.data.status == 0){
+                                                flag_status = true;
+                                                  barcode_flag = true;
+                                                msg(obj.data.message);
+                                                socket.send('23213');
+                                                return;
+                                }
+                                obj.data = JSON.parse(obj.data.data?obj.data.data:'');
+                                if (obj.data) {
+                                    
+                                    $("#barcode").text(obj.data.BarCode?obj.data.BarCode:'');
+                                    $("#Name").text(obj.data.Name?obj.data.Name:'');
+                                    $("#EnglishName").text(obj.data.EnglishName?obj.data.EnglishName:'');
+                                    $("#CASNumber").text(obj.data.CASNumber?obj.data.CASNumber:'');
+                                    $("#Purity").text(obj.data.Purity?obj.data.Purity:'');
+                                    $("#drug_margin").text(obj.data.Remain + ' /g');
+                                    $("#Status").text(format_status(obj.data.Status));
+                                    $("#ClientCode").text(obj.data.ClientCode+"号终端");
+                                    $("#ByUserName").text(obj.data.ByUserName?obj.data.ByUserName: '');
+                                    $('#drug_margin').css({'color': 'red', 'font-weight': 'bold'});
+                                    flag_status = true;
+                                    barcode_flag = true;
+                                    parent.layer.close(index);
+                                    socket.send('23213');
+                                    drugData = obj.data;
+                                    return;
+                                }
+
+
+                            });
+
+
+                }
+            }
+        };
+ //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+	window.onbeforeunload = confirmExit;
+function confirmExit() {
+    // 如果发生刷新页面或者关闭窗口事件则向后端发送 886  关闭连接请求
+
+    socket.send('886');
+    console.log('大鱼');
+}
+
+
+
+        $('#navTitle', window.parent.document).text('试剂称重');
+
+
+
+    });
+    function format_status(params){
+
+        switch (params) {
+            case 1:
+                return '在库';
+            case 2:
+            return '出库';
+            case 3:
+            return '空瓶';
+            case 5:
+            return '预备入库';
+            default:
+                return ''
+        }
+    }
+    function initWeigh(){
+        $.get('{% url 'drug:balance_tare' %}', function (obj) {
+            if (obj.data.status == 0) {
+               msg(obj.data.message,function(){});
+               return;
+            } 
+            else
+            {
+                msg("成功,当前天平读数为“0”.",function(){});
+            }
+        });
+
+    }
+
+    function setEmpty()
+    {
+        if(drugData==null)
+            {
+                parent.layer.msg("请先扫描试剂!");
+                return;
+            } 
+
+            new $.flavr({
+                content: '确定要将试剂<p style="line-height:30px;color:red;font-size:20px;">"' + drugData.Name + '"设为空瓶么?</p>',
+                dialog: 'confirm',
+                buttons: {
+                    danger: {
+                        text: '确定',
+                        style: 'danger',
+                        action: function() {
+                            $.post("{% url 'drug:setDrugEmpty' %}", { MedicamentId: drugData.MedicamentId }, function (obj) {
+                                if (obj.status == 1) {
+                                    new $.flavr({ content : '设置成功！',
+                                    autoclose : true, timeout : 800 });
+                                    return false;
+                                }
+                                else {
+                                    new $.flavr({ content : obj.message,
+                                    autoclose : true, timeout : 2000 });
+                                    return false;
+                                }
+                            });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        style: 'default'
+                    }
+                },
+            });
+
+
+    }
+
+    function startWeigh(){
+            if(drugData==null)
+            {
+                parent.layer.msg("请先扫描试剂!");
+                return;
+            }
+            var index = parent.layer.load(2);
+            var czType=$('input[name="czType"]:checked').val();
+            $.get('{% url 'drug:GetDrugInfo' %}', { drugId:  drugData.BarCode }, function (obj) {
+                                if (obj.data.status == 0) {
+                                    flag_status = true;
+                                    barcode_flag = true;
+                                    msg(obj.data.message);
+                                    parent.layer.close(index);
+                                    socket.send('23213');
+                                    return;
+                                }
+
+                                obj.data = JSON.parse(obj.data.data?obj.data.data:'');
+
+                                parent.layer.close(index);
+                            
+                                if(obj.drug_margin){
+                                    obj.drug_margin=obj.drug_margin.replace('G','');
+                                parent.layer.confirm('此次测得质量为"'+obj.drug_margin+'“g,是否确认更改？', {
+                                    btn: ['确定','取消'], skin: 'layer-custom', title: '提示' //按钮
+                                    }, function(confimIndex){
+                                        parent.layer.close(confimIndex);
+                                        var weighValue=czType=='1'?obj.drug_margin: (parseFloat(drugData.Remain)- parseFloat(obj.drug_margin)).toString();
+                                        $.ajax({
+                                        url: '{% url 'drug:drug_weigh' %}',
+                                        type: 'POST',
+                                        async: false,
+                                        data: {
+                                            'drug_margin': weighValue,
+                                            'drug_id': obj.data.MedicamentId,
+                                        },
+                                        success: function (obj) {
+                                            if(obj.data.status == 0){
+                                                flag_status = true;
+                                                  barcode_flag = true;
+                                                msg(obj.data.message);
+                                                socket.send('23213');
+                                                return;
+                                            }
+                                            obj.data = JSON.parse(obj.data.data?obj.data.data:'');
+                                            if(obj.data){
+                                            $("#barcode").text(obj.data.BarCode?obj.data.BarCode:'');
+                                            $("#Name").text(obj.data.Name?obj.data.Name:'');
+                                            $("#EnglishName").text(obj.data.EnglishName?obj.data.EnglishName:'');
+                                            $("#CASNumber").text(obj.data.CASNumber?obj.data.CASNumber:'');
+                                            $("#Purity").text(obj.data.Purity?obj.data.Purity:'');
+                                            $("#drug_margin").text(obj.data.Remain.toFixed(2) + ' /g');
+                                            $("#Status").text(format_status(obj.data.Status));
+                                            $("#ByUserName").text(obj.data.ByUserName?obj.data.ByUserName: '');
+                                            $('#drug_margin').css({'color': 'red', 'font-weight': 'bold'});
+                                            new $.flavr({
+                                             modal: false,
+                                            autoclose: true,
+                                            timeout: 2000,
+                                            buttons: {OK: {
+                                            text: '确认',
+                                                },},
+                                             content: '修改成功！'
+                                            });
+                                            drugData = obj.data;
+                                            flag_status = true;
+                                              barcode_flag = true;
+                                            socket.send('123123');
+
+
+                                            }else{
+
+                                                new $.flavr({ content : '请求数据为空！',autoclose : true, timeout : 2000 });
+                                                flag_status = true;
+                                                  barcode_flag = true;
+                                            }
+                                        },
+                                        error: function (e) {
+                                            flag_status = true;
+                                              barcode_flag = true;
+                                            socket.send('23123123');
+                                            new $.flavr({ content : '网络请求异常！',autoclose : true, timeout : 2000 });
+                                        }
+                                    });
+                                    
+                                    }, function(){
+                                    return
+                                });
+
+
+                                }else{
+                                    flag_status = true;
+                                      barcode_flag = true;
+                                    socket.send('23123123');
+                                    new $.flavr('试剂余量必须为数字！');
+
+                                }
+
+                            });
+        }
+
+        function sdWeigh(){
+            if(drugData==null)
+            {
+                parent.layer.msg("请先扫描试剂!");
+                return;
+            }
+            var czType=$('input[name="czType"]:checked').val();
+            value=window.prompt('请输入质量','');
+            if(value){
+            
+                    var weighValue=czType=='1'?value: (parseFloat(drugData.Remain)- parseFloat(value)).toString();
+                    $.ajax({
+                    url: '{% url 'drug:drug_weigh' %}',
+                    type: 'POST',
+                    async: false,
+                    data: {
+                        'drug_margin': weighValue,
+                        'drug_id': drugData.MedicamentId,
+                    },
+                    success: function (obj) {
+                        if(obj.data.status == 0){
+                            flag_status = true;
+                                barcode_flag = true;
+                            msg(obj.data.message);
+                            socket.send('23213');
+                            return;
+                        }
+                        obj.data = JSON.parse(obj.data.data?obj.data.data:'');
+                        if(obj.data){
+                        $("#barcode").text(obj.data.BarCode?obj.data.BarCode:'');
+                        $("#Name").text(obj.data.Name?obj.data.Name:'');
+                        $("#EnglishName").text(obj.data.EnglishName?obj.data.EnglishName:'');
+                        $("#CASNumber").text(obj.data.CASNumber?obj.data.CASNumber:'');
+                        $("#Purity").text(obj.data.Purity?obj.data.Purity:'');
+                        $("#drug_margin").text(obj.data.Remain.toFixed(2) + ' /g');
+                        $("#Status").text(format_status(obj.data.Status));
+                        $("#ByUserName").text(obj.data.ByUserName?obj.data.ByUserName: '');
+                        $('#drug_margin').css({'color': 'red', 'font-weight': 'bold'});
+                        new $.flavr({
+                            modal: false,
+                        autoclose: true,
+                        timeout: 2000,
+                        buttons: {OK: {
+                        text: '确认',
+                            },},
+                            content: '修改成功！'
+                        });
+                        drugData = obj.data;
+                        flag_status = true;
+                            barcode_flag = true;
+                        socket.send('123123');
+
+
+                        }else{
+
+                            new $.flavr({ content : '请求数据为空！',autoclose : true, timeout : 2000 });
+                            flag_status = true;
+                                barcode_flag = true;
+                        }
+                    },
+                    error: function (e) {
+                        flag_status = true;
+                            barcode_flag = true;
+                        socket.send('23123123');
+                        new $.flavr({ content : '网络请求异常！',autoclose : true, timeout : 2000 });
+                    }
+                });
+
+
+            }else{
+                flag_status = true;
+                    barcode_flag = true;
+                socket.send('23123123');
+                new $.flavr('试剂余量必须为数字！');
+
+            }
+
+        }
+
+</script>
+
+
+
+{% endblock %}

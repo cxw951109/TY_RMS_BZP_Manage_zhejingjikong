@@ -1,0 +1,85 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="PurchaseOrderDetailedId" type="hidden" value="{% firstof model.PurchaseOrderDetailedId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">试剂名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="DrugName" id="DrugName"  value="{% firstof model.DrugName '' %}" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入试剂名称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">CAS码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CASNumber" id="CASNumber" value="{% firstof model.CASNumber '' %}" lay-verify="required" placeholder="请输入CAS码" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">纯度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Purity" value="{% firstof model.Purity '' %}" placeholder="请输入纯度" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">试剂规格</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Speci" value="{% firstof model.Speci '' %}" lay-verify="required|number" placeholder="请输入规格" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">单位</label>
+        <div class="layui-input-inline" style="width: 100px;">
+            <select name="SpeciUnit" lay-verify="required">
+                <option value="ml" selected>ml</option>
+                <option value="g">g</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购数量</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Count" value="{% firstof model.Count '' %}"  lay-verify="required|number" placeholder="请输入采购数量" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form', 'autocomplete'], function () {
+        var form = layui.form;
+        // form.on('submit(LAY-user-front-submit)', function(obj){
+        //     var fieldData= obj.field;
+        //     return false;
+        // });
+        
+        autocomplete = layui.autocomplete;
+        autocomplete.render({
+            elem: $('#DrugName'),
+            cache: false,
+            url: '{% url 'standard:autoSearchDrugList' %}',
+            request: {
+                keywords: 'keyWord'
+            },
+            response: {
+                code: 'code',
+                data: 'data'
+            },
+            {% verbatim %} 
+            template_val: '{{d.value}}',
+            template_txt: '{{d.value}} {{d.subvalue!="" ? "<span class=\'layui-badge layui-bg-gray\'>" + d.subvalue.substr(0,36) + "</span>" : "" }}',
+            {% endverbatim %} 
+            onselect: function (obj) {
+                $("#CASNumber").val(obj.id);
+            }
+        });
+        
+    })
+</script>
+{% endblock %}

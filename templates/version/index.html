@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" action="{% url 'version:index' %}" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="search_word" name="searchValue" placeholder="版本名称、版本号" value="{% firstof search_word '' %}">
+                <div class="input-group-btn">
+                    <button type="submit" id="btnTableSearch" class="btn btn-sm btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="mail-tools tooltip-demo">
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新版本列表"><i class="fa fa-refresh"></i> 刷新</button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableAdd" data-placement="top" title="添加新版本">
+                <i class="fa fa-plus-square"> 新增版本</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableEdit" data-placement="top" title="编辑选中版本">
+                <i class="fa fa-edit"> 编辑版本</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableDelete" data-placement="top" title="删除选中版本">
+                <i class="fa fa-trash-o"> 删除</i>
+            </button>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>版本Id</th>
+                    <th>版本号</th>
+                    <th>版本名称</th>
+                    <th>下载链接</th>
+                    <th>创建世间</th>
+                    <th>创建人</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>版本Id</th>
+                    <th>版本号</th>
+                    <th>版本名称</th>
+                    <th>下载链接</th>
+                    <th>创建时间</th>
+                    <th>创建人</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function () {
+        $('#navTitle', window.parent.document).text('版本管理');
+        var searchValue = $('#search_word').val();
+        $("#searchValue").val(searchValue);
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            ajax: {
+                url: '{% url 'version:get_version_list_json' %}',
+                data: { searchValue: searchValue },
+                dataSrc: 'data'
+            },
+            columns: [
+            { data: 'VersionId' },
+            { data: 'VersionCode' },
+            { data: 'VersionName' },
+            { data: 'DownLink' },
+            { data: 'CreateDate' },
+            { data: 'CreateUserName' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(3).html(format_sqlAlchemy_date(data.CreateDate))
+            },
+            columnDefs: [
+    {
+        "targets": [0],
+        "visible": false
+    }
+            ],
+            "order": [[4, "desc"]]
+        });
+
+        $("#btnTableReload").click(function () {
+            location.href = '{% url 'version:index' %}';
+        });
+        $("#btnTableAdd").click(function () {
+
+            parent.layer.open({
+                title: "新增版本",
+                shift: 2,
+                type: 2,
+                area: ['860px', '520px'],
+                //
+                content: ['{% url 'version:add_version' %}', 'no'],
+                end: function () {
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#btnTableEdit").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要编辑的数据！");
+                return;
+            }
+            parent.layer.open({
+                title:"编辑版本信息",
+                shift: 2,
+                type: 2,
+                area: ['860px', '520px'],
+                //
+                content: ['/version/add_version/?version_id=' + selectRow.VersionId, 'no'],
+                end: function () {
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+
+        $("#btnTableDelete").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要删除的数据！");
+                return;
+            }
+            parent.layer.confirm('确定要删除此版本', function (index) {
+                parent.layer.close(index);
+                $.post('{% url 'version:delete_version' %}', { VersionId: selectRow.VersionId }, function (obj) {
+
+                    if (obj.status == 1) {
+                        layer.msg("删除成功！");
+                        tableModel.row('.selected').remove().draw(false);
+                    }
+                    else {
+                        layer.msg("删除失败！");
+                    }
+                })
+            });
+        });
+
+        $("#tablePre").click(function () {
+            $("#dataTableModel_previous").click();
+
+        })
+
+        $("#tableNext").click(function () {
+            $("#dataTableModel_next").click();
+
+        })
+    });
+</script>
+{% endblock %}

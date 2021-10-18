@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+
+        .chosen-container-single .chosen-single {
+        height: 25px !important;
+        line-height: 25px !important;
+        padding-top: 2px !important;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+
+                <input type="text" class="form-control" id="searchValue" name="searchValue" placeholder="搜索试剂条码、试剂名称">
+                <div class="input-group-btn">
+                    <button type="button" id="btnTableSearch" class="btn btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <h2>
+            试剂数据明细报表
+        </h2>
+        <div class="mail-tools tooltip-demo m-t-md">
+            <div class="btn-group pull-right">
+                <a type="submit" class="btn btn-primary btn-sm" href="{% url 'dataReport:index' %}">
+                    返回统计目录
+                </a>
+            </div>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新统计列表"><i class="fa fa-refresh"></i> 刷新</button>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出报表</button>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableChart" data-placement="left" title="以图表形式显示统计数据"><i class="fa fa-pie-chart"></i> 试剂保质期图表统计</button>
+            <div class="input-daterange input-group date pull-left" style="width:300px;">
+                <span class="input-group-addon"> &nbsp;&nbsp;药柜：</span>
+                <select data-placeholder="选择所属药柜..." id="cabinetSelect" required="required" class="chosen-select" style="width:200px;height:20px">
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th width="80">条码编号</th>
+                    <th width="100">中文名称</th>
+                    <th width="100">英文名称</th>
+                    <th width="100">CAS码</th>
+                    <th width="100">试剂余量</th>
+                    <th width="100">纯度</th>
+                    <th width="100">价格（元/单位）</th>
+                    <th width="100">目前状态</th>
+                    <th width="100">生产日期</th>
+                    <th width="100">过期日期</th>
+                    <th width="100">保质期（天）</th>
+                    <th width="120">剩余有效天数（天）</th>
+                    <th width="100">重点监管</th>
+                    <th width="100">生产厂商</th>
+                    <th width="100">经销商</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>条码编号</th>
+                    <th>中文名称</th>
+                    <th>英文名称</th>
+                    <th>CAS码</th>
+                    <th>试剂余量</th>
+                    <th>纯度</th>
+                    <th>价格（元/单位）</th>
+                    <th>目前状态</th>
+                    <th>生产日期</th>
+                    <th>过期日期</th>
+                    <th>保质期（天）</th>
+                    <th>剩余有效天数（天）</th>
+                    <th>重点监管</th>
+                    <th>生产厂商</th>
+                    <th>经销商</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% load static %}
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+        <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
+            $(obj.data).each(function (index, data) {
+                $("#cabinetSelect").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+            })
+            $(".chosen-select").chosen({
+                no_results_text: "没有找到",
+                disable_search: true,
+                allow_single_deselect: true
+            });
+        })
+        var tableModel = $('#dataTableModel').DataTable({
+            //searching: false,
+            lengthChange: false,
+            select: true,
+            "scrollX": true,
+            ajax: {
+                url: '{% url 'dataReport:getDrugListJson' %}',
+                data: {},
+                dataSrc: 'data',
+            },
+               "order": [[8, "asc"]],
+            columns: [
+            { data: 'BarCode' },
+            { data: 'Name' },
+            { data: 'EnglishName' },
+            { data: 'CASNumber' },
+            { data: 'Remain' },
+            { data: 'Purity' },
+            { data: 'Price' },
+            { data: 'Status' },
+            { data: 'ProductionDate' },
+            { data: 'ExpirationDate' },
+            { data: 'ShelfLife' },
+            { data: 'SurplusDays' },
+            { data: 'IsSupervise' },
+            { data: 'Manufacturer' },
+            { data: 'Distributor' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                console.log(data)
+                    $(row).children('td').eq(7).html(get_status(data.Status));
+                    $(row).children('td').eq(9).html(format_date(data.ProductionDate));
+                    $(row).children('td').eq(9).html(format_date(data.ExpirationDate));
+                    $(row).children('td').eq(12).html(data.IsSupervise == 1 ? '是': '否');
+            }
+        });
+
+        $('.chosen-select').on('change', function (e, params) {
+            tableModel.ajax.url('/dataReport/getDrugListJson/?ClientId=' + $('.chosen-select').val()).load();
+            tableModel.draw();
+        });
+        $("#btnTableChart").click(function () {
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "图表统计",
+                shift: 2,
+                type: 2,
+                area: ['850px', '650px'],
+                
+                content: ['{% url 'dataReport:drugShelfLifeChart' %}', 'no'],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#btnTableSearch").click(function () {
+
+            tableModel.search($("#searchValue").val()).draw();
+        });
+        $("#searchValue").keyup(function () {
+            tableModel.search($("#searchValue").val()).draw();
+
+        });
+        $("#btnTableReload").click(function () {
+            location.href = '{% url 'dataReport:drugShelfLifeList' %}';
+        });
+
+        $("#tablePre").click(function () {
+            $("#dataTableModel_previous").click();
+
+        });
+        $("#tableNext").click(function () {
+            $("#dataTableModel_next").click();
+
+        });
+        $("#btnTableExport").click(function () {
+            var index = '';
+            var url = '/dataReport/exportDrugShelfLifeData/?client_id=' + $('#cabinetSelect').val();
+            $.fileDownload(url, {
+                prepareCallback: function (url) {
+                    index = parent.layer.load(2)
+                },
+                successCallback: function (url) {
+                    parent.layer.close(index)
+                },
+                 failCallback: function (url) {
+                     msg('数据异常, 下载失败');
+                     parent.layer.close(index)
+                 }
+
+
+
+            })
+        });
+        function get_status(status) {
+            switch (status) {
+                case 1:
+                    return '在库';
+                case 2:
+                    return '出库';
+                case 3:
+                    return '空瓶';
+                case 5:
+                    return '预备入库';
+                default:
+                    return '异常'
+            }
+        }
+
+        function format_date(date1) {
+            var new_date = new Date(date1)
+            year1 = new_date.getFullYear().toString();
+            month1 = (new_date.getMonth() + 1).toString();
+            day1 = new_date.getDate().toString();
+            if(month1.length < 2){
+                month1 = '0' + month1
+            }
+             if(day1.length < 2){
+                day1 = '0' + day1
+            }
+            return year1 + '-' + month1 + '-' + day1
+        }
+
+        $('#searchValue').focus(function () {
+            $(this).keydown(function () {
+                switch (event.keyCode) {
+                    case 13:
+                        return false;
+                }
+            })
+        });
+
+
+
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+
+{% endblock %}

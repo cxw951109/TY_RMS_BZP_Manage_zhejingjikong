@@ -1,0 +1,180 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加</button>
+            </div>
+
+            <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+            <script type="text/html" id="datatable-toolbar">
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['index', 'table'], function () {
+        var table = layui.table
+            , form = layui.form;
+
+        //列表数据
+        table.render({
+            elem: '#LAY-datatable'
+            , url: "{% url 'user:getRoleListJson' %}"
+            ,size:'lg'
+            , cols: [[
+                { type: 'checkbox', fixed: 'left' }
+                , { field: 'RoleCode', width: 120, title: '角色代码' }
+                , { field: 'RoleName', width: 200, title: '角色名' }
+                , { field: 'SysModuleList', title: '系统权限' }
+                , { field: 'Description', title: '具体描述' }
+                , { title: '操作', width: 200, minWidth: 150, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar' }
+            ]]
+            ,page: {
+            layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+            ,prev:'上一页'
+            ,next:'下一页'
+            }
+            , limit: 10000
+            , limits: [10, 15, 20, 25, 30]
+            , height: 'full-110'
+        });
+
+        //监听工具条
+        table.on('tool(LAY-datatable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                top.layer.prompt({
+                    formType: 1
+                    , title: '敏感操作，请验证密码'
+                }, function (value, index) {
+                    top.layer.close(index);
+                    if (hex_md5(value) != top.CheckCode) {
+                        top.layer.msg("验证失败！");
+                        return
+                    }
+                    top.layer.confirm('确定删除吗？', function (index) {
+                        //提交
+                        $.post("{% url 'user:deleteRole' %}", { deleteIds: data.RoleId }, function (obj) {
+                            if (obj.status == 1) {
+                                top.layer.msg("删除成功", function () {
+                                    top.layer.close(index);
+                                });
+                            }
+                            else {
+                                top.layer.msg("删除失败 " + obj.message);
+                            }
+                        });
+                        obj.del();
+                        // table.reload('LAY-datatable');
+                    });
+                });
+            } else if (obj.event === 'edit') {
+                var tr = $(obj.tr);
+                top.layer.open({
+                    type: 2
+                    , title: '编辑角色'
+                    , content: "{% url 'user:roleForm' %}?role_id=" + data.RoleId
+                    , area: ['680px', '600px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        submit.trigger('click');
+                    }
+                    , end: function () {
+                        table.reload('LAY-datatable'); //数据刷新
+                    }
+                });
+            }
+        });
+
+        //监听搜索
+        form.on('submit(LAY-user-front-search)', function (data) {
+            var field = data.field;
+
+            //执行重载
+            table.reload('LAY-datatable', {
+                where: field
+            });
+        });
+
+        //事件
+        var active = {
+            batchdel: function () {
+                var checkStatus = table.checkStatus('LAY-datatable')
+                    , checkData = checkStatus.data; //得到选中的数据
+
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                top.layer.prompt({
+                    formType: 1
+                    , title: '敏感操作，请验证密码'
+                }, function (value, index) {
+                    top.layer.close(index);
+                    if (hex_md5(value) != top.CheckCode) {
+                        top.layer.msg("验证失败！");
+                        return
+                    }
+                    top.layer.confirm('确定删除吗？', function (index) {
+                        var deleteIds = '';
+                        checkData.forEach(function(element,index){
+                            if (deleteIds != '') { deleteIds += ',' }
+                            deleteIds += element.RoleId;
+                        });
+                        //提交
+                        $.post("{% url 'user:deleteRole' %}", { deleteIds: deleteIds }, function (obj) {
+                            if (obj.status == 1) {
+                                top.layer.msg("删除成功", function () {
+                                    top.layer.close(index);
+                                });
+                            }
+                            else {
+                                top.layer.msg("删除失败 " + obj.message);
+                            }
+                        });
+                        table.reload('LAY-datatable');
+                    });
+                });
+            }
+            , add: function () {
+                top.layer.open({
+                    type: 2
+                    , title: '添加角色'
+                    , content: "{% url 'user:roleForm' %}"
+                    , area: ['680px', '600px']
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+                        submit.trigger('click');
+                    }
+                    , end: function () {
+                        table.reload('LAY-datatable'); //数据刷新
+                    }
+                });
+            }
+        };
+
+        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

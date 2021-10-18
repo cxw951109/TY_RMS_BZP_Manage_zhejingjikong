@@ -1,0 +1,452 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style type="text/css">
+    .lasterYuJing {
+        height: 210px !important;
+    }
+
+        .lasterYuJing td {
+            overflow: hidden !important;
+            height: 35px !important;
+        }
+
+</style>
+     {% load static %}
+<script src="{% static 'js/plugins/echarts/echarts-all.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="row" >
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>温度监控折线图</h5>
+                    <div class="pull-right">
+                        <div class="btn-group" id="humitureSwich">
+                            <button type="button" class="btn btn-xs btn-white active" val="1">温度</button>
+                            <button type="button" style="display:none" class="btn btn-xs btn-white" val="2">湿度</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-content" style="vertical-align: middle;text-align: center;">
+
+                    <div class="row"  style="text-align: center;vertical-align: middle;">
+                        <div class="col-sm-12">
+                            <div class="echarts" id="echarts">
+                                <!-- 旋转图标 -->
+
+{#                               <div  class="refresh-animation"><i class="fa fa-spinner  fa-5x" aria-hidden="true"></i></div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>温度记录（按天平均值）</h5>
+                    <div class="pull-right">
+                        <div class="input-daterange input-group date pull-left" style="margin-right:10px;width:350px" id="datepicker">
+                            <span class="input-group-addon"> &nbsp;&nbsp;记录时间：</span>
+                            <input type="text" class="input-sm form-control" name="start" id="startDate1" value="{{ last_year }}" />
+                            <span class="input-group-addon">-</span>
+                            <input type="text" class="input-sm form-control" name="end" id="endDate1" value="{{ today }}" />
+                        </div>
+                     <!--   <div class="btn-group">
+                            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="deleteExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-trash-o"></i> 删除记录</button>
+                        </div>   -->
+                        <div class="btn-group">
+                            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableExport1" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出数据</button>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="dataTableModel1" class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>药柜</th>
+                                        <th>日期</th>
+                                        <th>温度（℃）</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>药柜</th>
+                                        <th>日期</th>
+                                        <th>温度（℃）</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>温度记录（详细）</h5>
+                    <div class="pull-right">
+                        <div class="input-daterange input-group date pull-left" style="margin-right:10px;width:350px" id="datepicker">
+                            <span class="input-group-addon"> &nbsp;&nbsp;记录时间：</span>
+                            <input type="text" class="input-sm form-control" name="start" id="startDate" value="{{ last_year }}" />
+                            <span class="input-group-addon">-</span>
+                            <input type="text" class="input-sm form-control" name="end" id="endDate" value="{{ today }}" />
+                        </div>
+                     <!--   <div class="btn-group">
+                            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="deleteExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-trash-o"></i> 删除记录</button>
+                        </div>   -->
+                        <div class="btn-group">
+                            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出数据</button>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                    <tr>
+                                        <th>药柜</th>
+                                        <th>记录时间</th>
+                                        <th>温度（℃）</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>药柜</th>
+                                        <th>记录时间</th>
+                                        <th>温度（℃）</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+            <script src="{% static 'js/warning.js' %}"></script>
+
+<script>
+
+
+    $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+    var min = new Date($('#startDate').val());
+    var max = new Date($('#endDate').val());
+
+    var date = new Date((data[1])) || 0; // use data for the age column
+    if ((isNaN(min) && isNaN(max)) ||
+         (isNaN(min) && date <= max) ||
+         (min <= date && isNaN(max)) ||
+         (min <= date && date <= max)) {
+        return true;
+    }
+    return false;
+});
+    $(function () {
+            $('#navTitle', window.parent.document).text('温湿度记录');
+        getChartData(1);
+
+        $("#humitureSwich .btn").click(function () {
+            getChartData($(this).attr("val"));
+        });
+
+
+        var tableModel = $('#dataTableModel').DataTable({
+            lengthChange: false,
+            select: true,
+            // 档处理大数据时, 延迟渲染数据, 有效的提高了Datatabale处理能力
+            deferRender:true,
+                // 后端分页
+            searching: false,
+            serverSide:true ,
+            bPaginate:true, //是否显示（应用）分页器
+            iDisplayLength:5,
+            sLoadingRecords: true,
+            ordering: false,
+            bInfo: true,
+            destroy: true,//解决Cannot reinitialise DataTable
+            bProcessing: true,
+             oLanguage: { 
+       sProcessing: "数据加载中...", 
+        },
+
+            ajax: function(data, callback, settings){
+                    var params = {};
+                    params.startIndex  = data.start;
+                    params.pageSize = 5;
+                    params.page =  (data.start / 5)+1;
+                    startDate = $('#startDate').val();
+                    endDate = $('#endDate').val();
+                    $.ajax({
+                        async:true,
+                        maskLoad:true,
+                        url: "{% url 'humiture:getHumitureListJson' %}",
+                        data: {
+                            params: JSON.stringify(params),
+                            startDate:startDate,
+                            endDate: endDate,
+                        },
+                        success: function(result){
+                            var returnData = {};
+                            returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                            returnData.recordsTotal = result.total;//返回数据全部记录 总共数据的长度
+                            returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+                            returnData.data = result.data;//返回的数据列表
+
+                            callback(returnData)
+                        },
+                    })
+                },
+
+            columns: [
+            { data: 'ClientName' },
+            { data: 'RecordDate' },
+            { data: 'Temperature' }
+            ],
+            createdRow: function (row, data, indexData) {
+                $(row).children('td').eq(1).html(replace_time(data.RecordDate))
+            }
+
+        });
+        $('#startDate, #endDate').change(function () {
+            tableModel.draw();
+        });
+        $("#btnTableExport").click(function () {
+            var index = parent.layer.load(2);
+            visitType=getUrlParam('visitType');
+            startDate = $('#startDate').val();
+            endDate = $('#endDate').val();
+            var visitType=window.parent.frames.getUrlParam('visitType');
+            if(((visitType=='1') || (visitType=='2')))
+            {
+            $.get("{% url 'humiture:exportHumitureData' %}?visitType=1&startDate="+startDate+"&endDate="+endDate+"", function (obj) {
+                                parent.layer.close(index);
+                                if (obj.status == 0) {
+                                    new $.flavr({ content : '导出成功！',
+                                    autoclose : true, timeout : 800 });
+                                    tableModel.row('.selected').remove().draw(false);
+                                    return false;
+                                }
+                                else {
+                                    new $.flavr({ content : obj.message,
+                                    autoclose : true, timeout : 2000 });
+                                    return false;
+                                }
+                            });
+            }
+            else
+            {
+            var index = '';
+              var url = "{% url 'humiture:exportHumitureData' %}?startDate="+startDate+"&endDate="+endDate+"";
+         $.fileDownload(url,{
+            httpMethod: 'GET',
+            prepareCallback:function(url){
+                // 加载中插件
+             index = parent.layer.load(2)
+            },
+            successCallback:function(url){
+               parent.layer.close(index)
+            },
+            failCallback: function (html, url) {
+               parent.layer.close(index)
+            }
+         });
+        }
+        });
+
+
+        //datatable1
+
+//         var tableModel1 = $('#dataTableModel1').DataTable({
+//             lengthChange: false,
+//             select: true,
+//             // 档处理大数据时, 延迟渲染数据, 有效的提高了Datatabale处理能力
+//             deferRender:true,
+//                 // 后端分页
+//             searching: false,
+//             serverSide:true ,
+//             bPaginate:true, //是否显示（应用）分页器
+//             iDisplayLength:5,
+//             sLoadingRecords: true,
+//             ordering: false,
+//             bInfo: true,
+//             destroy: true,//解决Cannot reinitialise DataTable
+//             bProcessing: true,
+//              oLanguage: { 
+//        sProcessing: "数据加载中...", 
+//         },
+
+//             ajax: function(data, callback, settings){
+//                     var params = {};
+//                     params.startIndex  = data.start;
+//                     params.pageSize = 5;
+//                     params.page =  (data.start / 5)+1;
+//                     startDate = $('#startDate').val();
+//                     endDate = $('#endDate').val();
+//                     $.ajax({
+//                         async:true,
+//                         maskLoad:true,
+//                         url: "{% url 'humiture:getHumitureListJson1' %}",
+//                         data: {
+//                             params: JSON.stringify(params),
+//                             startDate:startDate,
+//                             endDate: endDate,
+//                         },
+//                         success: function(result){
+//                             var returnData = {};
+//                             returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+//                             returnData.recordsTotal = result.total;//返回数据全部记录 总共数据的长度
+//                             returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+//                             returnData.data = result.data;//返回的数据列表
+
+//                             callback(returnData)
+//                         },
+//                     })
+//                 },
+
+//             columns: [
+//             { data: 'ClientName' },
+//             { data: 'avgDate' },
+//             { data: 'avgTemp' }
+//             ],
+//             createdRow: function (row, data, indexData) {
+//                 // $(row).children('td').eq(1).html(replace_time(data.RecordDate))
+//             }
+
+//         });
+        var tableModel1 = $('#dataTableModel1').DataTable({
+            //searching: false,
+            bPaginate:true, //是否显示（应用）分页器
+            iDisplayLength:5,
+            sLoadingRecords: true,
+            ordering: false,
+            lengthChange: false,
+            select: true,
+            ajax: {
+                url: '{% url 'humiture:getHumitureListJson1' %}',
+                data: {},
+                dataSrc: 'data',
+            },
+
+            columns: [
+            { data: 'ClientName' },
+            { data: 'avgDate' },
+            { data: 'avgTemp' }
+
+            ],
+            createdRow: function(row, data, dataIndex){
+                console.log("尝试访问..........")
+
+            }
+
+        });
+        $('#startDate1, #endDate1').change(function () {
+            tableModel1.ajax.url('/humiture/getHumitureListJson1/?startDate=' + $('#startDate1').val()+'&endDate='+$('#endDate1').val()).load();
+            tableModel1.draw();
+        });
+        $("#btnTableExport1").click(function () {
+
+            var index = parent.layer.load(2);
+            
+            var visitType=window.parent.frames.getUrlParam('visitType');
+            if(((visitType=='1') || (visitType=='2')))
+            {
+            $.get("{% url 'humiture:exportHumitureData1' %}?visitType=1"+'&startDate=' + $('#startDate1').val()+'&endDate='+$('#endDate1').val(), function (obj) {
+                                parent.layer.close(index);
+                                if (obj.status == 0) {
+                                    new $.flavr({ content : '导出成功！',
+                                    autoclose : true, timeout : 800 });
+                                    tableModel.row('.selected').remove().draw(false);
+                                    return false;
+                                }
+                                else {
+                                    new $.flavr({ content : obj.message,
+                                    autoclose : true, timeout : 2000 });
+                                    return false;
+                                }
+                            });
+            }
+            else
+            {
+                var index = '';
+                var url = "{% url 'humiture:exportHumitureData1' %}"+'?startDate=' + $('#startDate1').val()+'&endDate='+$('#endDate1').val();
+            $.fileDownload(url,{
+                httpMethod: 'GET',
+                prepareCallback:function(url){
+                    // 加载中插件
+                index = parent.layer.load(2)
+                },
+                successCallback:function(url){
+                parent.layer.close(index)
+                },
+                failCallback: function (html, url) {
+                parent.layer.close(index)
+                }
+            });
+
+            }
+
+        });
+        // 数据量较大时弹出加载框
+     /*   document.documentElement.style.overflow='hidden';
+        var layer_ = layer.load(2, {
+           offset: ['200px', '600px'],  //自定义layer顶部和左侧偏移
+            anim: 6,
+        });  */
+        function getChartData(_type) {
+            //  加载旋转图标
+    $('#echarts').html('<div class="" style="line-height: 250px;"><i class="fa fa-spinner fa-pulse fa-3x"></i></div>');
+            $.get('{% url 'humiture:getHumitureStatisticsJson' %}',{ type: _type, }, function (obj) {
+               {#layer.close(layer_);#}
+               {#document.documentElement.style.overflow='scroll';#}
+                $('#echarts').html('');
+                var lineChart = echarts.init(document.getElementById("echarts"));
+                var lineoption = obj.data;
+                lineChart.setOption(lineoption);
+                $(window).resize(lineChart.resize);
+
+            });
+        }
+
+        function replace_time(params) {
+           if(params){
+               return params.replace('T', ' ')
+           }
+        }
+
+        // 当点击删除按钮
+        $('#deleteExport').click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if(selectRow == undefined){
+                msg('请选择要删除的记录！');
+                return false
+            }
+            console.log(selectRow.ClientId)
+        })
+    });
+
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

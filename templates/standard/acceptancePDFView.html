@@ -1,0 +1,369 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<link href="{% static 'js/hiprint/css/hiprint.css' %}" rel="stylesheet" />
+<link href="{% static 'js/hiprint/css/print-lock.css' %}" rel="stylesheet" />
+
+<style>
+    /* .layui-table-header .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    } */
+    .hiprint-printPaper{
+        background-color: #FFF !important;
+    }
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="background-color:#FFF;padding:0;">
+    <div style="margin-left: 30px;margin-right: 60px;margin-top: 10px;text-align: right;">
+        <button class="layui-btn layui-btn-normal layuiadmin-btn-useradmin" id="exportPDFFile">导出PDF文件</button>
+    </div>
+    <div id="PDFView" style="background-color:#FFF;height: 500px;">
+        <!-- <div style="text-align: center;line-height: 30px;font-size: 20px;">标准物质验收记录表</div> -->
+        <!-- <div id="PrintElementOptionSetting" style="margin-top:10px;"></div> -->
+        <input type="hidden" id="AcceptanceOrderCode" value="{% firstof AcceptanceOrderCode '' %}">
+        <div id="preView"></div>
+        <!-- <div class="layui-form-item" style="margin-left: 30px; margin-right: 30px;background-color:#FFF;">
+            <table class="layui-table" id="LAY-datatable"
+                lay-data="{height: 380,defaultToolbar: []}" lay-filter="LAY-datatable">
+                <thead>
+                    <tr>
+                        <th lay-data="{type: 'numbers', width:50}" rowspan="2">序号</th>
+                        <th lay-data="{field:'DrugName', width:88, align: 'center'}" rowspan="2">标准品名称</th>
+                        <th lay-data="{field:'DrugCode', width:80, align: 'center'}" rowspan="2">编号及批次号</th>
+                        <th lay-data="{field:'Speci', width:80, align: 'center', templet: '#speciTpl'}" rowspan="2">
+                            标准品规格</th>
+                        <th lay-data="{field:'PackageStatus', width:60, align: 'center'}" rowspan="2">包装完好</th>
+                        <th lay-data="{field:'MarkStatus', width:60, align: 'center'}" rowspan="2">标识完好</th>
+                        <th lay-data="{field:'CertificateStatus', width:80, align: 'center'}" rowspan="2">证书对应性</th>
+                        <th lay-data="{align:'center'}" colspan="2">证书信息</th>
+                        <th lay-data="{field:'DetectionMethod', width:80, align: 'center'}" rowspan="2">检测方法</th>
+                        <th lay-data="{align:'center'}" colspan="2">检测结果</th>
+                        <th lay-data="{field:'BasicComponent', width:80, align: 'center'}" rowspan="2">基本组成</th>
+                        <th lay-data="{field:'BuyDate', width:80, align: 'center'}" rowspan="2">购入日期</th>
+                        <th lay-data="{field:'Count', width:60, align: 'center'}" rowspan="2">购入数量</th>
+                        <th lay-data="{field:'Manufacturer', width:80, align: 'center'}" rowspan="2">生产商</th>
+                        <th lay-data="{field:'StorageConditions', width:80, align: 'center'}" rowspan="2">保存条件</th>
+                        <th lay-data="{field:'Security', width:80, align: 'center'}" rowspan="2">安全防护</th>
+                        <th lay-data="{field:'SpecialRequirements', width:80, align: 'center'}" rowspan="2">特殊运输要求</th>
+                        <th lay-data="{field:'AcceptanceUserName', width:80, align: 'center'}" rowspan="2">验收人</th>
+                        <th lay-data="{field:'AcceptanceComment', width:80, align: 'center'}" rowspan="2">验收结论</th>
+                    </tr>
+                    <tr>
+                        <th lay-data="{field:'CertCharaValue', width:60, align: 'center'}">特性量值</th>
+                        <th lay-data="{field:'CertUncertainty', width:60, align: 'center'}">不确定度</th>
+                        <th lay-data="{field:'DetectionCharaValue', width:60, align: 'center'}">特性量值</th>
+                        <th lay-data="{field:'DetectionUncertainty', width:60, align: 'center'}">不确定度</th>
+                    </tr>
+                </thead>
+            </table>
+            <script type="text/html" id="speciTpl">
+                {% verbatim %} 
+                {{ d.Speci+d.SpeciUnit }}
+                {% endverbatim %}
+            </script>
+            <script type="text/html" id="datatable-toolbar">
+                <div class="layui-btn-container">
+                </div>
+            </script>
+            <script>
+                var staticPath = "{% static '/' %}";
+                var drugListData = {{ modelList| safe}};
+                var currentIndex = -1;
+                layui.use(['table', 'form'], function () {
+                    var table = layui.table;
+                    var form = layui.form;
+                    table.init('LAY-datatable', {
+                        data: drugListData
+                    });
+                    //头工具栏事件
+                    table.on('toolbar(LAY-datatable)', function (obj) {
+                        switch (obj.event) {
+                            case 'addAcceptanceDrug':
+                                currentIndex = -1;
+                                layer.open({
+                                    type: 2
+                                    , title: '添加验收试剂'
+                                    , content: "{% url 'standard:acceptanceDrugForm' %}"
+                                    , area: ['990px', '630px']
+                                    , shade: [0.1, '#000']
+                                    , offset: '30px'
+                                    , btn: ['确定', '取消']
+                                    , yes: function (index, layero) {
+                                        var iframeWindow = window['layui-layer-iframe' + index]
+                                        var submitID = 'LAY-user-front-submit'
+                                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                                        //监听提交
+                                        iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function (data) {
+                                            var field = data.field; //获取提交的字段
+                                            field.uuid = uuid();
+                                            drugListData.unshift(field);
+                                            table.reload('LAY-datatable', { data: drugListData });
+                                            // form.render();
+                                            layer.close(index); //关闭弹层
+                                            // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                            // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                            // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                            // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                        });
+                                        submit.trigger('click');
+                                    }
+                                    , end: function () {
+                                        table.reload('LAY-datatable'); //数据刷新
+                                    }
+                                });
+                                break;
+                        };
+                    });
+                    //监听工具条
+                    table.on('tool(LAY-datatable)', function (obj) {
+                        var data = obj.data;
+                        if (obj.event === 'del') {
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            drugListData.splice(index, 1);
+                            table.reload('LAY-datatable', { data: drugListData });
+                        }
+                        else if (obj.event === 'edit') {
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            currentIndex = index;
+                            layer.open({
+                                type: 2
+                                , title: '编辑验收试剂'
+                                , content: "{% url 'standard:acceptanceDrugForm'%}?acceptanceDrugData=" + encodeURIComponent(JSON.stringify(data))
+                                , area: ['990px', '630px']
+                                , shade: [0.1, '#000']
+                                , offset: '30px'
+                                , btn: ['确定', '取消']
+                                , yes: function (index, layero) {
+                                    var iframeWindow = window['layui-layer-iframe' + index]
+                                    var submitID = 'LAY-user-front-submit'
+                                        , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                                    //监听提交
+                                    iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function (data) {
+                                        var field = data.field; //获取提交的字段
+
+                                        drugListData[currentIndex] = field;
+                                        table.reload('LAY-datatable', { data: drugListData });
+                                        // form.render();
+                                        layer.close(index); //关闭弹层
+                                        // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                        // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                    });
+                                    submit.trigger('click');
+                                }
+                                , end: function () {
+                                    table.reload('LAY-datatable'); //数据刷新
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>
+        </div> -->
+    </div>
+
+</div>
+
+<script src="{% static 'js/jquery.PrintArea.min.js' %}"></script>
+<script src="{% static 'js/html2canvas.js' %}"></script>
+<!--[[ 测试专用  单独使用无需引入  -->
+<script src="{% static 'js/hiprint/custom_test/custom-etype-provider.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/custom-print-json.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/print-data.js' %}"></script>
+<script src="{% static 'js/hiprint/OrderPrintModel.js' %}"></script>
+<!--测试专用  单独使用无需引入 ]]  -->
+<!--单独使用无需引入  -->
+<script src="{% static 'js/hiprint/polyfill.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.minicolors.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/JsBarcode.all.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/qrcode.js' %}"></script>
+<script src="{% static 'js/jspdf.debug.js' %}"></script>
+<script src="{% static 'js/hiprint/hiprint.bundle.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.hiwprint.js' %}"></script>
+
+<!-- <script type="text/javascript">
+    //这个是我增加的那个按钮
+    var downButton = document.getElementById("2pdf");
+    downButton.onclick = function () {
+
+    }
+</script> -->
+<script>
+    var index=-1;
+    try {
+        index = parent.layer.getFrameIndex(window.name);  
+    } catch (error) {
+        console.log(error);
+    }
+    layui.use('index')
+    var drugListData = {{ modelList| safe}};
+    var AcceptanceOrderModel= {{AcceptanceOrderModel|safe}};
+    AcceptanceOrderModel.table= drugListData;
+    var newTableList=[];
+    AcceptanceOrderModel.table.forEach(function(element,index) {
+        element['SortIndex']=(index+1);
+        newTableList.push(element);
+    });
+    AcceptanceOrderModel.table=newTableList;
+    var hiprintTemplate;
+    $(function(){
+        //初始化打印插件
+        hiprint.init({
+            providers: [new customElementTypeProvider()]
+        });
+        if(parseInt(AcceptanceOrderModel['AcceptanceOrderStatus'])!=2)
+        {
+            var deleteIndex= acceptanceOrderPrintJson.panels[0].printElements.findIndex(function(x){
+                return x.options.field=='SignUrl';
+            });
+            acceptanceOrderPrintJson.panels[0].printElements.splice(deleteIndex,1);
+        }
+        hiprintTemplate = new hiprint.PrintTemplate({
+            template: acceptanceOrderPrintJson,
+            // settingContainer: '#PrintElementOptionSetting',
+            // paginationContainer: '.hiprint-printPagination'
+        });
+        var printHtml=hiprintTemplate.getHtml(AcceptanceOrderModel);
+        $("#preView").html($(printHtml).html());
+        $("#exportPDFFile").click(function(){
+            // hiprintTemplate.toPdf(printData,"导出pdf",{scale:2 });
+            var PDFName= '标准品验收记录表_'+$("#AcceptanceOrderCode").val();
+            var fieldData= {'PDFHtml':$(printHtml).html(),'PDFName': PDFName,'IsLandscape':1};
+            var loadIndex= layer.load('正在导出...');
+            $.post("{% url 'standard:exportPDF' %}", fieldData, function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("导出成功", function () {
+                        var a = document.createElement('a');
+                        a.download = 'data.pdf';
+                        a.href="{% url 'standard:exportPDF' %}?PDFName="+encodeURIComponent(PDFName);
+                        // a.href=window.URL.createObjectURL(blob);
+                        a.click();
+                    });
+                }
+                else {
+                    msg("导出失败 " + obj.message);
+                }
+            });
+            // html2canvas(document.getElementById("PDFView"), {
+            //     backgroundColor:'#fff',
+            //     useCORS : true,//保证跨域图片的显示
+            //     allowTaint :false,
+            // }).then(function(canvas){
+            //     console.log('dddd',canvas);
+            //     var contentWidth = canvas.width;
+            //     var contentHeight = canvas.height;
+
+            //     //一页pdf显示html页面生成的canvas高度;
+            //     var pageHeight = contentWidth / 592.28 * 841.89;
+            //     //未生成pdf的html页面高度
+            //     var leftHeight = contentHeight;
+            //     //pdf页面偏移
+            //     var position = 0;
+            //     //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+            //     var imgWidth = 595.28;
+            //     var imgHeight = 592.28 / contentWidth * contentHeight;
+
+            //     var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+            //     var pdf = new jsPDF('', 'pt', 'a4');
+
+            //     //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+            //     //当内容未超过pdf一页显示的范围，无需分页
+            //     if (leftHeight < pageHeight) {
+            //         pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
+            //     } else {
+            //         while (leftHeight > 0) {
+            //             pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+            //             leftHeight -= pageHeight;
+            //             position -= 841.89;
+            //             //避免添加空白页
+            //             if (leftHeight > 0) {
+            //                 pdf.addPage();
+            //             }
+            //         }
+            //     }
+
+            //     pdf.save('标准物品验收记录表.pdf');
+
+            // });
+        });
+    });
+
+    // layui.use(['index', 'form'], function () {
+    //     $("#exportPDFFile").click(function () {
+    //         $("#PDFView").printArea(); 
+    //         var dom = document.getElementById("PDFView");
+    //         var height = parseInt(dom.style.height) + 50;
+    //         //将PDFView这个对象渲染成canvas
+    //         html2canvas(document.getElementById("PDFView"), {
+    //             backgroundColor:'#fff',
+    //             useCORS : true,//保证跨域图片的显示
+    //             allowTaint :false,
+    //         }).then(function(canvas){
+    //             console.log('dddd',canvas);
+    //             var contentWidth = canvas.width;
+    //             var contentHeight = canvas.height;
+
+    //             //一页pdf显示html页面生成的canvas高度;
+    //             var pageHeight = contentWidth / 592.28 * 841.89;
+    //             //未生成pdf的html页面高度
+    //             var leftHeight = contentHeight;
+    //             //pdf页面偏移
+    //             var position = 0;
+    //             //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+    //             var imgWidth = 595.28;
+    //             var imgHeight = 592.28 / contentWidth * contentHeight;
+
+    //             var pageData = canvas.toDataURL('image/jpeg', 1.0);
+
+    //             var pdf = new jsPDF('', 'pt', 'a4');
+
+    //             //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+    //             //当内容未超过pdf一页显示的范围，无需分页
+    //             if (leftHeight < pageHeight) {
+    //                 pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);
+    //             } else {
+    //                 while (leftHeight > 0) {
+    //                     pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
+    //                     leftHeight -= pageHeight;
+    //                     position -= 841.89;
+    //                     //避免添加空白页
+    //                     if (leftHeight > 0) {
+    //                         pdf.addPage();
+    //                     }
+    //                 }
+    //             }
+
+    //             pdf.save('标准物品验收记录表.pdf');
+
+    //         });
+
+    //     });
+    // });
+</script>
+{% endblock %}

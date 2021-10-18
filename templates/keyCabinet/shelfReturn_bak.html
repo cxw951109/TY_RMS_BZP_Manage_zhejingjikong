@@ -1,0 +1,97 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid" style="padding: 0 !important;">
+    <div class="layui-card">
+
+        <div class="layui-card-body">
+            <div class="layui-bg-black" id="scanBox" style="font-size: 18px;text-align: center; line-height: 35px;">
+                <div id="complete"></div>
+                <div class="materialOperaTip">请归还人扫描货架二维码进行归还</div>
+                <div><span>已扫描归还数量：<span class="totalCount">0</span></span></div>
+
+            </div>
+            <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+        </div>
+    </div>
+</div>
+<script>
+    var totalCount=0;
+    layui.use(['index', 'table'], function () {
+        var $ = layui.$
+            , table = layui.table
+            , form = layui.form;
+        // $("#scanInput").focus();
+        var tableData = JSON.parse(localStorage.getItem("materialUseList"));
+        console.log(tableData);
+        //列表数据
+        table.render({
+            elem: '#LAY-datatable'
+            , data: tableData
+            , size: 'lg'
+            , cols: [[
+                { type: 'numbers', unresize: true, title: '序号' }
+                , { field: 'Name', width: 200, title: '试剂名称' }
+                , { field: 'CASNumber', title: 'CAS码', width: 120 }
+                , { field: 'Speci', title: '试剂规格', width: 100 }
+                , { field: 'SpeciUnit', title: '规格单位', width: 100 }
+                , { field: 'UseQuantity', title: '用量（g）', width: 130 }
+                , { field: 'UsePurpose', title: '用途', width: 170, align: 'center' }
+                , { field: 'Place', title: '位置', minWidth: 200 }
+            ]]
+            , page: false
+            , limit: 10000
+            , limits: [10, 15, 20, 25, 30]
+            , height: 'full-120'
+        });
+
+        window.focus();   // 当前页面获得焦点用来RFID扫描
+        //挂钩jquery插件，实现条码识别
+        $(document).barCodeScanerModeEnter(function (barCode) {
+            var scanList= tableData.filter(function(x){
+                return x.BarCode==barCode
+            });
+            if(scanList.length==0){
+                LayerErrorMsg("列表中无此货架试剂！");
+                return;
+            }
+            var waitUseMIDList = JSLINQ(scanList).Select("MedicamentId,Remain,UsePurpose").toArray();
+            console.log("waitUseMIDList:",waitUseMIDList);
+            var loadIndex = LayerLoadMsg("正在执行");
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'drug:drugReturnView' %}',
+                data: { drugId: JSON.stringify(waitUseMIDList) },
+                success: function (data) {
+                    layer.close(loadIndex);
+                    if (data.status == 0) {
+                        totalCount+=scanList.length;
+                        $(".totalCount").text(totalCount);
+                        tableData=array_difference(tableData,scanList);
+                        table.reload('LAY-datatable', { data: tableData });
+                        if(tableData.length==0){
+                            $(".layui-table-view").hide();
+                            $("#complete").css("height","180px");
+                            $("#scanBox").css("height","480px").removeClass("layui-bg-black").addClass("layui-bg-green");
+                            $(".materialOperaTip").text("归还完成").css("font-size","22px")
+                        }
+                       
+                    } else {
+                        LayerErrorMsg("归还失败"+data.message);
+
+                    }
+                },
+                error: function () {
+                    alert('数据异常！');
+                    layer.close(loadIndex);
+                }
+            });
+        });
+
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

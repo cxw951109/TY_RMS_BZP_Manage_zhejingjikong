@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta name="referrer" content="always">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <title>试剂系统后台管理 - 主页</title>
+    <script type="text/javascript">
+
+    </script>
+    {% load static %}
+    <!--  <link rel="shortcut icon" href="favicon.ico"> -->
+    <link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
+    <link rel="stylesheet" href="{% static 'layuiadmin/style/admin.css' %}" media="all">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/icon/iconfont.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/virtualkeyboard/virtualkeyboard.css' %}" rel="stylesheet" />
+    <style>
+        html,body{
+          min-height: 900px;
+        }
+        body .layer-skin{border-radius:5px;}
+        body .layer-skin .layui-layer-title{border-radius:5px 5px 0 0;}
+        .layui-layer-iframe .layui-layer-btn{
+          border-top: 1px solid #efeaea !important;
+        }
+        .layui-nav-more{
+          display: none;
+        }
+        /* .layui-side-menu{ zoom: 1.1;} */
+        .layui-layout-admin .layui-logo{
+          font-size: 17px;
+        }
+        .layui-nav * {
+            font-size: 15px;
+        } 
+        #LAY-system-side-menu li:not(:first-child){
+          display: none;
+        }
+        #LAY-system-side-menu li dd{
+          display: none;
+        }
+    </style>
+    <script>
+      var CheckCode ='{{userMD5Pwd}}';
+    </script>
+
+</head>
+
+<body class="layui-layout-body">
+    <div id="LAY_app">
+        <div class="layui-layout layui-layout-admin">
+          <div class="layui-header">
+            <!-- 头部区域 -->
+            <ul class="layui-nav layui-layout-left">
+              <li class="layui-nav-item layadmin-flexible" lay-unselect>
+                <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                  <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
+                </a>
+              </li>
+              <li class="layui-nav-item" lay-unselect>
+                <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                  <i class="layui-icon layui-icon-refresh-3"></i>
+                </a>
+              </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
+              
+              <li class="layui-nav-item" data-name="DrugTemplateIndex" id="warningInfo" lay-unselect style="margin-right: 25px">
+                <a lay-href="/warning/index?tag=1" layadmin-event="message" lay-text="预警信息">
+                  <i class="layui-icon layui-icon-notice"><span class="layui-badge warning-count"></span></i>  
+                </a>
+              </li>
+
+              <!-- <li class="layui-nav-item" data-name="WarningIndex" id="warningInfo" lay-unselect style="margin-right: 25px;">
+                <a lay-href="/warning/index?tag=1" layadmin-event="message" lay-text="预警信息">
+                  <i class="layui-icon layui-icon-flag"><span class="layui-badge">1</span></i>  
+                </a>
+              </li> 
+              <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a href="javascript:;" layadmin-event="theme">
+                  <i class="layui-icon layui-icon-theme"></i>
+                </a>
+              </li> -->
+              <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a href="javascript:;" layadmin-event="note">
+                  <i class="layui-icon layui-icon-note"></i>
+                </a>
+              </li> -->
+              <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a href="javascript:;" layadmin-event="fullscreen">
+                  <i class="layui-icon layui-icon-screen-full"></i>
+                </a>
+              </li>
+              <li class="layui-nav-item" lay-unselect>
+                <a href="javascript:;">
+                  <cite>{{user.RealName}}</cite>
+                </a>
+                <dl class="layui-nav-child">
+                  <dd><a lay-href="{% url 'home:myInfo' %}">个人资料</a></dd>
+                  <!-- <dd><a lay-href="set/user/password.html">修改密码</a></dd> -->
+                  <hr>
+                  <dd><a href="{% url 'account_logout' %}">退出</a></dd>
+                  <!-- <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd> -->
+                </dl>
+              </li>
+              
+              <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
+                <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
+              </li> -->
+              <!-- <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
+                <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
+              </li> -->
+            </ul>
+          </div>
+          
+          <!-- 侧边菜单 -->
+          <div class="layui-side layui-side-menu">
+            <div class="layui-side-scroll">
+              <div class="layui-logo" lay-href="{% url 'main' %}">
+                <span>试剂管理系统</span>
+              </div>
+              
+              <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+                <li data-name="home" class="layui-nav-item layuiQ-nav-itemed layui-this">
+                  <a href="javascript:;" lay-href="{% url 'main' %}" lay-tips="主页" lay-direction="2">
+                    <i class="layui-icon layui-icon-home"></i>
+                    <cite>主页概况</cite>
+                  </a>
+                </li>
+                <li data-name="PurchaseManage" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="采购管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>采购管理</cite>
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="PurchaseIndex">
+                      <a lay-href="{% url 'standard:purchaseIndex' %}">采购计划</a>
+                    </dd>
+                    <dd data-name="PurchaseWaitingIndex">
+                      <a lay-href="{% url 'standard:purchaseWaitingIndex' %}">等待采购</a>
+                    </dd>
+                    <dd data-name="PurchaseCompleteIndex">
+                      <a lay-href="{% url 'standard:purchaseCompleteIndex' %}">完成采购</a>
+                    </dd>
+                  </dl>
+                </li>
+                <li data-name="AcceptanceIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'standard:acceptanceIndex' %}" lay-tips="验收" lay-direction="2">
+                    <i class="layui-icon layui-icon-template"></i>
+                    <cite>试剂验收</cite>
+                  </a>
+                </li>
+                <li data-name="DrugTemplateIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'drugTemplate_index' %}" lay-tips="试剂入库" lay-direction="2">
+                    <i class="layui-icon layui-icon-component"></i>
+                    <cite>试剂入库</cite>
+                  </a>
+                </li>
+                <li data-name="DrugTemplateIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'keyCabinet:materialUse' %}" lay-tips="试剂领用" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>试剂领用</cite>
+                  </a>
+                </li>
+                <li data-name="DrugTemplateIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'keyCabinet:materialReturn' %}" lay-tips="试剂领用" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>试剂归还</cite>
+                  </a>
+                </li>
+                <li data-name="PeriodCheck" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="期间核查" lay-direction="2">
+                    <i class="layui-icon layui-icon-survey"></i>
+                    <cite>期间核查</cite>
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="PurchaseIndex">
+                      <a lay-href="{% url 'standard:periodCheckDrugAnonIndex' %}">即时核查</a>
+                    </dd>
+                    <dd data-name="PurchaseWaitingIndex">
+                      <a lay-href="{% url 'standard:periodCheckIndex' %}">分类核查</a>
+                    </dd>
+                    <dd data-name="PurchaseWaitingIndex">
+                      <a lay-href="{% url 'standard:periodCheckDrugFailureIndex' %}">不合格试剂</a>
+                    </dd>
+                  </dl>
+                </li>
+                <li data-name="CabinetIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'cabinet:mapIndex' %}" lay-tips="库房查看" lay-direction="2">
+                    <i class="layui-icon layui-icon-template"></i>
+                    <cite>库房查看</cite>
+                  </a>
+                </li>
+                <li data-name="CabinetIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'cabinet:index' %}" lay-tips="柜体管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-template"></i>
+                    <cite>柜体管理</cite>
+                  </a>
+                </li>
+                <li data-name="DrugManage" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="试剂管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>试剂管理</cite>
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="DrugIndex">
+                      <a lay-href="{% url 'drug_index' %}">试剂数据</a>
+                    </dd>
+                    <dd data-name="DrugTypeIndex">
+                      <a lay-href="{% url 'drug:drugTypeIndex' %}">试剂类别</a>
+                    </dd>
+                    <!-- <dd data-name="DrugTypeIndex">
+                      <a lay-href="{% url 'drug:drugTypeIndex' %}">试剂销毁</a>
+                    </dd> -->
+                  </dl>
+                </li>
+                <!-- <li data-name="WarningIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'warning:index' %}" lay-tips="危化品管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>危化品管理</cite>
+                  </a>
+                </li>
+                <li data-name="WarningIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'warning:index' %}" lay-tips="耗材管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-app"></i>
+                    <cite>耗材管理</cite>
+                  </a>
+                </li> -->
+                <li data-name="HumitureIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'humiture:index' %}" lay-tips="温度记录" lay-direction="2">
+                    <i class="layui-icon layui-icon-snowflake"></i>
+                    <cite>温度记录</cite>
+                  </a>
+                </li>
+                <li data-name="DataReportIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'dataReport:index' %}" lay-tips="报表统计" lay-direction="2">
+                    <i class="layui-icon layui-icon-chart"></i>
+                    <cite>报表统计</cite>
+                  </a>
+                </li>
+                <li data-name="StockTakingIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'stockTaking:index' %}" lay-tips="库存盘点" lay-direction="2">
+                    <i class="layui-icon layui-icon-form"></i>
+                    <cite>库存盘点</cite>
+                  </a>
+                </li>
+                <li data-name="ApproveManage" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="审批管理" lay-direction="2">
+                    <i class="layui-icon layui-icon-senior"></i>
+                    <cite>审批管理</cite>
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="ApproveMySend">
+                      <a lay-href="{% url 'approve:mySend' %}">我的申请</a>
+                    </dd>
+                    <dd data-name="ApproveMyReceive">
+                      <a lay-href="{% url 'approve:myReceive' %}">待我审批</a>
+                    </dd>
+                    <dd data-name="ApproveSetIndex">
+                      <a lay-href="{% url 'approve:setIndex' %}">审批配置</a>
+                    </dd>
+                  </dl>
+                </li>
+                <li data-name="StockTakingIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'drug:danger' %}" lay-tips="MSDS数据库" lay-direction="2">
+                    <i class="layui-icon layui-icon-form"></i>
+                    <cite>MSDS数据库</cite>
+                  </a>
+                </li>
+                <li data-name="UserManage" class="layui-nav-item">
+                  <a href="javascript:;" lay-tips="用户" lay-direction="2">
+                    <i class="layui-icon layui-icon-user"></i>
+                    <cite>用户信息</cite>
+                  </a>
+                  <dl class="layui-nav-child">
+                    <dd data-name="UserIndex">
+                      <a lay-href="{% url 'user:index' %}">用户信息</a>
+                    </dd>
+                    <dd data-name="UserRoleIndex">
+                      <a lay-href="{% url 'user:roleIndex' %}">角色信息</a>
+                    </dd>
+                  </dl>
+                </li>
+                <li data-name="LogIndex" class="layui-nav-item layui-nav-itemed">
+                  <a href="javascript:;" lay-href="{% url 'log_index' %}" lay-tips="视频监控" lay-direction="2">
+                    <i class="layui-icon layui-icon-flag"></i>
+                    <cite>视频监控</cite>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+    
+          <!-- 页面标签 -->
+          <div class="layadmin-pagetabs" id="LAY_app_tabs">
+            <div class="layui-icon layadmin-tabs-control layui-icon-prev" layadmin-event="leftPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-next" layadmin-event="rightPage"></div>
+            <div class="layui-icon layadmin-tabs-control layui-icon-down">
+              <ul class="layui-nav layadmin-tabs-select" lay-filter="layadmin-pagetabs-nav">
+                <li class="layui-nav-item" lay-unselect>
+                  <a href="javascript:;"></a>
+                  <dl class="layui-nav-child layui-anim-fadein">
+                    <dd layadmin-event="closeThisTabs"><a href="javascript:;">关闭当前标签页</a></dd>
+                    <dd layadmin-event="closeOtherTabs"><a href="javascript:;">关闭其它标签页</a></dd>
+                    <dd layadmin-event="closeAllTabs"><a href="javascript:;">关闭全部标签页</a></dd>
+                  </dl>
+                </li>
+              </ul>
+            </div>
+            <div class="layui-tab" lay-unauto lay-allowClose="true" lay-filter="layadmin-layout-tabs">
+              <ul class="layui-tab-title" id="LAY_app_tabsheader">
+                <li lay-id="{% url 'main' %}" lay-attr="{% url 'main' %}" class="layui-this"><i class="layui-icon layui-icon-home"></i></li>
+              </ul>
+            </div>
+          </div>
+          
+          
+          <!-- 主体内容 -->
+          <div class="layui-body" id="LAY_app_body">
+            <div class="layadmin-tabsbody-item layui-show">
+              <iframe src="{% url 'main' %}" frameborder="0" class="layadmin-iframe"></iframe>
+            </div>
+          </div>
+          
+          <!-- 辅助元素，一般用于移动设备下遮罩 -->
+          <div class="layadmin-body-shade" layadmin-event="shade"></div>
+        </div>
+      </div>
+
+
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/md5.js' %}"></script>
+    <script src="{% static 'layuiadmin/layui/layui.js' %}"></script>
+    <!-- <script src="{% static 'plugins/virtualkeyboard/virtualkeyboard.js' %}"></script> -->
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script>
+    layui.config({
+      base: '../static/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use('index');
+
+
+    </script>
+    
+    <script src="{% static 'js/qwebchannel-js.js' %}"></script>
+    <script type="text/javascript">
+    
+
+        var PowerList={{object_id_list|safe}};
+        PowerList.forEach(function(element,index){
+          $("#LAY-system-side-menu li[data-name="+element+"]").show();
+          $("#LAY-system-side-menu dd[data-name="+element+"]").show();
+          $("#LAY-system-side-menu dd[data-name="+element+"]").parent().parent().show();
+          if(element=="WarningIndex"){
+            $("#warningInfo").show();
+          }
+        });
+        var P_Face;
+        var flag_ = false;
+        var visitType = getUrlParam('visitType');
+        if ("undefined" != typeof qt) {
+            new QWebChannel(qt.webChannelTransport, function (channel) {
+                P_Face = channel.objects.P_Face;
+            });
+        }
+
+        $(function () {
+
+
+            if (visitType != '1') {
+                $(".centerVisit").hide();
+                $(".powerOff").hide();
+            }
+
+            if (visitType != '2') {
+                $(".redirectTerminal").hide();
+            }
+            else {
+                $("#logout").hide();
+
+            }
+
+            $('#med-manager').click(function () {
+                if (flag_) {
+                    flag_ = false;
+                    $('#med-show').css('display', 'none')
+                } else {
+                    flag_ = true;
+                    $('#med-show').css('display', 'block')
+                }
+
+            });
+            $(".redirectTerminal").click(function () {
+                //P_Sys.loadUrl("file:////home/yanyi/Project/RMS/UI_WebEngine/index.html");
+                location.assign("file:////home/yanyi/Project/RMS/UI_WebEngine/index.html");
+            });
+            var currentTime = 0;
+            getWarningCount();
+            setInterval(function () {
+                currentTime++;
+                if (currentTime % 5 == 0) {
+                    getWarningCount();
+                }
+            }, 3000);
+        });
+
+        function getWarningCount() {
+
+            $.get("/warning/warning_numbers", function (obj) {
+                $(".warning-count").text(obj.number);
+                if (obj.number == 0) {
+                    $(".warning-count").hide();
+                }
+                else {
+                    $(".warning-count").show();
+                }
+            });
+
+        }
+        function completeAddFace(code) {
+            layer.msg("录入人脸成功！");
+
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,407 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-card-header" style="font-size: 20px;font-weight: bold;">在用试剂列表</div>
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+      <div style="display: flex; justify-content: center;">
+        <div class="layui-form-item" style="width: 1000px;">
+          <div class="layui-inline">
+            <label class="layui-form-label">关键字</label>
+            <div class="layui-input-block" style="width: 360px;">
+              <input type="text" name="searchValue" placeholder="试剂名称、CAS码、英文名称" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline will-hide">
+            <label class="layui-form-label">终端</label>
+            <div class="layui-input-block">
+              <select name="clientId" id="clientId">
+                <option value="">不限</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-card-body">
+      <!-- <div style="padding-bottom: 10px;">
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="batchdel">添加柜子试剂</button>
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加货架试剂</button>
+        </div> -->
+
+      <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+      <script type="text/html" id="datatable-toolbar">
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addUseList"><i class="layui-icon layui-icon-edit"></i>添加到归还列表</a>
+        </script>
+    </div>
+  </div>
+  <div class="layui-card will-hide">
+    <div class="layui-card-header" style="font-size: 20px;font-weight: bold;">待归还列表</div>
+    <div class="layui-card-body" style="padding: 15px;">
+      <table id="LAY-datatable-use" lay-filter="LAY-datatable-use"></table>
+    </div>
+    <script type="text/html" id="statusTpl-HandoutMaterials">
+        <button class="layui-btn layui-btn-normal layui-btn-xs">合法</button>
+        <!-- <button class="layui-btn layui-btn-danger layui-btn-xs">不合法</button> -->
+      </script>
+    <script type="text/html" id="datatable-toolbar-use">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>从列表中移除</a>
+      </script>
+  </div>
+</div>
+<div class="returnInfo" style="padding-top: 10px;display: none;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">用量</label>
+    <div class="layui-input-inline"  style="width: 100px;">
+        <input type="number" name="UseQuantity" id="UseQuantity" value="0" placeholder="请输入试剂用量" autocomplete="off"
+            class="layui-input">
+    </div>
+    <div class="layui-input-inline" id="returnUnit" style="width: 50px;margin-top:12px">ml</div>
+    <div class="layui-input-inline" style="width: 50px;margin-top:12px"><input type="checkbox" id="setEmpty" title="空瓶"> 空瓶</div>
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label">用途</label>
+    <div class="layui-input-inline">
+        <input type="text" name="UsePurpose" id="UsePurpose" value=""  placeholder="请输入用途"
+            class="layui-input">
+    </div>
+</div>
+</div>
+<div class="layui-layout-admin will-hide">
+  <div class="layui-footer" style="left: 0;z-index: 99999;">
+    <button id="cancelReceiveSamplesBtn" class="layui-btn boot-btn-danger next">取消归还</button>&nbsp;&nbsp;&nbsp;
+    <button id="okUseBtn" class="layui-btn cancle-btn">确认归还</button>
+  </div>
+</div>
+<script>
+  if(sessionStorage.visitType!=1){
+    $(".will-hide").hide();
+  }
+  layui.use(['index', 'table'], function () {
+    var table = layui.table
+      , form = layui.form;
+    var remain=0;
+      $.get("{% url 'cabinet:getSelectClientListJson' %}",{}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#clientId").append("<option value='" + data.value + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+    var tableConfig={
+      elem: '#LAY-datatable'
+      , url: "{% url 'drug_GetDrugListJson' %}?status=2&isMyUse=1"
+      // ,size:'lg'
+      , cols: [[
+        { type: 'numbers', unresize: true, title: '序号' }
+        , { field: 'Name', width: 190, title: '试剂名称' }
+        , { field: 'EnglishName', title: '英文名称', minWidth: 180 }
+        , { field: 'BarCode', title: '条码编号', minWidth: 150,templet:function(data){
+            return data.CellPositionCode==100?'无':data.BarCode;
+        } }
+        , { field: 'CASNumber', title: 'CAS码', width: 150 }
+        , { field: 'Remain', title: '试剂余量', width: 130,templet:function(data){
+            return data.Remain+data.SpeciUnit;
+        } }
+        , { field: 'Speci', title: '试剂规格', width: 130,templet:function(data){
+            return data.Speci+data.SpeciUnit;
+        } }
+        , { field: 'Purity', title: '纯度', width: 130 }
+        , {field: 'Manufacturer', title: '生产厂家', width: 170}
+        , { field: 'ExpirationDate', title: '过期日期', width: 170, align: 'center' }
+        , { field: 'Place', title: '位置',fixed: 'right', width: 200, align: 'center' }
+        , { title: '操作', width: 200, width: 150, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar' }
+      ]]
+      , page: {
+        layout: ['count', 'prev', 'page', 'next',] //自定义分页布局
+        , prev: '上一页'
+        , next: '下一页'
+      }
+      , limit: 15
+      , limits: [10, 15, 20, 25, 30]
+      , height: '350'
+
+      , parseData: function (res) {
+        console.log("res", res);
+        var dataList = res.data;
+        var waitUseMIDList = JSLINQ(waitUseList).Select("MedicamentId").toArray();
+        dataList = dataList.concat(waitUseList).filter(function (v) {
+          return waitUseMIDList.indexOf(v.MedicamentId) === -1
+        });
+        /* 如果需要前端做模拟查询，可以在此处写，先过滤数据
+        var temp = dataList;
+        dataList = [];
+        for(var i=0; i<temp.length; i++){
+          if(条件1){
+            flag1 = true;
+          }
+          if(条件2){
+            flag2 = true;
+          }
+          if(flag1 && flag2){
+            dataList.push(temp[i]);
+          }
+        } */
+        var total = dataList.length; //请求的数据总数
+        var list = []; //用来保存当前页显示的数据
+        //前端模拟分页，获取当前页、分页显示数据量
+        var page = $("#layui-table-page1").find(".layui-laypage-em").next().html();
+        var limit = $("#layui-table-page1").find(".layui-laypage-limits select").val();
+        console.log(page + ", " + limit);
+        if (page == undefined || page == null || page == "") {
+          page = 1;
+        }
+        if (limit == undefined || limit == null || limit == "") {
+          limit = 10;
+        }
+        //数据从哪条数据开始
+        var start = (page - 1) * limit;
+        //数据从哪条数据结束
+        var end = page * limit;
+        if (end > total) {
+          end = total;
+        }
+        //取分页数据
+        for (var i = start; i < end; i++) {
+          list.push(dataList[i]);
+        }
+        return {
+          "code": 0, //解析接口状态
+          "count": total, //解析数据长度
+          "data": list //解析数据列表
+        }
+      },
+    };
+    if(sessionStorage.visitType!=1){
+      tableConfig.height='full-180';
+      tableConfig.cols[0].pop();
+      tableConfig.cols[0][10].templet=function(data){
+        return data.FlowNo+'楼'+data.Place;
+      };
+    }
+    //列表数据
+    table.render(tableConfig);
+
+    //监听工具条
+    table.on('tool(LAY-datatable)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'del') {
+
+      } else if (obj.event === 'addUseList') {
+        var tr = $(obj.tr);
+
+        if (waitUseList.length != 0) {
+          if (data.CellPositionCode != waitUseList[0].CellPositionCode) {
+            LayerErrorMsg("钥匙柜和货架试剂不能同时归还！");
+            return;
+          }
+          if (data.CellPositionCode == 100 && data.Place != waitUseList[0].Place) {
+            LayerErrorMsg("只能同时归还同一个钥匙柜格子的试剂！");
+            return;
+          }
+        }
+        remain=data.Remain;
+        $("#returnUnit").text(data.SpeciUnit);
+        $(".returnInfo").show();
+        layer.open({
+            type: 1
+            , title: '归还试剂信息'
+            , content: $(".returnInfo")
+            , area: ['400px', '230px']
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+
+              var UseQuantity= $("#UseQuantity").val()==""?0:parseFloat($("#UseQuantity").val());
+
+              if(UseQuantity>data.Remain){
+                LayerErrorMsg("用量不能大于余量！");
+                return;
+              }
+              data.UseQuantity=UseQuantity;
+              data.UsePurpose=$("#UsePurpose").val();
+              data.Remain=data.Remain-UseQuantity;
+              data.IsEmpty=$("#setEmpty").prop("checked")==true?1:0;
+              waitUseList.push(data);
+              console.log(waitUseList);
+              tr.remove();
+              table.reload('LAY-datatable-use', { data: waitUseList });
+              $("#UsePurpose").val("");
+              $("#UseQuantity").val("0")
+              $("#setEmpty").removeProp("checked")
+              layer.close(index);
+            }
+            , end: function () {
+              $(".returnInfo").hide();
+            }
+          });
+
+      }
+    });
+    //监听工具条
+    table.on('tool(LAY-datatable-use)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'del') {
+        var tr = $(obj.tr);
+        tr.remove();
+        waitUseList = waitUseList.filter(function (item) {
+          return item.MedicamentId != data.MedicamentId
+        });
+        table.reload('LAY-datatable-use', { data: waitUseList });
+      }
+    });
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function (data) {
+      var field = data.field;
+
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+    $("#setEmpty").change(function(){
+      if($(this).prop("checked")==true)
+      {
+        $("#UseQuantity").val(remain);
+      }else{
+        $("#UseQuantity").val(0);
+      }
+    });
+    $("#cancelReceiveSamplesBtn").click(function(){
+      location.href = "/main";
+
+    });
+    $("#okUseBtn").click(function () {
+      if (waitUseList.length == 0) {
+        LayerErrorMsg("无待归还试剂！");
+        return;
+      }
+      top.layer.open({
+              type: 2
+              , title: '领用归还位置示意'
+              , content: "{% url 'keyCabinet:keyCabinetView' %}?type=1"
+              , area: ['1100px', '600px']
+              , btn: []
+              , yes: function (index, layero) {
+                // var submitID = 'LAY-user-front-submit'
+                //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                // submit.trigger('click');
+              },cancel:function(){
+                // alert("fdfdf1");
+              }
+              , end: function () {
+
+              }
+            });
+      if(waitUseList[0].CellPositionCode==100){
+        var waitUseMIDList = JSLINQ(waitUseList).Select("MedicamentId,Remain,UsePurpose,IsEmpty").toArray();
+      var loadIndex = LayerLoadMsg("正在执行");
+      $.ajax({
+        type: 'POST',
+        url: '{% url 'drug:drugReturnView' %}',
+        data: { drugId: JSON.stringify(waitUseMIDList) },
+        success: function (data) {
+          layer.close(loadIndex)
+          if (data.status == 0) {
+            
+            localStorage.setItem("keyCabinetViewPlace", '1号钥匙柜-'+waitUseList[0].FlowPositionCode);
+            top.layer.open({
+              type: 2
+              , title: '领用试剂钥匙柜位置显示'
+              , content: "{% url 'keyCabinet:keyCabinetView' %}"
+              , area: ['800px', '600px']
+              , btn: ['重新开门', '完成']
+              , yes: function (index, layero) {
+                // var submitID = 'LAY-user-front-submit'
+                //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                // submit.trigger('click');
+                layero.find('iframe')[0].contentWindow.location.reload(true);
+              }
+              , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+              }
+            });
+            
+          } else {
+            LayerErrorMsg(data.message);
+
+          }
+        },
+        error: function () {
+          alert('数据异常！');
+          flag_status = true;
+          layer.close(index);
+          // socket.send('886');
+        }
+      });
+      }else{
+
+        localStorage.setItem("materialUseList", JSON.stringify(waitUseList));
+        top.layer.open({
+              type: 2
+              , title: '货架试剂归还'
+              , content: "{% url 'keyCabinet:shelfReturn' %}"
+              , area: ['1000px', '600px']
+              , btn: ['完成']
+              , yes: function (index, layero) {
+                // var submitID = 'LAY-user-front-submit'
+                //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                // submit.trigger('click');
+                top.layer.close(index);
+              }
+              , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+              }
+            });
+      }
+
+
+    });
+    var waitUseList = [];
+    //列表数据
+    table.render({
+      elem: '#LAY-datatable-use'
+      , data: waitUseList
+      , size: 'lg'
+      , cols: [[
+        { type: 'numbers', unresize: true, title: '序号' }
+        , { field: 'Name', width: 190, title: '试剂名称' }
+        , { field: 'EnglishName', title: '英文名称', minWidth: 180 }
+        , { field: 'BarCode', title: '条码编号', minWidth: 180,templet:function(data){
+            return data.CellPositionCode==100?'无':data.BarCode;
+        } }
+        , { field: 'CASNumber', title: 'CAS码', width: 150 }
+        , { field: 'Speci', title: '试剂规格', width: 130,templet:function(data){
+            return data.Speci+data.SpeciUnit;
+        }  }
+        , { field: 'Purity', title: '纯度', width: 130 }
+        , {field: 'Manufacturer', title: '生产厂家', width: 170}
+        , { field: 'UseQuantity', title: '用量', width: 130,templet:function(data){
+            return data.UseQuantity+data.SpeciUnit;
+        }  }
+        , { field: 'UsePurpose', title: '用途', width: 170, align: 'center' }
+        , { field: 'Place', title: '位置', width: 200,fixed: 'right', align: 'center' }
+        , { title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar-use' }
+      ]]
+      , page: false
+      , limit: 10000
+      , limits: [10, 15, 20, 25, 30]
+      , height: '300'
+    });
+
+  });
+</script>
+{% endblock %}

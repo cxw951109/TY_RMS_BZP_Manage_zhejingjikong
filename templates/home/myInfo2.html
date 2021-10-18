@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link href="{% static 'js/plugins/newCropper/cropper.min.css' %}" rel="stylesheet" />
+<link href="{% static 'js/plugins/newCropper/sitelogo.css' %}" rel="stylesheet" />
+    <script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+
+<script src="{% static 'js/plugins/newCropper/cropper.js' %}"></script>
+<script src="{% static 'js/plugins/newCropper/sitelogo.js' %}"></script>
+<style type="text/css">
+    .avatar-btns button {
+        height: 35px;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="ibox-content">
+        <div class="tabs-container">
+            <ul class="nav nav-tabs" id="avatar-tab">
+                <li class="active">
+                    <a data-toggle="tab" href="#tab-1" aria-expanded="true">基本信息</a>
+                </li>
+                <li class="">
+                    <a data-toggle="tab" href="#tab-2" aria-expanded="false">修改密码</a>
+                </li>
+               <!-- <li class="">
+                    <a data-toggle="tab" href="#tab-3" aria-expanded="false">设置头像</a>
+                </li> -->
+            </ul>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="panel-body">
+                        <form class="form-horizontal m-t" id="myinfoForm" style="width:600px">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">工号：</label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" id= "UserId" name="UserId" value="{{ user.UserId }}">
+                                    <input id="Account" name="Account" disabled="disabled" class="form-control" type="text" value="{{ user.Account }}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">角色：</label>
+                                <div class="col-sm-8">
+                                    <input id="RoleName" name="RoleName" disabled="disabled" class="form-control" type="text" aria-required="true" aria-invalid="false" value="{% firstof user.RoleName '' %}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">姓名：</label>
+                                <div class="col-sm-8">
+                                    <input id="RealName" name="RealName" class="form-control" type="text" aria-required="true" aria-invalid="true" value="{% firstof  user.RealName '' %}">
+                                </div>
+                            </div>
+                            <!--@*<div class="form-group">-->
+                                    <!--<label class="col-sm-3 control-label">性别：</label>-->
+                                    <!--<div class="col-sm-8">-->
+                                        <!--<input id="password" name="password" class="form-control" type="password" >-->
+                                    <!--</div>-->
+                                <!--</div>*@-->
+                            <div class="form-group">
+                                      <label class="col-sm-3 control-label">生日：</label>
+                                <div class="col-sm-8">
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" class="form-control" id="Birthday" name="Birthday" value="{% firstof user.Birthday '' %}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">E-mail：</label>
+                                <div class="col-sm-8">
+                                    <input id="email" name="Email" class="form-control" type="email" value="{% firstof  user.Email '' %}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">QQ：</label>
+                                <div class="col-sm-8">
+                                    <input id="confirm_password" name="QQ" class="form-control" type="text" value="{% firstof  user.QQ '' %}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">电话：</label>
+                                <div class="col-sm-8">
+                                    <input id="phone" name="Mobile" class="form-control" type="text" value="{% firstof  user.Mobile '' %}">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:35px">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="panel-body">
+                        <form class="form-horizontal m-t" id="pwdForm" style="width:600px">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">原密码：</label>
+                                <div class="col-sm-8">
+                                    <input id="OldPwd" name="OldPwd" class="form-control" required type="password" aria-required="true" aria-invalid="true" placeholder="请输入原密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">密码：</label>
+                                <div class="col-sm-8">
+                                    <input id="NewPwd" name="NewPwd" class="form-control" required type="password" placeholder="请输入新密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">确认密码：</label>
+                                <div class="col-sm-8">
+                                    <input id="NewPwd1" name="NewPwd1" class="form-control" required type="password" placeholder="请输入确认密码">
+                                    <span class="help-block m-b-none" id="warning_"  style="color:red"></span>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:35px">
+                                <div class="col-sm-8 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div id="tab-3" class="tab-pane">
+                    <div class="panel-body">
+                        <div id="avatar-modal">
+                            <div>
+                                <div>
+                                    <form class="avatar-form">
+                                        <div class="modal-body">
+                                            <div class="avatar-body">
+                                                <div class="avatar-upload">
+                                                    <input class="avatar-src" name="avatar_src" type="hidden">
+                                                    <input class="avatar-data" name="avatar_data" type="hidden">
+                                                    <!--@*<label for="avatarInput" style="line-height: 35px;">图片上传</label>*@-->
+                                                    <button class="btn btn-primary" type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
+                                                    <span id="avatar-name"></span>
+                                                    <input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <div class="avatar-wrapper"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="avatar-preview preview-lg" id="imageHead" style="width: 182px; height: 182px;"><img src="" /></div>
+                                                        <!--<div class="avatar-preview preview-md"></div>
+                                                        <div class="avatar-preview preview-sm"></div>-->
+                                                    </div>
+                                                </div>
+                                                <div class="row avatar-btns">
+                                                    <div class="col-md-4">
+                                                        <div class="btn-group">
+                                                            <button class="btn btn-primary fa fa-undo" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"> 向左旋转</button>
+                                                        </div>
+                                                        <div class="btn-group">
+                                                            <button class="btn  btn-primary fa fa-repeat" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"> 向右旋转</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5" style="text-align: right;">
+                                                        <!--@*<button class="btn btn-primary fa fa-arrows" data-method="setDragMode" data-option="move" type="button" title="移动">-->
+                                                                <!--<span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">-->
+                                                                <!--</span>-->
+                                                            <!--</button>*@-->
+                                                        <button type="button" class="btn btn-primary fa fa-search-plus" data-method="zoom" data-option="0.1" title="放大图片">
+                                                            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, 0.1)">
+                                                                <!--<span class="fa fa-search-plus"></span>-->
+                                                            </span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary fa fa-search-minus" data-method="zoom" data-option="-0.1" title="缩小图片">
+                                                            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, -0.1)">
+                                                                <!--<span class="fa fa-search-minus"></span>-->
+                                                            </span>
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary fa fa-refresh" data-method="reset" title="重置图片">
+                                                            <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;reset&quot;)" aria-describedby="tooltip866214"></span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <button class="btn btn-primary btn-block avatar-save fa fa-save" type="button" data-dismiss="modal"> 保存头像</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'js/plugins/newCropper/html2canvas.min.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var $Birthday = $('#Birthday').val();
+    if($Birthday.length > 0){
+        $('#Birthday').val($Birthday.substring(0, 10))
+    }
+    $('#avatarInput').on('change', function (e) {
+        var filemaxsize = 1024 * 5;//5M
+        var target = $(e.target);
+        var Size = target[0].files[0].size / 1024;
+        if (Size > filemaxsize) {
+            alert('图片过大，请重新选择!');
+            $(".avatar-wrapper").children().remove;
+            return false;
+        }
+        if (!this.files[0].type.match(/image.*/)) {
+            alert('请选择正确的图片!')
+        } else {
+            var filename = document.querySelector("#avatar-name");
+            var texts = document.querySelector("#avatarInput").value;
+            var teststr = texts; //你这里的路径写错了
+            testend = teststr.match(/[^\\]+\.[^\(]+/i); //直接完整文件名的
+            filename.innerHTML = testend;
+        }
+
+    });
+
+    $('#NewPwd').focus(function () {
+        if($('#NewPwd1').val().length == 0) {
+            $('.fa-info-circle').show();
+            $('#warning_').html('<i class="fa fa-info-circle"></i> 请再次输入您的密码')
+        }
+    });
+    $('#NewPwd1').focus(function () {
+        $('#warning_').html('')
+    })
+
+    $(".avatar-save").on("click", function () {
+        var img_lg = document.getElementById('imageHead');
+        // 截图小的显示框内的内容
+        html2canvas(img_lg, {
+            allowTaint: true,
+            taintTest: false,
+            onrendered: function (canvas) {
+                canvas.id = "mycanvas";
+                //生成base64图片    数据
+                var dataUrl = canvas.toDataURL("image/jpeg");
+                var newImg = document.createElement("img");
+                newImg.src = dataUrl;
+                imagesAjax(dataUrl)
+            }
+        });
+    })
+
+    function imagesAjax(src) {
+        var data = {};
+        data.faceData = src;
+        data.jid = $('#jid').val();
+        $.ajax({
+            url: '@Url.Content("~/Home/SaveMyAvatar")',
+            data: data,
+            type: "POST",
+            dataType: 'json',
+            success: function (re) {
+                if (re.status == '1') {
+                    $('#avatar', window.parent.document).attr('src', re.data);
+                    msg("设置成功！");
+                }
+                else {
+                    msg("设置失败！");
+                }
+            }
+        });
+    }
+    $(function () {
+        $("#myinfoForm").submit(function () {
+
+            if($('#RealName').val() == ""){
+                msg('姓名不能为空！');
+            }else{
+                 var loadIndex = layer.load(2);
+                 $.post("{% url 'home:saveMyBaseInfo' %}", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            }
+
+            return false;
+        });
+
+        $("#pwdForm").submit(function () {
+            if ($("#NewPwd").val() != $("#NewPwd1").val()) {
+                msg("确认密码与新密码不一致！");
+                return false;
+            }
+            var loadIndex = layer.load(2);
+            $.post("{% url 'home:saveMyPwd' %}", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        window.parent.location.href = '{% url "account_login" %}'
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        })
+        //做个下简易的验证  大小 格式
+
+    })
+
+</script>
+
+
+{% endblock %}

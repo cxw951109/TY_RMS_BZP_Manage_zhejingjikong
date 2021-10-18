@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <style>
+    /* 定义layer弹框背景颜色 */
+    body .layer-custom .layui-layer-content{
+        background-color: rgba(16, 18, 15, 0.07);
+    }
+
+   .layer-custom{
+
+   }
+
+/* layer的按钮的样式设置 */
+    .layer-custom .layui-layer-btn a{
+        margin-right: 50px;
+        border: 0px;
+        background: #0d8ddb;
+    }
+    /* 设置layer弹出框的按钮所在的div中的样式 */
+   body .layer-custom .layui-layer-btn{
+
+    }
+
+    </style>
+
+
+    {% load static %}
+    <!-- 引入bootstrap样式 -->
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+<form class="form-horizontal myForm">
+
+  <div class="form-group" style="margin-top: 100px; margin-bottom: 30px; font-size: 18px;">
+    <label for="exampleInputName2" class="col-md-3 col-md-offset-1 control-label">类别 (纯度)</label>
+         <label for="exampleInputName2" class="col-md-3 control-label" style="margin-left: -20px;" >请输入校验在库数量</label>
+  </div>
+
+        <!-- 遍历后端传入不同类别的数据 -->
+    {% for variety_obj in variety_obj_list %}
+
+          <div class="form-group">
+            <label for="exampleInputName2" class="col-md-3 col-md-offset-1 control-label"><span class="name1">{{ variety_obj.Name }}</span> ({{ variety_obj.Purity }})</label>
+            <div class="col-md-2 col-md-offset-1">
+                 <input type="number"  vid="{{ variety_obj.VarietyId }}" class="form-control varietyId" id="stock_number" placeholder="请输入校验的在库数量" required="required">
+            </div>
+          </div>
+
+    {% endfor %}
+
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-8">
+          <button type="button" id="btn_click" class="btn btn-default">提交校验</button>
+        </div>
+    </div>
+
+</form>
+    <script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+    <script>
+
+    $(function () {
+
+
+        $('#btn_click').click(function () {
+             var tag = 0
+             var input_content_data = new Array();
+            $('.varietyId').each(function () {
+               varietyId =  $(this).attr('vid');
+               value1 = $(this).val();
+               if (value1 != ''){
+                   tag = tag + 1
+               }
+               input_content_data.push({'varietyId': varietyId, 'value': value1})
+            });
+                 // 判断输入的值是否为空 禁止提交
+            if (tag < input_content_data.length){
+                     layer.msg('库存数量不能为空, 请完善库存信息');
+                     return;
+                }
+            $.post('{% url 'stockTaking:checkStock' %}',{'input_values_list': JSON.stringify(input_content_data)}, function(obj){
+                if(obj.status == 1){
+                    // 定义layer content的内容
+                    html1 = '<div style="margin-top:20px;text-align: center; font-size: 20px;color:red">经核对库存数量有误的类别如下</div>' +
+                        '<div class="col-md-3 col-md-offset-3" style="margin-top:20px;font-size: 16px;font-weight: bold">类别(纯度) </div>\n' +
+                        '<div class="col-md-5 col-md-offset-1" style="margin-top:20px;font-size: 16px;font-weight: bold">在库数量</div>'
+                    $(obj.data).each(function (index, value1) {
+
+                        html1 += '<div class="col-md-4 col-md-offset-3" style="margin-top:20px;font-size: 15px;font-weight: bold">' + cut_out_str(value1.name) + ' (' + cut_out_str(value1.Purity) + ')' + '</div>' + '<div class="col-md-4" style="margin-left: 10px;margin-top:20px;font-size: 15px;font-weight: bold">' + cut_out_str(value1.value)   + '</div>'
+                    });
+
+                  layer.open({
+                              type: 1,
+                              area: ['800px', '400px'],
+                             skin: 'layer-custom',   // 自定义样式
+                              shade: false,
+                              title: false, //不显示标题
+                              btn: ['确定'],  // 按钮
+                              content: html1, // 自定义content  支持html语法
+                            });
+                }else{
+                    layer.msg(obj.message)
+                }
+            });
+
+        });
+
+        // 截取长度大于10的字符串
+      function cut_out_str(params_str) {
+          if(params_str.length > 10){
+              params_str = params_str.substring(0, 10) + '...';
+              return params_str
+          }else{
+              return params_str
+          }
+      }
+
+      // 限制类别名称以防毁掉样式
+      $('.name1').each(function () {
+          update_text = cut_out_str($(this).text());
+          $(this).text(update_text)
+      });
+    })
+
+    </script>
+
+
+{% endblock %}

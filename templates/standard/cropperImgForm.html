@@ -1,0 +1,182 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<link href="{% static 'layuiadmin/lib/extend/ImgCropping/cropper.min.css' %}" rel="stylesheet" />
+<!-- <link href="{% static 'layuiadmin/lib/extend/ImgCropping/ImgCropping.css' %}" rel="stylesheet" /> -->
+<div class="layui-fluid" id="ddd">
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin">
+        <div class="layui-form-item">
+            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                <label for="chooseImg" class="layui-btn layui-btn-primary">
+                    <i class="layui-icon">&#xe67c;</i>选择图片
+                </label>
+                <input class="layui-upload-file" id="chooseImg" type="file" onchange="selectImg(this)" value="选择图片">
+            </div>
+            <div class="layui-form-mid layui-word-aux">建议:图片尺寸210px*90px，大小500KB以内</div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs8">
+                <div class="cropper-container" style="height:300px;background-color: rgb(247, 247, 247);">
+                    <img id="tailoringImg">
+                </div>
+            </div>
+            <div class="layui-col-xs4">
+                <div id="previewImg"
+                    style="width:210px;height:90px;border: 1px solid rgb(200, 200, 200);overflow:hidden">
+                </div>
+            </div>
+        </div>
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs8">
+                <div class="layui-row">
+                    <div class="layui-col-xs9">
+                        <button type="button" class="layui-btn fa fa-rotate-left cropper-rotate-left-btn"
+                            cropper-event="rotate" data-option="-45">向左旋转45°</button>
+                        <button type="button" class="layui-btn fa fa-rotate-right cropper-rotate-right-btn"
+                            cropper-event="rotate" data-option="45">向右旋转45°</button>
+                    </div>
+                    <div class="layui-col-xs3" style="text-align: right;">
+                        <button type="button" class="layui-btn fa fa-refresh cropper-reset-btn" cropper-event="reset"
+                            title="重置图片"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs4">
+                <button class="layui-btn layui-btn-fluid fa fa-save" id="btnImgSave" style="width: 210px;"
+                    cropper-event="confirmSave" type="button">保存图片</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{% static 'layuiadmin/lib/extend/ImgCropping/cropper.js' %}"></script>
+<script src="{% static 'js/html2canvas.js' %}"></script>
+<script>
+    layui.use(['index', 'form'], function () {
+
+    });
+    var index=-1;
+    try {
+        index = parent.layer.getFrameIndex(window.name);
+    } catch (error) {
+        console.log(error)
+    }
+    sessionStorage.removeItem("photoDataSrc");
+    $(function () {
+        $("#btnImgSave").click(function () {
+            var img_lg = document.getElementById('previewImg');
+            // 截图小的显示框内的内容
+            html2canvas(img_lg, {
+                allowTaint: true,
+                taintTest: false,
+                onrendered: function (canvas) {
+                    canvas.id = "mycanvas";
+                    //生成base64图片数据
+                    var dataUrl = canvas.toDataURL("image/png");
+                    var pictureBase64 = dataUrl.split(',')[1];
+                    // var newImg = document.createElement("img");
+                    // newImg.src = dataUrl;
+                    if(pictureBase64=="")
+                    {
+                        layer.msg("没有图片信息！");
+                        return false;
+                    }
+                    var fieldData={"pictureBase64":pictureBase64};
+                    //提交修改
+                    $.post("{% url 'standard:savePhotographData' %}", fieldData, function (obj) {
+                        if (obj.status == 1) {
+                            msg("保存成功", function () {
+                                sessionStorage.setItem('photoDataSrc',obj.data)
+                                parent.layer.close(index);
+                            });
+                        }
+                        else {
+                            msg("保存失败 " + obj.message);
+                        }
+                    });
+                }
+            });
+
+        });
+
+        //cropper图片裁剪
+        $('#tailoringImg').cropper({
+            strict: false,
+            aspectRatio: 21 / 9,//默认比例
+            preview: '#previewImg',//预览视图
+            guides: true,  //裁剪框的虚线(九宫格)
+            autoCropArea: 1,  //0-1之间的数值，定义自动剪裁区域的大小，默认0.8
+            movable: false, //是否允许移动图片
+            dragCrop: false,  //是否允许移除当前的剪裁框，并通过拖动来新建一个剪裁框区域
+            movable: true,  //是否允许移动剪裁框
+            resizable: true,  //是否允许改变裁剪框的大小
+            zoomable: true,  //是否允许缩放图片大小
+            mouseWheelZoom: true,  //是否允许通过鼠标滚轮来缩放图片
+            touchDragZoom: true,  //是否允许通过触摸移动来缩放图片
+            rotatable: true,  //是否允许旋转图片
+            crop: function (e) {
+                // 输出结果数据裁剪图像。
+            }
+        });
+        //旋转
+        $(".cropper-rotate-left-btn").on("click", function () {
+            $('#tailoringImg').cropper("rotate", -45);
+        });
+        //旋转
+        $(".cropper-rotate-right-btn").on("click", function () {
+            $('#tailoringImg').cropper("rotate", 45);
+        });
+        //复位
+        $(".cropper-reset-btn").on("click", function () {
+            $('#tailoringImg').cropper("reset");
+        });
+        //换向
+        var flagX = true;
+        $(".cropper-scaleX-btn").on("click", function () {
+            if (flagX) {
+                $('#tailoringImg').cropper("scaleX", -1);
+                flagX = false;
+            } else {
+                $('#tailoringImg').cropper("scaleX", 1);
+                flagX = true;
+            }
+            flagX != flagX;
+        });
+
+        //裁剪后的处理
+        $("#sureCut").on("click", function () {
+            if ($("#tailoringImg").attr("src") == null) {
+                return false;
+            } else {
+                var cas = $('#tailoringImg').cropper('getCroppedCanvas');//获取被裁剪后的canvas
+                var base64url = cas.toDataURL('image/png'); //转换为base64地址形式
+                $("#finalImg").prop("src", base64url);//显示为图片的形式
+
+                //关闭裁剪框
+                closeTailor();
+            }
+        });
+        //关闭裁剪框
+        function closeTailor() {
+            $(".tailoring-container").toggle();
+        }
+    });
+    //图像上传
+    function selectImg(file) {
+        if (!file.files || !file.files[0]) {
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            var replaceSrc = evt.target.result;
+            //更换cropper的图片
+            $('#tailoringImg').cropper('replace', replaceSrc, false);//默认false，适应高度，不失真
+        }
+        reader.readAsDataURL(file.files[0]);
+    }
+</script>
+{% endblock %}

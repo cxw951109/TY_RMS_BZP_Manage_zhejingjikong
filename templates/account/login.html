@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+{% load static %}
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>登陆丨试剂管理系统</title>
+<link href="{% static 'newlogin/css/style.css' %}" rel="stylesheet" />
+<body>
+
+<div class="login-container">
+	<h1>试剂管理系统</h1>
+	
+	<div class="connect">
+		<p>欢迎使用</p>
+	</div>
+	
+	<form action="" method="post" id="loginForm">
+		<div>
+			<input type="text" name="username" id="userAccount" class="username" placeholder="用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input type="password" name="password" id="userPassword" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<button id="submit" type="button">登 陆</button>
+	</form>
+
+</div>
+
+</body>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'newlogin/js/common.js' %}"></script>
+<script src="{% static 'newlogin/js/supersized.3.2.7.min.js' %}"></script>
+<script src="{% static 'newlogin/js/supersized-init.js' %}"></script>
+<script src="{% static 'newlogin/js/jquery.validate.min.js' %}"></script>
+<script src="{% static 'js/plugins/layer3.1/layer.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+<script>
+    $(function(){
+        $("#userAccount").focus();
+            // 当用户输入框获得焦点或者密码输入框获得焦点enter键按下时提交事件触发
+            $(document).keyup(function (event) {
+                if (event.keyCode == 13) {
+                        $('#submit').trigger("click");
+                    }
+
+            });
+        $('#submit').click(function () {
+                var _userAccount = $("#userAccount").val();
+                var _userPassword = $("#userPassword").val();
+                if (_userAccount == "" || _userPassword == "") {
+                    layer.msg("用户名或密码不能为空");
+                    return;
+                }
+                $.post("{% url 'account_login' %}", { userAccount: _userAccount, userPassword: _userPassword }, function (obj) {
+                    var loginObj = obj;
+                    if (loginObj.status == 1) {
+                        location.href = "/";
+                                }
+                                else {
+                                    layer.msg(loginObj.message);
+                    }
+                    });
+
+            });
+    })
+</script>
+</html>

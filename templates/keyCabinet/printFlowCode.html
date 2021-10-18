@@ -1,0 +1,87 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<link href="{% static 'js/hiprint/css/hiprint.css' %}" rel="stylesheet" />
+<link href="{% static 'js/hiprint/css/print-lock.css' %}" rel="stylesheet" />
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">货架号</label>
+        <div class="layui-input-block">
+            <select name="cabinetNo" id="cabinetNo">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">层号</label>
+        <div class="layui-input-block">
+            <input type="radio" name="flowNo" value="1" title="1层" checked>
+            <input type="radio" name="flowNo" value="2" title="2层">
+            <input type="radio" name="flowNo" value="3" title="3层">
+            <input type="radio" name="flowNo" value="4" title="4层">
+            <input type="radio" name="flowNo" value="5" title="5层">
+            <input type="radio" name="flowNo" value="6" title="6层">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</form>
+{% load static %}
+<script src="{% static 'js/fileDownload.js' %}"></script>
+<script src="{% static 'js/warning.js' %}"></script>
+<script src="{% static 'js/jquery.PrintArea.min.js' %}"></script>
+<script src="{% static 'js/html2canvas.js' %}"></script>
+<!--[[ 测试专用  单独使用无需引入  -->
+<script src="{% static 'js/hiprint/custom_test/custom-etype-provider.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/custom-print-json.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/print-data.js' %}"></script>
+<script src="{% static 'js/hiprint/LabelPrintModel.js' %}"></script>
+<!--测试专用  单独使用无需引入 ]]  -->
+<!--单独使用无需引入  -->
+<script src="{% static 'js/hiprint/polyfill.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.minicolors.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/JsBarcode.all.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/qrcode.js' %}"></script>
+<script src="{% static 'js/jspdf.debug.js' %}"></script>
+<script src="{% static 'js/hiprint/hiprint.bundle.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.hiwprint.js' %}"></script>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var staticPath="{% static '/' %}";
+    hiprint.init({
+        providers: [new customElementTypeProvider()]
+    });
+    hiprintTemplate = new hiprint.PrintTemplate({
+        template: LabelPrintJson,
+    });
+    layui.use(['index', 'form'], function () {
+
+        var form = layui.form;
+        $.get("{% url 'cabinet:getSelectClientListJson' %}",{type:'101'}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#cabinetNo").append("<option value='" + data.code + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            var place= $("#cabinetNo").find("option:selected").text() +'-'+ $("input[name=flowNo]:checked").prop("title");
+            var fieldData= obj.field;
+            fieldData.place=place;
+            fieldData.cabinetType=101;
+            console.log(fieldData);
+            localStorage.setItem("stockInPlace",JSON.stringify(fieldData));
+            var code=$("#cabinetNo").find("option:selected").val() +'-'+ $("input[name=flowNo]:checked").prop("value")
+            var printData = [];
+            printData.push({
+                    BarCode: code,
+            });
+            hiprintTemplate.print(printData);
+            return;
+            return false;
+        });
+        
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+</style>
+
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_host">预警对象</label>
+            <div class="col-sm-10">
+                <input class="form-control" disabled="disabled" type="text" value="{% firstof Warning_obj.ObjectName '' %}" />
+                <input type="hidden" name="WarningId" id="WarningId" value="{{ Warning_obj.WarningId }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_name">预警类型</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="warningType" disabled="disabled" name="warningType" type="text" value="{% firstof   Warning_obj.ObjectType '0' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_host">引发预警人</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="CASNumber" disabled="disabled" name="CASNumber" type="text" value="{% firstof  Warning_obj.WarningUserName '' %}" />
+            </div>
+           <!-- @*<label class="col-sm-2 control-label" for="ds_name"></label>
+            <div class="col-sm-4">
+
+            </div>*@ -->
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">预警内容</label>
+            <div class="col-sm-10">
+                <textarea id="ccomment" name="comment" class="form-control" rows="8" readonly="readonly" aria-required="true">{% firstof  Warning_obj.WarningContent '' %}</textarea>
+            </div>
+        </div>
+        <div class="well" style="display: none">
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="ds_host">是否解决</label>
+                <div class="col-sm-4">
+                    <input type="hidden" id="_IsSolve" value="{% firstof Warning_obj.IsSolve '0' %}" />
+                    <input type="hidden" id="IsSolve" name="IsSolve" value="{% firstof Warning_obj.IsSolve 0 %}" />
+                    {% if Warning_obj.IsSolve == 1 %}
+                            <input type="checkbox" class="js-switch_2" id="IsSolveSwich" checked />
+                     {% else %}
+                            <input type="checkbox" class="js-switch_2" id="IsSolveSwich" />
+                 {% endif %}
+                </div>
+
+                <label class="col-sm-2 control-label" for="ds_name">解决时间</label>
+                <div class="col-sm-4">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        {% if  Warning_obj.IsSolve == 1 %}
+                        <input type="text" class="form-control" id="SolveDate" name="SolveDate" required="required" value="{% firstof Warning_obj.SolveDate|date:"Y-m-d" '' %} " data-mask="9999-99-99">
+                        {% else %}
+                        <input type="text" class="form-control" id="SolveDate" name="SolveDate" required="required" value="" data-mask="9999-99-99">
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="ds_username">解决内容</label>
+                <div class="col-sm-10">
+                    <textarea id="SolveContent" name="SolveContent" class="form-control" required="" aria-required="true">{% firstof  Warning_obj.SolveContent '' %}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+          {% if Warning_obj.IsSolve == 0 %}
+                <div class="form-group">
+                    <div class="col-sm-12 col-sm-offset-2">
+                        <button class="btn btn-primary" disabled="disabled" style="display: none" id="saveData" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+                    </div>
+                </div>
+         {% endif %}
+
+    </form>
+</div>
+{% load static %}
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $("#warningType").val(replace_objectType($("#warningType").val()));
+        $("#IsSolveSwich").change(function () {
+            if (!$("#IsSolveSwich").is(":checked"))
+            {
+                $("#SolveDate").val("");
+                $("#SolveContent").val("");
+            }
+            $("#IsSolve").val($("#IsSolveSwich").is(":checked") ? 1 : 0);
+            if ($("#_IsSolve").val() != $("#IsSolve").val()) {
+                $("#saveData").removeAttr("disabled");
+            }
+            else {
+                $("#saveData").attr("disabled", "disabled");
+            }
+        });
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            $.post("{% url  'warning:solveWarning' %}", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        })
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+
+        // 替换预警类型
+        function replace_objectType(params) {
+            switch (params) {
+            case '1':
+                return '试剂保质期预警';
+            case '2':
+                return '试剂过期报警';
+            case '3':
+                return '试剂余量预警';
+            case '4':
+                return '药柜温湿度预警';
+            case '5':
+                return '药柜滤芯保质期预警';
+            case '6':
+                return '试剂出库超期预警';
+            case '7':
+                return '试剂违规领用预警';
+        }
+        }
+</script>
+
+
+
+
+{% endblock %}

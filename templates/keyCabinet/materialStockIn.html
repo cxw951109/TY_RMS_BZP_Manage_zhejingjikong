@@ -1,0 +1,162 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+
+      
+      <div class="layui-card-body">
+        <div style="padding-bottom: 10px;">
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="addCabinetDrug">添加钥匙柜试剂</button>
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="addShelfDrug">添加货架试剂</button>
+        </div>
+        
+        <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+        <script type="text/html" id="datatable-toolbar">
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
+      </div>
+    </div>
+  </div>
+  <script>
+  layui.use(['index', 'table'], function(){
+    var table = layui.table
+    ,form = layui.form;
+    var tableData=[];
+    localStorage.setItem("stockInList",'[]');
+    //列表数据
+    table.render({
+        elem: '#LAY-datatable'
+        ,data: tableData
+        ,size:'lg'
+        ,cols: [[
+        { type: 'numbers', unresize: true, title: '序号' }
+        ,{field: 'Name', width: 200, title: '试剂名称'}
+        ,{field: 'EnglishName', title: '英文名称', width: 200}
+        ,{field: 'CASNumber', title: 'CAS码', width: 150}
+        ,{field: 'Purity', title: '纯度', width: 130}
+        ,{field: 'Speci', title: '包装大小', width: 130}
+        ,{field: 'SpeciUnit', title: '包装单位', width: 130}
+        // ,{field: 'Remain', title: '质量（g）', width: 130}
+        ,{field: 'Place', title: '位置', minWidth: 200}
+        ,{field: 'Count', title: '数量', minWidth: 200}
+        ]]
+        ,page: false
+        ,limit: 10000
+        ,limits: [10, 15, 20, 25, 30]
+        ,height: 'full-100'
+    });
+    
+    //监听工具条
+    table.on('tool(LAY-datatable)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'del'){
+          top.layer.prompt({
+            formType: 1
+            ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+            top.layer.close(index);
+            if(hex_md5(value)!=top.CheckCode)
+            {
+                top.layer.msg("验证失败！");
+                return
+            }
+            top.layer.confirm('确定删除吗？', function(index) {
+                //提交
+                $.post("{% url 'user:deleteUser' %}", {deleteIds:data.UserId}, function (obj) {
+                    if (obj.status == 1) {
+                        top.layer.msg("删除成功", function () {
+                            top.layer.close(index);
+                        });
+                    }
+                    else {
+                        top.layer.msg("删除失败 " + obj.message);
+                    }
+                });
+                obj.del();
+                // table.reload('LAY-datatable');
+            });
+        });
+        } else if(obj.event === 'edit'){
+        var tr = $(obj.tr);
+
+        top.layer.open({
+          type: 2
+          ,title: '编辑用户'
+          ,content: "{% url 'user:form' %}?user_id="+data.UserId
+          ,area: ['800px', '680px']
+          ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+        }
+    });
+    
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+      var field = data.field;
+      
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+  
+    //事件
+    var active = {
+      addCabinetDrug: function(){
+        top.layer.open({
+          type: 2
+          ,title: '选择钥匙柜'
+          ,content: "{% url 'keyCabinet:keyCabinetSelect' %}"
+          ,area: ['800px', '580px']
+          // ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            var stockInList= JSON.parse(localStorage.getItem("stockInList"));
+            table.reload('LAY-datatable', { data: stockInList }); //数据刷新
+          }
+        }); 
+      }
+      ,addShelfDrug: function(){
+        top.layer.open({
+          type: 2
+          ,title: '选择货架'
+          ,content: "{% url 'keyCabinet:shelfSelect' %}"
+          ,area: ['300px', '330px']
+          ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            var stockInList= JSON.parse(localStorage.getItem("stockInList"));
+            table.reload('LAY-datatable', { data: stockInList }); //数据刷新
+          }
+        }); 
+      }
+    };
+    
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+  </script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

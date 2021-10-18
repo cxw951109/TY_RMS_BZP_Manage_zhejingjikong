@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+</style>
+<div class="ibox  float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <input  name="ClientId" id="ClientId" type="hidden" value="{{ ClientId }}" />
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">药柜序号*：</label>
+            <div class="col-sm-8">
+                <div class="input-group">
+                    <input class="form-control" id="ClientCode" name="ClientCode" type="number" required="required" value="{% firstof client_obj.ClientCode '' %}" />
+                    <span class="input-group-addon">号终端</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">药柜标题*：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="ClientTitle"  name="ClientTitle" type="text" required="required" value="{{ client_obj.ClientTitle }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">药柜类型*：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="ClientUseCode"  name="ClientUseCode" type="text" required="required" value="{{ client_obj.ClientUseCode }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">药柜位置：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="Place"  name="Place" type="text"  value="{{ client_obj.Place }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">滤芯生产日期*</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" id="FilterProductionDate" name="FilterProductionDate" required="required" value="{{client_obj.FilterProductionDate|date:"Y-m-d" }}" data-mask="9999-99-99">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">滤芯到期提前提醒天数*</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="FilterShelfLifeWarningValue" step="1" name="FilterShelfLifeWarningValue" type="number" required="required" value="{{ client_obj.FilterShelfLifeWarningValue }}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">联系人：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="ContactPeopleName"  name="ContactPeopleName" type="text"  value="{{ client_obj.ContactPeopleName }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">联系电话：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="ContactPhone"  name="ContactPhone" type="text"  value="{{ client_obj.ContactPhone }}" />
+            </div>
+
+        </div>
+
+        <!-- <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">温度上限℃*</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="TemperatureMaxValue" step="0.01" name="TemperatureMaxValue" type="number" required="required" value="{{ client_obj.TemperatureMaxValue }}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">温度下限℃*</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="TemperatureMinValue" step="0.01" name="TemperatureMinValue" type="number" required="required" value="{{ client_obj.TemperatureMinValue }}" />
+            </div>
+        </div>
+        <div class="form-group" style="display:none">
+            <label class="col-sm-3 control-label" for="ds_username">湿度上限*</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="HumidityMaxValue" step="0.01" name="HumidityMaxValue" type="number" required="required" value="{{ client_obj.HumidityMaxValue }}" />
+            </div>
+        </div>
+        <div class="form-group" style="display:none">
+            <label class="col-sm-3 control-label" for="ds_username">湿度下限*</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="HumidityMinValue" step="0.01" name="HumidityMinValue" type="number" required="required" value="{{ client_obj.HumidityMinValue }}" />
+            </div>
+        </div> -->
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="ds_username">说明：</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="Description"  name="Description" type="text"  value="{{client_obj.Description|default:''}}" />
+            </div>
+
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2">
+                <button class="btn btn-primary" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+    {% load static %}
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            $.post("{% url 'cabinet:saveWarningSetting' %}", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        })
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

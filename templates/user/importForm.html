@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load static %}
+
+<link href="{% static 'css/plugins/webuploader/webuploader.css' %}" rel="stylesheet" />
+<div class="wrapper wrapper-content animated fadeIn">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="height:450px">
+                    <input type="hidden" id="serverUrl" value="~/User/ImportUserData" />
+                    <div class="page-container">
+                        <p id="downTem"><a href="javascript:void(0)" id="linkDownUserTem">点击下载空模板文件</a></p>
+                        <div id="uploader" class="wu-example">
+                            <div class="queueList">
+                                <div id="dndArea" class="placeholder">
+                                    <div id="filePicker"></div>
+                                    <p>或将数据模板文件直接拖到此处</p>
+                                </div>
+                                <div id="excelBox" style="height:400px;text-align:center;font-weight:bolder;display:none">
+                                    <div id="excelProcess" style="text-align:center;font-weight:bolder;margin-top:100px">
+                                        <div id="excelUpload">
+                                            <div class="sk-spinner sk-spinner-rotating-plane" style="margin-bottom:20px;width:80px;height:80px"></div>
+                                            正在导入用户模板数据...
+                                        </div>
+                                        <div id="excelError" style="display:none;padding-top:50px">
+                                            <div style="color:red;margin-bottom:20px" id="errorText">模板文件格式错误！</div>
+                                            <a type="submit" class="btn btn-primary " href="~/User/ImportForm">
+                                                重新导入
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div id="excelResult" style="display:none">
+                                        <textarea id="resultText" style="width:550px;height:350px"></textarea>
+                                        <a type="submit" class="btn btn-primary " href="~/User/ImportForm">
+                                            重新导入
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="statusBar" style="display:none;">
+                                    <div class="progress">
+                                        <span class="text">0%</span>
+                                        <span class="percentage"></span>
+                                    </div>
+                                    <div class="info"></div>
+                                    <div class="btns">
+                                        <div id="filePicker2"></div>
+                                        <div class="uploadBtn">开始上传</div>
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // 添加全局站点信息
+    var BASE_URL = '@Url.Content("~/Content/js/plugins/webuploader")';
+</script>
+<script src="~/Content/js/plugins/webuploader/webuploader.min.js"></script>
+<script src="~/Content/js/demo/webuploader-demo.js"></script>
+
+<script type="text/javascript">
+    $("#linkDownUserTem").click(function () {
+        document.getElementById("downUserTem").src = '@Url.Content("~/Resource/ExcelTemplate/UserImportTmp.xls")';
+
+    })
+
+</script>
+<iframe width=0 height=0 frameborder=0 id="downUserTem" />
+
+{% endblock %}

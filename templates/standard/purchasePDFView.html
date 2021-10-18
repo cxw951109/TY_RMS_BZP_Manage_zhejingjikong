@@ -1,0 +1,163 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<link href="{% static 'js/hiprint/css/hiprint.css' %}" rel="stylesheet" />
+<link href="{% static 'js/hiprint/css/print-lock.css' %}" rel="stylesheet" />
+
+<style>
+    /* .layui-table-header .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    } */
+    .hiprint-printPaper{
+        background-color: #FFF !important;
+    }
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="background-color:#FFF;padding:0;">
+    <div style="margin-left: 30px;margin-right: 60px;margin-top: 10px;text-align: right;">
+        <button class="layui-btn layui-btn-normal layuiadmin-btn-useradmin" id="exportPDFFile">导出PDF文件</button>
+    </div>
+    <div id="PDFView" style="background-color:#FFF;height: 500px;">
+        <input type="hidden" id="PurchaseOrderCode" value="{% firstof PurchaseOrderCode '' %}">
+        <div id="preView"></div>
+    </div>
+
+</div>
+
+<script src="{% static 'js/jquery.PrintArea.min.js' %}"></script>
+<script src="{% static 'js/html2canvas.js' %}"></script>
+<!--[[ 测试专用  单独使用无需引入  -->
+<script src="{% static 'js/hiprint/custom_test/custom-etype-provider.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/custom-print-json.js' %}"></script>
+<script src="{% static 'js/hiprint/custom_test/print-data.js' %}"></script>
+<script src="{% static 'js/hiprint/OrderPrintModel.js' %}"></script>
+<!--测试专用  单独使用无需引入 ]]  -->
+<!--单独使用无需引入  -->
+<script src="{% static 'js/hiprint/polyfill.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.minicolors.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/JsBarcode.all.min.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/qrcode.js' %}"></script>
+<script src="{% static 'js/jspdf.debug.js' %}"></script>
+<script src="{% static 'js/hiprint/hiprint.bundle.js' %}"></script>
+<script src="{% static 'js/hiprint/plugins/jquery.hiwprint.js' %}"></script>
+
+<script>
+    var index=-1;
+    try {
+        index = parent.layer.getFrameIndex(window.name);  
+    } catch (error) {
+        console.log(error);
+    }
+    layui.use('index');
+    var purchaseOrderModel= {{purchaseOrderModel|safe}};
+    var approveCount= {{approveCount}};
+    for (var index = 0; index < approveCount; index++) {
+        if(index==0){continue;}
+        var approveUser={
+            "options": {
+                "left": 43.5+(index*230),
+                "top": 1072.5,
+                "height": 9.75,
+                "width": 90,
+                "title": "审批人"+(index+1)+"签字",
+                "field": "ApproveUserName"+(index+1),
+                "fontSize": 12,
+                "fontWeight": "bold"
+            },
+            "printElementType": {
+                "type": "text"
+            }
+        };
+        var approveDate={
+            "options": {
+                "left": 45+(index*230),
+                "top": 1114.5,
+                "height": 9.75,
+                "width": 204,
+                "title": "签字日期",
+                "field": "ApproveDate"+(index+1),
+                "fontSize": 12,
+                "fontWeight": "bold"
+            },
+            "printElementType": {
+                "type": "text"
+            }
+        };
+        var signUrl={
+            "options": {
+                "left": 130.5+(index*230),
+                "top": 1053,
+                "height": 40.5,
+                "width": 108,
+                "src": "/Content/assets/hi.png",
+                "field": "SignUrl"+(index+1)
+            },
+            "printElementType": {
+                "type": "image"
+            }
+        };
+        purchaseOrderPrintJson.panels[0].printElements.push(approveUser);
+        purchaseOrderPrintJson.panels[0].printElements.push(approveDate);
+        purchaseOrderPrintJson.panels[0].printElements.push(signUrl);
+        
+    }
+    var newTableList=[];
+    purchaseOrderModel.table.forEach(function(element,index) {
+        element['SortIndex']=(index+1);
+        newTableList.push(element);
+    });
+    purchaseOrderModel.table=newTableList;
+    var hiprintTemplate;
+    $(function(){
+        //初始化打印插件
+        hiprint.init({
+            providers: [new customElementTypeProvider()]
+        });
+        hiprintTemplate = new hiprint.PrintTemplate({
+            template: purchaseOrderPrintJson,
+            // settingContainer: '#PrintElementOptionSetting',
+            // paginationContainer: '.hiprint-printPagination'
+        });
+        var printHtml=hiprintTemplate.getHtml(purchaseOrderModel);
+        $("#preView").html($(printHtml).html());
+        $("#exportPDFFile").click(function(){
+            // hiprintTemplate.toPdf(printData,"导出pdf",{scale:2 });
+            var PDFName= '标准品采购单_'+$("#PurchaseOrderCode").val();
+            var fieldData= {'PDFHtml':$(printHtml).html(),'PDFName': PDFName};
+            var loadIndex= layer.load('正在导出...');
+            $.post("{% url 'standard:exportPDF' %}", fieldData, function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("导出成功", function () {
+                        var a = document.createElement('a');
+                        a.download = 'data.pdf';
+                        a.href="{% url 'standard:exportPDF' %}?PDFName="+encodeURIComponent(PDFName);
+                        // a.href=window.URL.createObjectURL(blob);
+                        a.click();
+                    });
+                }
+                else {
+                    msg("导出失败 " + obj.message);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

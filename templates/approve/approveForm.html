@@ -1,0 +1,185 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+  .approve-content{
+    margin-top: 15px;
+  }
+  .approve-date{
+    font-weight: bold;
+    line-height: 40px;
+  }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;margin-left: 30px;">
+    <input name="ApproveInfoId" type="hidden" value="{% firstof model.ApproveInfoId '' %}" />
+    <fieldset class="layui-elem-field">
+        <legend>批复信息</legend>
+        <div class="layui-field-box">
+            <div class="layui-form-item">
+                <label class="layui-form-label">批复决定</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="ApproveDecide" value="1" title="批准" checked="">
+                  <input type="radio" name="ApproveDecide" value="2" title="驳回">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">批复附言</label>
+                <div class="layui-input-block">
+                    <textarea type="text" name="Description" autocomplete="off" class="layui-textarea">{% firstof approve.Description '' %}</textarea>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <!-- <div class="layui-tab layui-tab-card">
+      <ul class="layui-tab-title">
+        <li class="layui-this">审批单信息</li>
+        <li>审批流程</li>
+      </ul>
+      <div class="layui-tab-content" style="height: 390px;">
+        <div class="layui-tab-item layui-show">
+          <div class="layui-field-box">
+            <div class="layui-form-item">
+              <label class="layui-form-label">审批单号:</label>
+              <div class="layui-input-inline">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveInfoCode '' %}</div>
+              </div>
+              <label class="layui-form-label">审批类型:</label>
+              <div class="layui-input-inline">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveTypeName '' %}</div>
+              </div>
+              <label class="layui-form-label" style="width: 100px;">审批对象编号:</label>
+              <div class="layui-input-inline">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveObjectCode '' %}</div>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label class="layui-form-label">申请附言:</label>
+              <div class="layui-input-block">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveInfoTitle '' %}</div>
+              </div>
+          </div>
+          <div class="layui-form-item">
+              <label class="layui-form-label">申请信息</label>
+              <div class="layui-input-block">
+                  <div class="approveInfoContent">
+                    {{ model.ApproveInfoContent|safe }}
+                  </div>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="layui-tab-item">2</div>
+      </div>
+    </div> -->
+    <fieldset class="layui-elem-field">
+        <legend>审批单信息</legend>
+        <div class="layui-field-box">
+            <div class="layui-form-item">
+                <label class="layui-form-label">审批单号:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveInfoCode '' %}</div>
+                </div>
+                <label class="layui-form-label">审批类型:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveTypeName '' %}</div>
+                </div>
+                <label class="layui-form-label" style="width: 100px;">审批对象编号:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveObjectCode '' %}</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">申请人:</label>
+              <div class="layui-input-inline">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.CreateUserName '' %}</div>
+              </div>
+              <label class="layui-form-label">申请时间:</label>
+              <div class="layui-input-inline">
+                  <div class="layui-form-mid layui-word-aux">{% firstof model.CreateDate '' %}</div>
+              </div>
+          </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">申请附言:</label>
+                <div class="layui-input-block">
+                    <div class="layui-form-mid layui-word-aux">{% firstof model.ApproveInfoTitle '' %}</div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">申请信息</label>
+                <div class="layui-input-block">
+                    <div class="approveInfoContent">
+                      {{ model.ApproveInfoContent|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </fieldset>
+      <fieldset class="layui-elem-field">
+        <legend>审批流程</legend>
+        <div class="layui-field-box">
+            <ul class="layui-timeline">
+                {% for approve_info_process in approve_info_process_list %}
+                  <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                      <h3 class="layui-timeline-title">{{approve_info_process.ApproveUserName}}</h3>
+                      {% if approve_info_process.ApproveStatus == 1 %}
+                        <p><span class="layui-badge layui-bg-gray">待进行</span></p>
+                      {% elif approve_info_process.ApproveStatus == 2 %}
+                        <p><span class="layui-badge layui-bg-orange">待处理</span></p>
+                      {% elif approve_info_process.ApproveStatus == 3 %}
+                        <p><span class="layui-badge layui-bg-blue">已通过</span></p>
+                        <p class="approve-content">
+                          附言：{{approve_info_process.ApproveComment}}
+                        </p>
+                        <p class="approve-date">
+                          {{approve_info_process.ApproveDate}}
+                        </p>
+                      {% elif approve_info_process.ApproveStatus == 4 %}
+                        <p><span class="layui-badge">已驳回</span></p>
+                        <p class="approve-content">
+                          附言：{{approve_info_process.ApproveComment}}
+                        </p>
+                        <p class="approve-date">
+                          {{approve_info_process.ApproveDate}}
+                        </p>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endfor %}
+                <li class="layui-timeline-item">
+                  <i class="layui-icon layui-timeline-axis"></i>
+                  <div class="layui-timeline-content layui-text">
+                    <div class="layui-timeline-title">开始</div>
+                  </div>
+                </li>
+              </ul> 
+        </div>
+      </fieldset>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            var fieldData = obj.field;
+            //提交修改
+            $.post("{% url 'approve:summitApproveDecide' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,311 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">入库单号</label>
+            <div class="layui-input-block">
+              <input type="text" name="TemplateName" placeholder="入库单号" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">创建人</label>
+            <div class="layui-input-block">
+              <input type="text" name="CreateUserName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">试剂信息</label>
+            <div class="layui-input-block">
+              <input type="text" name="TemplateContent" placeholder="试剂信息" autocomplete="off" class="layui-input">
+            </div>
+          </div>      
+          <div class="layui-inline">
+            <label class="layui-form-label">所属终端</label>
+            <div class="layui-input-block">
+              <div class="layui-xmselect" id="ClientId" style="width: 180px;" lay-data='{"url":"/cabinet/getSelectClientListJson/"}' name="ClientId"></div>
+
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="layui-card-body">
+        <div style="padding-bottom: 10px;">
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="add">添加入库单</button>
+          <button class="layui-btn layuiadmin-btn-useradmin" data-type="export">导入入库单</button>
+        </div>
+        <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+        <script type="text/html" id="progressTpl">
+          {% verbatim %} 
+          <div class="layui-progress layuiadmin-order-progress" lay-filter="progress-"+ {{ d.PeriodCheckId }} +"">
+            <div class="layui-progress-bar layui-bg-blue" lay-percent= "{{ d.PeriodCheckTotalCount / d.PeriodCurrentDrugCount * 100  }}%" style="width: {{ d.PeriodCheckTotalCount / d.PeriodCurrentDrugCount * 100  }}%;"></div>
+          </div>
+          {% endverbatim %} 
+        </script>
+        <script type="text/html" id="statusTpl">
+            {% verbatim %} 
+            {{#  if(d.PeriodCheckStatus==2){ }}
+              <button class="layui-btn layui-btn-normal layui-btn-xs">已结束</button>
+            {{#  } else { }}
+              <button class="layui-btn layui-btn-primary layui-btn-xs">进行中</button>
+            {{#  } }}
+            {% endverbatim %}
+        </script> 
+        <script type="text/html" id="drugContentTpl">
+            {% verbatim %} 
+            {{# 
+                var xxnrObj=JSON.parse(d.TemplateContent);
+                var xxnr='';
+                $.each(xxnrObj,function(index,item){
+                    xxnr+=item.Name+'：'+(item.Manufacturer==undefined?'':item.Manufacturer)+"，";
+    
+                });
+            }}
+            <span>{{xxnr}}</span>
+            {% endverbatim %}
+        </script> 
+        <script type="text/html" id="clientTpl">
+          {% verbatim %} 
+          {{# 
+              var clientName='';
+              if(d.ClientId!=''){
+                clientName=d.ClientName;
+              }
+              else{
+                clientName='待设置'
+              }
+          }}
+          <span>{{clientName}}</span>
+          {% endverbatim %}
+      </script> 
+        <script type="text/html" id="datatable-toolbar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="barcodeAddDrug"><i class="layui-icon layui-icon-component"></i>条码入库</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="rfidAddDrug"><i class="layui-icon layui-icon-component"></i>RFID入库</a>
+            <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="printBarcode"><i class="layui-icon layui-icon-print"></i>打印条码</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        </script>
+      </div>
+    </div>
+  </div>
+  <script>
+
+  layui.use(['index', 'table'], function(){
+    var table = layui.table
+    ,form = layui.form;
+
+    //列表数据
+    table.render({
+        elem: '#LAY-datatable'
+        ,url: "{% url 'drugTemplate_getTemplateListJson' %}"
+        ,size:'lg'
+        ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'TemplateName', width: 180, title: '入库单号'}
+        ,{field: 'BarCodeCount', width: 100, title: '试剂数量', minWidth: 100}
+        ,{field: 'ClientName', width: 130, title: '所属终端' ,templet: '#clientTpl'}
+        ,{field: 'TemplateContent', title: '试剂信息', templet: '#drugContentTpl'}
+        ,{field: 'CreateUserName', width: 150, title: '创建人'}
+        ,{field: 'CreateDate', width: 170, title: '创建时间'}
+        ,{title: '操作', width: 360, minWidth: 250, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar'}
+        ]]
+        ,page: {
+          layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+          ,prev:'上一页'
+          ,next:'下一页'
+        }
+        ,limit: 15
+        ,limits: [10, 15, 20, 25, 30]
+        ,height: 'full-160'
+    });
+    
+    //监听工具条
+    table.on('tool(LAY-datatable)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'edit'){
+          top.layer.open({
+          type: 2
+          ,title: '编辑入库单'
+          ,content: ['/drugTemplate/' + data.TemplateId  + '/update_form/']
+          ,area: ['1100px', '680px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+        } else if(obj.event === 'printBarcode'){
+        var tr = $(obj.tr);
+        var layer_index = top.layer.load(2, {
+                                  offset: "auto"
+                                });
+                    $.ajax({
+                               url: '{% url 'drugTemplate:printer_drug_code' %}',
+                               type: 'GET',
+                               data: {
+                                TemplateId: data.TemplateId
+                               },
+                               success: function (e) {
+                                  top.layer.close(layer_index)
+
+                                   if(e.data.status == 0){
+                                    top.layer.msg("打印成功");
+                                   }else{
+
+                                        top.layer.msg(e.data.message);
+                                   }
+                               },
+                               error: function () {
+
+                                    top.layer.close(layer_index);
+                                    top.layer.msg("打印失败 ");
+                               }
+                });
+            //提交
+            $.post("{% url 'drugTemplate:printer_drug_code' %}", {TemplateId: data.TemplateId}, function (obj) {
+                if (obj.status == 1) {
+                    top.layer.msg("打印成功", function () {
+                        top.layer.close(index);
+                    });
+                }
+                else {
+                    top.layer.msg("打印失败 " + obj.message);
+                }
+            });
+
+        }
+        else if(obj.event === 'rfidAddDrug'){
+        var tr = $(obj.tr);
+        if(data.ClientId==''){
+          top.layer.msg('请先设置终端！');
+          return false;
+        }
+        top.layer.open({
+          type: 2
+          ,title: 'RFID试剂入库'
+          ,content: ['/drugTemplate/' + data.TemplateId  + '/RFIDStorage/']
+          ,area: ['1100px', '680px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+        }
+        else if(obj.event === 'barcodeAddDrug'){
+        var tr = $(obj.tr);
+        if(data.ClientId==''){
+          top.layer.msg('请先设置终端！');
+          return false;
+        }
+        top.layer.open({
+          type: 2
+          ,title: '条码试剂入库'
+          ,content: ['/drug/' + data.TemplateId  + '/DrugPutInByBarCode/']
+          ,area: ['1100px', '680px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+        }
+    });
+    
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+      var field = data.field;
+      
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+  
+    //事件
+    var active = {
+      batchdel: function(){
+        var checkStatus = table.checkStatus('LAY-datatable')
+        ,checkData = checkStatus.data; //得到选中的数据
+
+        if(checkData.length === 0){
+          return layer.msg('请选择数据');
+        }
+        
+        top.layer.prompt({
+          formType: 1
+          ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+          top.layer.close(index);
+          if(hex_md5(value)!=top.CheckCode)
+          {
+            top.layer.msg("验证失败！");
+            return
+          }
+          top.layer.confirm('确定删除吗？', function(index) {
+            var deleteIds='';
+            checkData.forEach(function(element,index){
+                if(deleteIds!=''){deleteIds+=','}
+                deleteIds+=element.UserId;
+            });
+            //提交
+            $.post("{% url 'user:deleteUser' %}", {deleteIds:deleteIds}, function (obj) {
+                if (obj.status == 1) {
+                    top.layer.msg("删除成功", function () {
+                        top.layer.close(index);
+                    });
+                }
+                else {
+                    top.layer.msg("删除失败 " + obj.message);
+                }
+            });
+            table.reload('LAY-datatable');
+          });
+        });
+      }
+      ,add: function(){
+        top.layer.open({
+          type: 2
+          ,title: '添加入库单'
+          ,content: ['{% url 'drugTemplate_form'  %}']
+          ,area: ['1100px', '680px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+      }
+    };
+    
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+  </script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

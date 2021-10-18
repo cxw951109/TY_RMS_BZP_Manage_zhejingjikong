@@ -1,0 +1,415 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+    th,td{
+        white-space:nowrap;
+    }
+</style>
+
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_host">入库单号*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="TemplateId" name="TemplateId" value="{{ template_obj.TemplateId }}" type="hidden" />
+                <input class="form-control" readonly id="TemplateName" name="TemplateName" type="text" value="{% firstof template_obj.TemplateName NewDrugTemplateOrderCode %} " />
+            </div>
+          <!--  <label class="col-sm-2 control-label" for="ds_password">是否启用</label>
+            <div class="col-sm-4">
+                @{
+                    if (Model.IsWaitExport == 1)
+                    {
+                        <input type="checkbox" class="js-switch_2" id="IsWaitExportSwich" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" class="js-switch_2" id="IsWaitExportSwich" />
+                    }
+
+                <input type="hidden" id="IsWaitExport" name="IsWaitExport" value="" />
+            </div>  } -->
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_host">所属药柜*</label>
+            <div class="col-sm-4">
+                <select data-placeholder="选择所属药柜..." id="cabinetSelect"  class="chosen-select" style="width:480px;">
+                    <option value="">请选择所属药柜</option>
+                </select>
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password"></label>
+            <div class="col-sm-4">
+
+            </div>
+        </div>
+        <div class="hr-line-dashed" style="margin-left:75px"></div>
+        <div class="form-group" style="margin-bottom:0px;margin-top:20px">
+            <div class="col-sm-4 col-sm-offset-1">
+                <button class="btn btn-white btn-sm" type="button" data-toggle="tooltip" id="btnTableAdd" data-placement="top" title="添加新模板">
+                    <i class="fa fa-plus-circle"> 新增模板条目</i>
+                </button>
+                <button class="btn btn-white btn-sm" type="button" data-toggle="tooltip" id="btnTableDelete" data-placement="top" title="删除选中条目">
+                    <i class="fa fa-trash-o"> 删除选中条目</i>
+                </button>
+            </div>
+        </div>
+
+          {% if not template_obj %}
+        <div class="form-group">
+            <div class="col-sm-11 col-sm-offset-1">
+                <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>类型ID</th>
+                            <th>类型名称</th>
+                            <th>EnglishName</th>
+                            <th>纯度</th>
+                            <th>CAS码</th>
+                            <th>生产厂商</th>
+                            <th>销售商</th>
+                            <th>生产日期</th>
+                            <th>保质期（天）</th>
+                            <th>价格（元）</th>
+                            <th>导入数量（个）</th>
+                            <th>规格</th>
+                            <th>单位</th>
+                            <th>规格单位</th>
+                            <th>预估质量（g）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        {% else %}
+          <div class="form-group">
+            <div class="col-sm-11 col-sm-offset-1">
+                <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+                    <thead>
+                        <tr>
+                            <th>类型ID</th>
+                            <th>类型名称</th>
+                            <th>EnglishName</th>
+                            <th>纯度</th>
+                            <th>CAS码</th>
+                            <th>生产厂商</th>
+                            <th>销售商</th>
+                            <th>生产日期</th>
+                            <th>保质期（天）</th>
+                            <th>价格（元）</th>
+                            <th>导入数量（个）</th>
+                            <th>规格</th>
+                            <th>单位</th>
+                            <th>规格单位</th>
+                            <th>预估质量（g）</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                    {# 加载自定过滤器 #}
+                    {% load myfilter %}
+                    {% for template_content1 in template_obj.TemplateContent|to_list %}
+                                    <tr class="gradeA">
+                                        <td>{% firstof template_content1.VarietyId '' %} </td>
+                                        <td>{% firstof template_content1.Name '' %}</td>
+                                        <td>{% firstof template_content1.EnglishName '' %}</td>
+                                        <td>{% firstof template_content1.Purity '' %}</td>
+                                        <td>{% firstof template_content1.CASNumber '' %}</td>
+                                        <td>{% firstof template_content1.Manufacturer '' %}</td>
+                                        <td>{% firstof template_content1.Distributor '' %}</td>
+                                        <td style="width:75px;text-align: center">{% firstof template_content1.ProductionDate '' %}</td>
+                                        <td>{% firstof template_content1.ShelfLife '' %}</td>
+                                        <td>{% firstof template_content1.Price '' %}</td>
+                                        <td>{% firstof template_content1.ExportCount '' %}</td>
+                                        <td>{% firstof template_content1.Speci '' %}</td>
+                                        <td>{% firstof template_content1.Unit '' %}</td>
+                                        <td>{% firstof template_content1.SpeciUnit '' %}</td>
+                                        <td>{% firstof template_content1.Remain '' %}</td>
+                                    </tr>
+{% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        {% endif %}
+
+
+
+
+
+
+        <div class="form-group" style="position:absolute; left:15px; bottom:10px;width:832px">
+
+            <div class="col-sm-12 col-sm-offset-1">
+                <div class="hr-line-dashed"></div>
+                <button class="btn btn-primary" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% load static %}
+<script src="{% static 'js/plugins/dataTables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+Date.prototype.pattern=function(fmt) {           
+    var o = {           
+    "M+" : this.getMonth()+1, //月份           
+    "d+" : this.getDate(), //日           
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时           
+    "H+" : this.getHours(), //小时           
+    "m+" : this.getMinutes(), //分           
+    "s+" : this.getSeconds(), //秒           
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度           
+    "S" : this.getMilliseconds() //毫秒           
+    };           
+    var week = {           
+    "0" : "/u65e5",           
+    "1" : "/u4e00",           
+    "2" : "/u4e8c",           
+    "3" : "/u4e09",           
+    "4" : "/u56db",           
+    "5" : "/u4e94",           
+    "6" : "/u516d"          
+    };           
+    if(/(y+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));           
+    }           
+    if(/(E+)/.test(fmt)){           
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);           
+    }           
+    for(var k in o){           
+        if(new RegExp("("+ k +")").test(fmt)){           
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));           
+        }           
+    }           
+    return fmt;           
+}      
+    var itemTemplateCount = 0;
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $.get("{% url 'drugTemplate_clientListJson' %}", function (obj) {
+            $(obj.data).each(function (index, data) {
+                $("#cabinetSelect").append("<option value='" + data.ClientId + "' " + (data.ClientId == '{{ template_obj.ClientId }}' ? "selected" : "") + "  hassubinfo='true'>" + data.ClientName + "</option>");
+            });
+            $(".chosen-select").chosen({
+                no_results_text: "没有找到",
+                allow_single_deselect: true
+            });
+        });
+
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            "bPaginate": false,
+            "info": "",
+            'scrollX': true,
+            'autoWidth': true,
+            "scrollY": "175px",
+            "scrollCollapse": true,
+            columns: [
+            { data: 'VarietyId' },
+            { data: 'Name' },
+            { data: 'EnglishName' },
+            { data: 'Purity' },
+            { data: 'CASNumber' },
+            { data: 'Manufacturer' },
+            { data: 'Distributor' },
+            { data: 'ProductionDate' },
+            { data: 'ShelfLife' },
+            { data: 'Price' },
+            { data: 'ExportCount' },
+            { data: 'Speci' },
+            { data: 'Unit' },
+            { data: 'SpeciUnit' },
+            { data: 'Remain' },
+            ],
+            columnDefs: [
+    {
+        "targets": [0],
+        "visible": false
+    }
+            ]
+        });
+
+        $("#IsWaitExportSwich").change(function () {
+            $("#IsWaitExport").val($("#IsWaitExportSwich").is(":checked") ? 1 : 0);
+        });
+        $(".myForm").submit(function () {
+
+            var dataList = new Array();
+            for (var i = 0; i < $('#dataTableModel').DataTable().data().length; i++) {
+                dataList.push($('#dataTableModel').DataTable().data()[i]);
+            }
+            if (dataList.length == 0) {
+                msg("模板条目不能为空！");
+                return false;
+            }
+            var _TemplateId = $("#TemplateId").val();
+            var _TemplateName = $("#TemplateName").val();
+            var _IsWaitExport = $("#IsWaitExport").val();
+            var _TemplateContent = JSON.stringify(dataList);
+            var _ClientId = $("#cabinetSelect").val();
+            if(_ClientId.length == 0 || _TemplateName.length == 0 || _TemplateContent.length == 0){
+                msg("请完善表单信息");
+                return false;
+            }
+            var loadIndex = layer.load(2);
+            $.post("{% url 'drugTemplate_saveTemplateData' %}",
+                { TemplateId: _TemplateId,
+                    TemplateName: _TemplateName,
+                    ClientId: _ClientId,
+                    IsWaitExport: _IsWaitExport,
+                    TemplateContent: _TemplateContent,
+                    itemTemplateCount: itemTemplateCount
+                },
+                function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败");
+                }
+            });
+            return false;
+        });
+        $("#btnTableAdd").click(function () {
+            quiteTime = Infinity;
+            layer.open({
+                title: "新增模板条目",
+                shift: 1,
+                type: 2,
+                area: ['770px', '500px'],
+                btn: ['添加'],
+                shade: 0.1,
+                content: ["{% url 'drugTemplate_itemForm' %}"],
+                end: function(){
+                  currentTime = 0;
+                  quiteTime = 600;
+                },
+                yes: function (index, layero) {
+                    var body = layer.getChildFrame('body', index);
+                    var drugTypeId = body.find("#drugTypeSelect").val();
+                    var drugTypeName = body.find("#drugTypeSelect").val();
+                    var EnglishName = body.find("#EnglishName").val().substring(0, 45);
+                    var manufacturer = body.find("#Manufacturer").val();
+                    var Purity = body.find("#Purity").val();
+                    var CASNumber = body.find("#CASNumber").val();
+                    var distributor = body.find("#Distributor").val();
+                    var productionDate = body.find("#ProductionDate").val();
+                    var ExpirationDate = body.find("#ExpirationDate").val();
+
+                    var shelfLife = body.find("#ShelfLife").val();
+                    if(ExpirationDate!='')
+                   {
+                       var pDate=new Date();
+                       if(productionDate!='')
+                       {
+                         pDate=new Date(productionDate);
+                         productionDate= new Date(productionDate).pattern("yyyy-MM-dd");
+                       }else
+                       {
+                         pDate=new Date();
+                         productionDate= new Date().pattern("yyyy-MM-dd");
+                       }
+                       console.log('生产日期:'+productionDate);
+                       realDate=new Date(ExpirationDate);
+                       shelfLife=Math.floor((realDate.getTime()-pDate.getTime())/(24*3600*1000));
+                       console.log('保质期:'+shelfLife);
+                   }
+                    var price = body.find("#Price").val();
+                    var exportCount = body.find("#ExportCount").val();
+                    var Speci = body.find("#Speci").val();
+                    var Unit = body.find("#Unit").val();
+                    var SpeciUnit = body.find("#SpeciUnit").val();
+                    var Remain = body.find("#Remain").val();
+                    if (drugTypeId == "") {
+                        msg("请选择试剂类型！");
+                        return;
+                    }
+                    if (Speci == "" || productionDate == "" || shelfLife == "" || exportCount == "" || Purity == "" || CASNumber == "") {
+                        msg("请完善表单信息，带*为必填项！");
+                        return;
+                    }
+                    if(exportCount < 1){
+                        msg('入库数量不能小于1！');
+                        return;
+                    }
+                    // 正则校验入库数量是否有小数点
+                    const regx = /\d*?\./;
+                    if (regx.test(exportCount)){
+                        msg('入库数量不能包含小数点！');
+                        return
+                    }
+                    if(price=="")
+                    {
+                        price='0';
+                    }
+                    $('#dataTableModel').DataTable().row.add({
+                        "VarietyId": drugTypeId,
+                        "Name": drugTypeName,
+                        "EnglishName": EnglishName,
+                        "Purity": Purity,
+                        "CASNumber": CASNumber,
+                        "Manufacturer": manufacturer,
+                        "Distributor": distributor,
+                        "ProductionDate": productionDate,
+                        "ShelfLife": shelfLife,
+                        "Price": price,
+                        "ExportCount": exportCount,
+                        "Speci": Speci,
+                        "Unit": Unit,
+                        "SpeciUnit": SpeciUnit,
+                        "Remain": Remain,
+                    }).draw();
+                    itemTemplateCount += parseInt(exportCount);
+                    console.log(itemTemplateCount, 6666666666);
+                    layer.close(index);
+                }
+            });
+        });
+        $("#btnTableDelete").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                msg("请选择要删除的数据！");
+                return;
+            }
+
+            tableModel.row('.selected').remove().draw(false);
+            itemTemplateCount -= parseInt(selectRow.ExportCount);
+            console.log(itemTemplateCount)
+        });
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+
+
+{% endblock %}

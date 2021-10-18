@@ -1,0 +1,197 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .layui-form-label{
+        width: 88px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="PurchaseOrderDetailedId" type="hidden" value="{% firstof model.PurchaseOrderDetailedId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">标准品名称</label>
+        <div class="layui-input-block">
+            <input type="text" style="width: 825px;" name="DrugName" id="DrugName"  value="{% firstof model.DrugName '' %}" lay-verify="required" autocomplete="off" class="layui-input" placeholder="请输入标准品名称">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">编号批次号</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DrugCode" value="{% firstof model.DrugCode '' %}" placeholder="请输入编号批次号" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">规格</label>
+        <div class="layui-input-inline">
+            <div class="layui-inline" style="width: 115px;">
+                <input type="text" name="Speci" value="{% firstof model.Speci '' %}" lay-verify="number" placeholder="请输入规格" autocomplete="off"
+                class="layui-input">
+            </div>
+            <div class="layui-inline" style="width: 60px; margin-right: 0 !important;">
+                <select name="SpeciUnit" lay-verify="required">
+                    <option value="ml" selected>ml</option>
+                    <option value="g">g</option>
+                </select>
+            </div>
+        </div>
+        <label class="layui-form-label">纯度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Purity" value="{% firstof model.Purity '' %}" placeholder="请输入纯度" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">生产商</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Manufacturer" value="{% firstof model.Manufacturer '' %}" placeholder="请输入生产商" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">生产日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ProductionDate" id="ProductionDate" value="{% firstof model.ProductionDate '' %}" placeholder="请输入生产日期" autocomplete="off"
+                class="layui-input laydate">
+        </div>
+        <label class="layui-form-label">过期日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="ExpirationDate" id="ExpirationDate" value="{% firstof model.ExpirationDate '' %}" placeholder="请输入过期日期" autocomplete="off"
+                class="layui-input laydate">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">购入日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="BuyDate" id="BuyDate" value="{% firstof model.BuyDate '' %}" placeholder="请输入购入日期" autocomplete="off"
+                class="layui-input laydate">
+        </div>
+        <label class="layui-form-label">购入数量</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Count" value="{% firstof model.Count '' %}" lay-verify="required|number" placeholder="请输入购入数量" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">保存条件</label>
+        <div class="layui-input-inline">
+            <input type="text" name="StorageConditions" value="{% firstof model.StorageConditions '' %}" placeholder="请输入保存条件" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">包装完好</label>
+        <div class="layui-input-inline">
+            <input type="text" name="PackageStatus" value="{% firstof model.PackageStatus '' %}" placeholder="请输入包装完好" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">标识完好</label>
+        <div class="layui-input-inline">
+            <input type="text" name="MarkStatus" value="{% firstof model.MarkStatus '' %}" placeholder="请输入标识完好" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">证书对应性</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CertificateStatus" value="{% firstof model.CertificateStatus '' %}" placeholder="请输入证书对应性" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">证书:特性量值</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CertCharaValue" value="{% firstof model.CertCharaValue '' %}" placeholder="请输入证书:特性量值" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">证书:不确定度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="CertUncertainty" value="{% firstof model.CertUncertainty '' %}" placeholder="请输入证书:不确定度" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">检测方法</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DetectionMethod" value="{% firstof model.DetectionMethod '' %}" placeholder="请输入检测方法" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">检测:特性量值</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DetectionCharaValue" value="{% firstof model.DetectionCharaValue '' %}" placeholder="请输入检测:特性量值" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">检测:不确定度</label>
+        <div class="layui-input-inline">
+            <input type="text" name="DetectionUncertainty" value="{% firstof model.DetectionUncertainty '' %}" placeholder="请输入检测:不确定度" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">基本组成</label>
+        <div class="layui-input-inline">
+            <input type="text" name="BasicComponent" value="{% firstof model.BasicComponent '' %}" placeholder="请输入基本组成" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">安全防护</label>
+        <div class="layui-input-inline">
+            <input type="text" name="Security" value="{% firstof model.Security '' %}" placeholder="请输入安全防护" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">特殊运输要求</label>
+        <div class="layui-input-inline">
+            <input type="text" name="SpecialRequirements" value="{% firstof model.SpecialRequirements '' %}" placeholder="请输入特殊运输要求" autocomplete="off"
+                class="layui-input">
+        </div>
+        <label class="layui-form-label">验收人</label>
+        <div class="layui-input-inline">
+            <input type="text" name="AcceptanceUserName" value="{% firstof model.AcceptanceUserName '' %}" placeholder="请输入验收人" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">验收结论</label>
+        <div class="layui-input-block">
+            <input type="text" style="width: 825px;" name="AcceptanceComment" value="{% firstof model.AcceptanceComment '' %}" placeholder="请输入验收结论" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form', 'autocomplete','laydate'], function () {
+        var form = layui.form;
+        var laydate = layui.laydate;
+        // form.on('submit(LAY-user-front-submit)', function(obj){
+        //     var fieldData= obj.field;
+        //     return false;
+        // });
+        laydate.render({
+            elem: '#ProductionDate'
+        });
+        laydate.render({
+            elem: '#ExpirationDate'
+        });
+        laydate.render({
+            elem: '#BuyDate'
+        });
+        autocomplete = layui.autocomplete;
+        autocomplete.render({
+            elem: $('#DrugName'),
+            cache: false,
+            url: '{% url 'standard:autoSearchDrugList' %}',
+            request: {
+                keywords: 'keyWord'
+            },
+            response: {
+                code: 'code',
+                data: 'data'
+            },
+            {% verbatim %} 
+            template_val: '{{d.value}}',
+            template_txt: '{{d.value}} {{d.subvalue!="" ? "<span class=\'layui-badge layui-bg-gray\'>" + d.subvalue.substr(0,36) + "</span>" : "" }}',
+            {% endverbatim %} 
+            onselect: function (obj) {
+                $("#CASNumber").val(obj.id);
+            }
+        });
+        
+    })
+</script>
+{% endblock %}

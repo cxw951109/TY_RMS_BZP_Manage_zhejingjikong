@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="ibox-content" style="height:520px;padding:5px">
+    <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+        <thead>
+            <tr>
+                <th>预警ID</th>
+                <th width="100">预警类型</th>
+                <th width="100">预警对象</th>
+                <th width="500">预警内容</th>
+                <th width="100">预警时间</th>
+                <!-- <th style="text-align:center">状态</th> -->
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+    {% load static %}
+    <script src="{% static 'js/warning.js' %}"></script>
+
+
+<script type="text/javascript">
+    $(function () {
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            "ordering": false,
+            iDisplayLength: 10,
+            "bPaginate": true,
+            "info": "true",
+            "scrollY": "472px",
+            "scrollCollapse": true,
+            ajax: {
+                url: '{% url 'home:homeWarningListJson' %}',
+                data: { warningType: '{{ warningType }}'},
+                dataSrc: 'data',
+            },
+            columns: [
+            { data: 'WarningId' },
+            { data: 'ObjectType' },
+            { data: 'ObjectName' },
+            { data: 'WarningContent' },
+            { data: 'WarningDate' },
+            // { data: 'IsSolve' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                // $(row).children('td').eq(4).html(data.IsSolve == 1 ? "<span class='label label-warning'>已解决</span>" : "<span class='label label-default'>未解决</span>");
+                // $(row).children('td').eq(4).attr('style', 'text-align: center;');
+                $(row).children('td').eq(3).html(get_date(data.WarningDate));
+                $(row).children('td').eq(0).html(get_warning_type(data.ObjectType))
+            },
+            columnDefs: [
+           {
+               "targets": [0],
+               "visible": false
+           }]
+        });
+        function get_warning_type(params) {
+            switch (params) {
+                case '1':
+                    return '试剂保质期预警';
+                case '2':
+                    return '试剂过期报警';
+                case '3':
+                    return '试剂余量预警';
+                case '4':
+                    return '药柜温湿度预警';
+                case '5':
+                    return '药柜滤芯保质期预警';
+                case '6':
+                    return '试剂出库超期预警'
+            }
+        }
+        function get_date(params) {
+               if(params){
+               return params.replace('T', ' ')
+           }
+                }
+    });
+</script>
+{% endblock %}

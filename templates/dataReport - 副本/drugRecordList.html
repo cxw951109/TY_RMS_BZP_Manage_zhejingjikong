@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style type="text/css">
+    .dataTables_filter {
+        display: none;
+    }
+
+    .chosen-container-single .chosen-single {
+        height: 25px !important;
+        line-height: 25px !important;
+        padding-top: 2px !important;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" action="" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchValue" name="searchValue" value="{{ searchValue }}" placeholder="搜索试剂条码名称、操作人员">
+                <div class="input-group-btn">
+                    <button type="button" id="btnTableSearch" class="btn btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <h2>
+            试剂流转记录报表
+        </h2>
+        <div class="mail-tools tooltip-demo m-t-md">
+            <div class="btn-group pull-right">
+                <a type="submit" class="btn btn-primary btn-sm" href="{% url 'dataReport:index' %}">
+                    返回统计目录
+                </a>
+            </div>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新统计列表"><i class="fa fa-refresh"></i> 刷新</button>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出报表</button>
+            <button class="btn btn-white btn-sm pull-left" style="margin-right:3px;" data-toggle="tooltip" id="btnTableChart" data-placement="left" title="以图表形式显示统计数据"><i class="fa fa-pie-chart"></i> 流转记录图表统计</button>
+            <div class="input-daterange input-group date pull-left" style="margin-right:3px;width:350px" id="datepicker">
+                <span class="input-group-addon"> &nbsp;&nbsp;操作时间：</span>
+                <input type="text" class="input-sm form-control" name="start" id="startDate" value="{{ startDate }}" />
+                <span class="input-group-addon">-</span>
+                <input type="text" class="input-sm form-control" name="end" id="endDate" value="{{ endDate }}" />
+            </div>
+            <div class="input-daterange input-group date pull-left" style="width:300px;">
+                <span class="input-group-addon"> &nbsp;&nbsp;药柜：</span>
+                <select data-placeholder="选择所属药柜..." id="cabinetSelect" required="required" class="chosen-select" style="width:200px;height:20px">
+                    <option value="">全部</option>
+                </select>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th width="100">条码编号</th>
+                    <th width="100">CAS码</th>
+                    <th width="100">中文名称</th>
+                    <th width="100">英文名称</th>
+                    <th width="100">纯度</th>
+                    <th width="100">余量</th>
+                    <th width="100">操作人员</th>
+                    <th width="100">操作类型</th>
+                    <th width="100">目前状态</th>
+                    <th width="100">位置</th>
+                    <th width="100">记录时间</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>条码编号</th>
+                    <th>CAS码</th>
+                    <th>中文名称</th>
+                    <th>英文名称</th>
+                    <th>纯度</th>
+                    <th>余量</th>
+                    <th>操作人员</th>
+                    <th>操作类型</th>
+                    <th>目前状态</th>
+                    <th>位置</th>
+                    <th>记录时间</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+    {% load static %}
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/warning.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+<script type="text/javascript">
+    $.fn.dataTable.ext.search.push(
+function (settings, data, dataIndex) {
+    var min = new Date($('#startDate').val());
+    var max = new Date($('#endDate').val());
+
+    var date = new Date(data[10]) || 0; // use data for the age column
+
+    if ((isNaN(min) && isNaN(max)) ||
+         (isNaN(min) && date <= max) ||
+         (min <= date && isNaN(max)) ||
+         (min <= date && date <= max)) {
+        return true;
+    }
+    return false;
+});
+    $(function () {
+        $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
+
+            $(obj.data).each(function (index, data) {
+                $("#cabinetSelect").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+            });
+            $(".chosen-select").chosen({
+                no_results_text: "没有找到",
+                disable_search: true,
+                allow_single_deselect: true
+            });
+        });
+
+        var tableModel = $('#dataTableModel').DataTable({
+            //searching: false,
+            lengthChange: false,
+            select: true,
+            "scrollX": true,
+            "ordering": false,
+            bAutoWidth: false,
+            ajax: {
+                url: '{% url 'dataReport:getDrugRecordListJson' %}',
+                data: { },
+                dataSrc: 'data',
+
+            },
+            columns: [
+            { data: 'BarCode' },
+            { data: 'CASNumber' },
+            { data: 'Name' },
+            { data: 'EnglishName' },
+            { data: 'Purity' },
+            { data: 'RecordRemain' },
+            { data: 'CreateUserName' },
+            { data: 'RecordType' },
+            { data: 'Status' },
+            { data: 'Place' },
+            { data: 'CreateDate' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(10).html(format_date(data.CreateDate));
+                $(row).children('td').eq(7).html(formatRecordType(data.RecordType));
+                $(row).children('td').eq(8).html(formatStatus(data.Status));
+                $(row).children('td').eq(9).html(data.ClientCode?data.ClientCode + '号终端' + (data.Place?data.Place:''):'')
+            }
+
+        });
+        $('.chosen-select').on('change', function (e, params) {
+            tableModel.ajax.url('/dataReport/getDrugRecordListJson/?ClientId=' + $('.chosen-select').val()).load();
+            tableModel.draw();
+        });
+     $("#btnTableSearch").click(function () {
+
+            tableModel.column(0).search($("#searchValue").val()).draw();
+        });
+        $("#searchValue").keyup(function () {
+            tableModel.search($("#searchValue").val()).draw();
+
+        });
+        $('#startDate, #endDate').change(function () {
+            tableModel.draw();
+        });
+        $("#btnTableReload").click(function () {
+            location.href = '{% url 'dataReport:drugRecordList' %}';
+        });
+
+        $("#tablePre").click(function () {
+            $("#dataTableModel_previous").click();
+
+        });
+        $("#btnTableChart").click(function () {
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "图表统计",
+                shift: 2,
+                type: 2,
+                area: ['1000px', '500px'],
+                
+                content: ['{% url 'dataReport:drugRecordChart' %}', 'no'],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#tableNext").click(function () {
+            $("#dataTableModel_next").click();
+
+        });
+        $("#btnTableExport").click(function () {
+            var client_id =$('#cabinetSelect').val();
+
+            var index = '';
+            var url = '/dataReport/exportDrugRecordData/?client_id=' + client_id;
+         $.fileDownload(url,{
+            httpMethod: 'GET',
+            prepareCallback:function(url){
+             index = parent.layer.load(2)
+            },
+            successCallback:function(url){
+               parent.layer.close(index)
+            },
+            failCallback: function (html, url) {
+               parent.layer.close(index)
+            }
+         });
+
+        });
+
+        function format_date(date1) {
+            return date1.replace('T', ' ')
+        }
+        // 禁用enter键
+        $('#searchValue').focus(function () {
+            $(this).keydown(function () {
+                switch (event.keyCode) {
+                    case 13:
+                        return false;
+                }
+            })
+        });
+        function formatRecordType(params) {
+            switch (params) {
+                case 1:
+                    return '入库';
+                case 2:
+                    return '领用';
+                case 3:
+                    return '归还';
+                default:
+                    return params
+            }
+
+        }
+
+         function formatStatus(params) {
+            switch (params) {
+                case 1:
+                    return '在库';
+                case 2:
+                    return '出库';
+                case 3:
+                    return '空瓶';
+                case 5:
+                return '预备入库';
+                default:
+                    return params
+            }
+
+        }
+
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+
+{% endblock %}

@@ -1,0 +1,24 @@
+具体时间:[2021-10-18 09:38:04,685][default:INFO(22)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-10-18 09:38:05,777][default:INFO(22)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2021-10-18 09:38:11,363][default:INFO(181)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-10-18 11:26:18,833][default:INFO(181)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-10-18 14:59:29,596][default:INFO(181)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+
+具体时间:[2021-10-18 18:26:19,808][default:INFO(181)]
+当前文件位置:[D:\cxw\TY_RMS_BZP_Manage_zhejingjikong\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第181行]-登录成功
+

@@ -1,0 +1,71 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">货架号</label>
+        <div class="layui-input-block">
+            <select name="cabinetNo" id="cabinetNo">
+
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">层号</label>
+        <div class="layui-input-block">
+            <input type="radio" name="flowNo" value="1" title="1层" checked>
+            <input type="radio" name="flowNo" value="2" title="2层">
+            <input type="radio" name="flowNo" value="3" title="3层">
+            <input type="radio" name="flowNo" value="4" title="4层">
+            <input type="radio" name="flowNo" value="5" title="5层">
+            <input type="radio" name="flowNo" value="6" title="6层">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</form>
+
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    var staticPath="{% static '/' %}";
+    layui.use(['index', 'form'], function () {
+
+        var form = layui.form;
+        $.get("{% url 'cabinet:getSelectClientListJson' %}",{type:'101'}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#cabinetNo").append("<option value='" + data.value + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            var place= $("#cabinetNo").find("option:selected").text() +'-'+ $("input[name=flowNo]:checked").prop("title");
+            var fieldData= obj.field;
+            fieldData.place=place;
+            fieldData.cabinetType=101;
+            console.log(fieldData);
+            localStorage.setItem("stockInPlace",JSON.stringify(fieldData));
+           
+            top.layer.open({
+                type: 2
+                ,title: '入库试剂信息'
+                ,content: "{% url 'keyCabinet:addMaterialForm' %}"
+                ,area: ['680px', '600px']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var submitID = 'LAY-user-front-submit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                    submit.trigger('click');
+                }        
+                ,end:function(){
+                    top.layer.close(index);
+                }
+            }); 
+            return false;
+        });
+        
+    })
+</script>
+{% endblock %}

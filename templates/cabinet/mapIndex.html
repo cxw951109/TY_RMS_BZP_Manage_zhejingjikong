@@ -1,0 +1,165 @@
+{% extends 'baseBZP.html' %}
+{% block content %}
+<style type="text/css">
+.mapBox{
+    margin:0 20px;
+    display:flex;
+    justify-content:center;
+    border:2px solid gray;
+    padding-top: 20px;
+    background-color: rgb(252, 252, 249);
+    /* background-color: rgb(252, 252, 240); */
+    border-radius:5px;
+}
+.mapBox .mapList{
+
+    width:300px;
+    /* background-color: red; */
+    /* border:2px solid red; */
+    display: flex;
+    flex-direction:column;
+    align-items: center;;
+}
+.mapList .mapItem{
+    width:120px;
+    height:190px;
+    background-image:url('../../static/img/map_item.png');
+    background-size:60px 130px;
+    background-repeat:no-repeat;
+    background-position:center 15px;
+    border:2px solid yellowgreen;
+    margin-bottom: 30px;
+    background-color:rgb(209, 196, 196);
+    /* background-color:rgb(228, 214, 214); */
+    /* background-color:rgb(70, 65, 65); */
+    cursor: pointer;
+    border-radius: 5px;
+}
+.mapList .mapItem:hover{
+    background-image:url('../../static/img/map_item_hover.png');
+    background-color:rgb(19, 16, 16);
+}
+.mapList .mapItem .mapTitle{
+    text-align: center;
+    color: #ffffff;
+    margin-top:150px;
+    font-size:20px;
+}
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+      <!-- <div class="layui-card-header" style="font-size: 20px;font-weight: bold;">库房示意</div> -->
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div style="display: flex; justify-content: center;">
+          <div class="layui-form-item" style="width: 500px;">
+            <div class="layui-inline will-hide">
+              <label class="layui-form-label" style="font-weight: bold">库房选择</label>
+              <div class="layui-input-block">
+                <select name="clientId" id="clientId">
+                  <option value="">不限</option>
+                  <option value="">库房一</option>
+                </select>
+              </div>
+            </div>
+            <!-- <div class="layui-inline">
+              <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+                <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+              </button>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+
+      </div>
+
+      <div class="layui-card-body">
+        <div class="mapBox">
+            <div class="mapList">
+                <div class="mapItem">
+                    <div class="mapTitle">1号柜</div>
+                </div>
+                <div class="mapItem">
+                    <div class="mapTitle">2号柜</div>
+                </div>
+            </div>
+            <div class="mapList" style="font-size:30px">
+                <div style="height:500px;line-height:500px;text-indent: 20px;color:#c7c5c5;">
+                    过道
+                </div>
+
+                <div style="background-color:#f0e4e4;border:2px solid gray;width:120px;height:50px;text-align:center;line-height:50px;margin-top:110px;border-radius: 5px;font-size:20px;color:gray;">门位置</div>
+
+                
+            </div>
+            <div class="mapList">
+                <div class="mapItem">
+                    <div class="mapTitle">3号柜</div>
+                </div>
+                <div class="mapItem">
+                    <div class="mapTitle">4号柜</div>
+                </div>
+            </div>
+            <div class="mapList">
+                <div class="mapItem">
+                    <div class="mapTitle">5号柜</div>
+                </div>
+            </div>
+            <div class="mapList">
+                <div class="mapItem">
+                    <div class="mapTitle">6号柜</div>
+                </div>
+                <div class="mapItem">
+                    <div class="mapTitle">7号柜</div>
+                </div>
+                <div class="mapItem">
+                    <div class="mapTitle">8号柜</div>
+                </div>
+            </div>
+        </div>
+  
+      </div>
+    </div>
+</div>
+
+{% load static %}
+<script src="{% static 'js/warning.js' %}"></script>
+<script type="text/javascript">
+
+layui.use(['index', 'table'], function () {
+    var table = layui.table
+      , form = layui.form;
+      $.get("{% url 'cabinet:getSelectClientListJson' %}",{}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#clientId").append("<option value='" + data.value + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+});
+    $(function () {
+        $(".mapItem").click(function(){
+            top.layer.open({
+              type: 2
+              , title: '2号柜试剂存放示意'
+              , content: "{% url 'keyCabinet:mapFlowView' %}"
+              , area: ['1100px', '600px']
+              , btn: []
+            //   , yes: function (index, layero) {
+            //     // var submitID = 'LAY-user-front-submit'
+            //     //   , submit = layero.find('iframe').contents().find('#' + submitID);
+            //     // submit.trigger('click');
+            //     layero.find('iframe')[0].contentWindow.location.reload(true);
+            //   },cancel:function(){
+            //     // alert("fdfdf1");
+            //   }
+              , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+              }
+            });
+
+        });
+    });
+</script>
+{% endblock %}

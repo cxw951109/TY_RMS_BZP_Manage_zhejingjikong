@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+ <script src="../static/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+
+     <!-- 导入弹窗插件flavr -->
+    <link rel="stylesheet" href="../static/flavr/style.css">
+    <link rel="stylesheet" href="../static/flavr/animate.css">
+    <link rel="stylesheet" href="../static/flavr/flavr.css">
+    <script src="../static/flavr/flavr.min.js"></script>
+<body>
+
+
+
+
+</body>
+
+
+
+<script>
+
+    /**
+ * 封装flavr，方便使用
+ */
+var Flavr = function() {
+    /*
+    //动画数组
+    var animates = ["tada", "swing", "shake", "rubberBand", "bounce", "pulse"];
+    //获取随机动画
+    function getAnimate() {
+        return animates[Math.floor(Math.random() * animates.length)];
+    }  */
+
+    var fr = {
+        /**
+         * 弹窗信息
+         * @param {String} 信息内容
+         */
+        alert: function(msg) {
+            new $.flavr({
+                buttons: {
+                    OK: {
+                        text: '确定',
+                        style: 'default',
+                        addClass: null,
+                    }
+                },
+               /* animateEntrance: getAnimate(),  */
+                content: msg
+            });
+        },
+        /**
+         * 提示信息
+         * @param {String} 信息内容
+         */
+        msg: function(msg) {
+            new $.flavr({
+                buttons: {
+                    OK: {
+                        text: '确定',
+                        style: 'default',
+                        addClass: null,
+                    }
+                },
+                content: msg
+            });
+        },
+        /**
+         * 确认信息
+         * @param {String} 信息内容
+         * @param {Function} 确认回调函数
+         * @param {Function} 取消回调函数
+         */
+        confirm: function(msg, okBack, cancelBack) {
+            new $.flavr({
+                dialog: 'confirm',
+                buttons: {
+                    OK: {
+                        text: '确认',
+                        style: 'danger',
+                        addClass: null,
+                        action: okBack
+                    },
+                    CANCEL: {
+                        text: '取消',
+                        addClass: null,
+                        action: cancelBack
+                    }
+                },
+              //  animateEntrance: getAnimate(),
+                content: msg
+            });
+        }
+    }
+    return fr;
+}
+var flavr = new Flavr();
+flavr.alert("Flavr Alert");
+flavr.msg("Flavr Msg");
+flavr.confirm("确定删除吗？", function() {
+    flavr.msg("删除成功");
+});
+
+</script>
+</html>

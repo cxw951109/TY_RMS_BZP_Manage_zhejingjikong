@@ -1,0 +1,12 @@
+具体时间:[2019-12-12 10:09:56,521][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-12-12 10:09:56,992][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-12-12 10:10:03,621][default:INFO(153)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第153行]-登录成功
+

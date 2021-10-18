@@ -1,0 +1,172 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="PurchaseOrderId" type="hidden" value="{% firstof model.PurchaseOrderId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购单号</label>
+        <div class="layui-input-inline">
+            <!-- <input type="text" name="number" id="end" autocomplete="off" class="layui-input" placeholder="采购单号"> -->
+            <input type="text" readonly name="PurchaseOrderCode" value="{% firstof model.PurchaseOrderCode NewPurchaseOrderCode %}" lay-verify="required" placeholder="采购单号" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">采购内容</label>
+        <div class="layui-input-block">
+            <table class="layui-hide" id="LAY-datatable" lay-filter="LAY-datatable"></table>
+            <script type="text/html" id="datatable-toolbar">
+                <div class="layui-btn-container">
+                  <button class="layui-btn layui-btn-sm" lay-event="addPurchaseDrug">添加采购试剂</button>
+                </div>
+            </script>
+            <script type="text/html" id="datatable-tool">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              </script>
+            <script>
+                var drugListData={{PurchaseOrderContent|safe}};
+                layui.use(['table', 'form'], function(){
+                    var table = layui.table;
+                    var form = layui.form;
+                    table.render({
+                        elem: '#LAY-datatable'
+                        ,data: drugListData
+                        ,height: 280
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,toolbar: '#datatable-toolbar' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: []
+                        ,title: '用户数据表'
+                        ,cols: [[
+                        {type:'numbers'}
+                        ,{field:'DrugName', title: '试剂名'}
+                        ,{field:'CASNumber', width:130, title: 'CAS码'}
+                        ,{field:'Speci', width:100, title: '规格'}
+                        ,{field:'SpeciUnit', width:60, title: '单位'}
+                        ,{field:'Purity', width:130, title: '纯度'}
+                        ,{field:'Count', width:100, title: '采购数量'}
+                        ,{title: '操作', width: 100, align: 'center', fixed: 'right', toolbar: '#datatable-tool'}
+                        ]]
+                    });
+                    $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                    $("#approveContent .layui-table-view .layui-table-tool").remove();
+                    $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                    $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                    //头工具栏事件
+                    table.on('toolbar(LAY-datatable)', function(obj){
+                        switch(obj.event){
+                        case 'addPurchaseDrug':
+                            layer.open({
+                                type: 2
+                                ,title: '添加采购试剂'
+                                ,content: "{% url 'standard:purchaseDrugForm' %}"
+                                ,area: ['600px', '400px']
+                                ,shade: [0.1, '#000']
+                                ,offset: '60px'
+                                ,btn: ['确定', '取消']
+                                ,yes: function(index, layero){
+                                    var iframeWindow = window['layui-layer-iframe'+ index]
+                                    var submitID = 'LAY-user-front-submit'
+                                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                                    //监听提交
+                                    iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+                                        var field = data.field; //获取提交的字段
+                                        field.uuid=uuid();
+                                        drugListData.unshift(field);
+                                        table.reload('LAY-datatable',{data:drugListData});
+                                        // form.render();
+                                        layer.close(index); //关闭弹层
+                                        $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                        $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                        $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                        $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                    });  
+                                    submit.trigger('click');
+                                }        
+                                ,end:function(){
+                                    table.reload('LAY-datatable'); //数据刷新
+                                }
+                            }); 
+                        break;
+                        };
+                    });
+                    //监听工具条
+                    table.on('tool(LAY-datatable)', function(obj){
+                        var data = obj.data;
+                        if(obj.event === 'del'){
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            drugListData.splice(index,1);
+                            table.reload('LAY-datatable',{data:drugListData});
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">具体描述</label>
+        <div class="layui-input-block">
+            <textarea type="text" name="Description" autocomplete="off" class="layui-textarea">{% firstof model.Description '' %}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提交审批</label>
+        <div class="layui-input-inline" style="width: 50px;height: 38px;">
+            {% if model.PurchaseOrderStatus == 1 or model.PurchaseOrderStatus is None %}
+                <input type="checkbox" lay-filter="switch" name="PurchaseOrderStatus" lay-skin="switch" lay-text="是|否">
+            {% else %}
+               <input type="checkbox" checked lay-filter="switch" name="PurchaseOrderStatus" lay-skin="switch" lay-text="是|否">
+            {% endif %}
+        </div><div class="layui-form-mid layui-word-aux">提交审批后，信息将不可更改</div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+    <div id="approveContent" class="layui-hide">
+        <style>
+            #approveContentTable .laytable-cell-1-0-1{
+                width: 230px !important;
+            }
+        </style>
+        <div id="approveContentTable" class="layui-form layui-border-box layui-table-view" style="height: 280px;"></div>
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            var fieldData = obj.field;
+            fieldData= $.extend({PurchaseOrderStatus:1},fieldData);
+            fieldData.PurchaseOrderStatus=fieldData.PurchaseOrderStatus=='on'? 2:1;
+            fieldData.PurchaseOrderContent=JSON.stringify(drugListData);
+            var purchaseOrderTotalCount=0;
+            var purchaseOrderDrugInfo=''
+            drugListData.forEach(function(element,index){
+                purchaseOrderTotalCount+=parseInt(element.Count);
+                if(purchaseOrderDrugInfo!=''){purchaseOrderDrugInfo+='，'}
+                purchaseOrderDrugInfo+=element.DrugName +"("+element.Speci+element.SpeciUnit+"):"+element.Count+"个";
+            });
+            fieldData.PurchaseOrderTotalCount=purchaseOrderTotalCount;
+            fieldData.PurchaseOrderDrugInfo=purchaseOrderDrugInfo;
+            fieldData.ApproveInfoContent=fieldData.PurchaseOrderStatus==1?'':$("#approveContent").html();
+            //提交修改
+            $.post("{% url 'standard:savePurchaseOrderData' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

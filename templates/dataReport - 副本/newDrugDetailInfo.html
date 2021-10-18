@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" action="{% url 'dataReport:getDrugDetailInfo' %}" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="searchValue" name="searchValue" placeholder="搜索试剂条码、试剂名称" value="{{ searchValue }}">
+                <div class="input-group-btn">
+                    <button type="submit" id="btnTableSearch" class="btn btn-sm btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <h2>
+
+                试剂详细信息统计
+            </h2>
+        <div class="mail-tools tooltip-demo">
+            <div class="btn-group pull-right">
+                    <button class="btn btn-white btn-sm" id="tablePre">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <button class="btn btn-white btn-sm" id="tableNext">
+                        <i class="fa fa-arrow-right"></i>
+                    </button>
+                </div>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新"><i class="fa fa-refresh"></i> 刷新</button>
+            <!-- <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出数据</button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableEdit" data-placement="top" title="编辑选中试剂">
+                <i class="fa fa-edit"> 编辑试剂</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableDrugRecord" data-placement="top" title="查看流转记录">
+                <i class="fa fa-eye"> 查看流转记录</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableQx" data-placement="top" title="分配使用用户">
+                <i class="fa fa-gear"> 分配禁用用户</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableSetEmpty" data-placement="top" title="设置空瓶">
+                <i class="fa fa-gear"> 设置空瓶</i>
+            </button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableDelete" data-placement="top" title="删除选中试剂">
+                <i class="fa fa-trash-o"> 删除</i>
+            </button> -->
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>条码编号</th>
+                    <th>申购单编号</th>
+                    <th>采购单编号</th>
+                    <th>试剂类别</th>
+                    <th>所属项目</th>
+                    <th>试剂名称</th>
+                    <th>英文名称</th>
+                    <th>CAS码</th>
+                    <th>试剂余量（g）</th>
+                    <th>试剂规格</th>
+                    <th>纯度</th>
+{#                    <th>生产厂家</th>#}
+{#                        <th>经销商</th>#}
+                    <th>生产日期</th>
+                    <th>入库时间</th>
+                    <th style="text-align:center">是否监管</th>
+                    <th style="text-align:center">状态</th>
+                    <th>最后使用人</th>
+                    <th>位置</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="gradeX">
+                        <td>Trident</td>
+                        <td>
+                            Internet Explorer 4.0
+                        </td>
+                        <td>Win 95+</td>
+                        <td class="center">4</td>
+                        <td class="center">X</td>
+                        <td class="center">X</td>
+                        <td class="center">X</td>
+                        <td class="center">X</td>
+                        <td class="center">X</td>
+                        <td class="center">X</td>
+                    </tr>
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>条码编号</th>
+                    <th>申购单编号</th>
+                    <th>采购单编号</th>
+                    <th>试剂类别</th>
+                    <th>所属项目</th>
+                    <th>试剂名称</th>
+                    <th>英文名称</th>
+                    <th>CAS码</th>
+                    <th>试剂余量（g）</th>
+                    <th>试剂规格</th>
+                    <th>纯度</th>
+{#                    <th>生产厂家</th>#}
+{#                        <th>经销商</th>#}
+                    <th>生产日期</th>
+                    <th>入库时间</th>
+                    <th style="text-align:center">是否监管</th>
+                    <th style="text-align:center">状态</th>
+                    <th>最后使用人</th>
+                    <th>位置</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% load static %}
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+            <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#navTitle', window.parent.document).text('试剂数据');
+        var searchValue = $("#searchValue").val();
+
+        $("#searchValue").val(searchValue);
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            "ordering": false,
+            ajax: {
+                url: "{% url 'drug_GetDrugListJson' %}",
+                data: { searchValue: searchValue},
+                dataSrc: 'data'
+            },
+            columns: [
+            { data: 'BarCode' },
+            { data: 'Remark1' },
+            { data: 'Remark2' },
+            { data: 'Remark3' },
+            { data: 'Remark4' },
+            { data: 'Name' },
+            { data: 'EnglishName' },
+            { data: 'CASNumber' },
+            { data: 'Remain' },
+            { data: 'Speci' },
+            { data: 'Purity' },
+            { data: 'ProductionDate' },
+            { data: 'PutInDate' },
+            { data: 'IsSupervise' },
+            { data: 'Status' },
+            { data: 'ByUserName' },
+            { data: 'Place' }
+            ],
+            "order": [[6, "desc"]],
+            createdRow: function (row, data, dataIndex) {
+
+                $(row).children('td').eq(0).html("<span class='label label-info'>" + data.BarCode + "</span>");
+                $(row).children('td').eq(9).html(data.IsSupervise == 1 ? "<span class='label label-warning'>是</span>" : "<span class='label label-default'>否</span>");
+                $(row).children('td').eq(9).attr('style', 'text-align: center;');
+                $(row).children('td').eq(10).attr('style', 'text-align: center;');
+                $(row).children('td').eq(10).html(judge_drugStatus(data.Status));
+                $(row).children('td').eq(12).html(data.ClientCode?data.ClientCode + '号终端' + (data.Place?data.Place:''):'')
+                $(row).children('td').eq(5).html(data.Remain+' '+data.SpeciUnit);
+            },
+        });
+        $("#btnTableReload").click(function () {
+            // location.href = "{% url 'drug_index' %}";
+            location.reload();
+        });
+
+        $("#btnTableEdit").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+
+            if (selectRow == null) {
+                layer.msg("请选择要编辑的数据！");
+                return;
+            }
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "编辑试剂",
+                shift: 2,
+                type: 2,
+                area: ['860px', '550px'],
+                //
+                content: ["/drug/" + selectRow.MedicamentId + '/form/'],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#btnTableSetEmpty").click(function(){
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要设置空瓶的数据！");
+                return;
+            }
+
+             new $.flavr({
+                content: '确定要将试剂<p style="line-height:30px;color:red;font-size:20px;">"' + selectRow.Name + '"设为空瓶么?</p>',
+                dialog: 'confirm',
+                buttons: {
+                    danger: {
+                        text: '确定',
+                        style: 'danger',
+                        action: function() {
+                            $.post("{% url 'drug:setDrugEmpty' %}", { MedicamentId: selectRow.MedicamentId }, function (obj) {
+                                if (obj.status == 1) {
+                                    new $.flavr({ content : '设置成功！',
+                                    autoclose : true, timeout : 800 });
+                                    tableModel.row('.selected').remove().draw(false);
+                                    return false;
+                                }
+                                else {
+                                    new $.flavr({ content : obj.message,
+                                    autoclose : true, timeout : 2000 });
+                                    return false;
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        style: 'default'
+                    }
+                },
+            });
+
+        });
+        $("#btnTableDrugRecord").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要查看的数据！");
+                return;
+            }
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "试剂“" + selectRow.BarCode + "”的流转记录",
+                shift: 2,
+                type: 2,
+                area: ['960px', '580px'],
+                //
+                content: ['/home/homeDrugRecord/?BarCode=' + selectRow.BarCode],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+
+        $("#btnTableDelete").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要删除的数据！");
+                return;
+            }
+
+             new $.flavr({
+                content: '确定要删除试剂<p style="line-height:30px;color:red;font-size:20px;">"' + selectRow.Name + '"?</p>',
+                dialog: 'confirm',
+                buttons: {
+                    danger: {
+                        text: '确定',
+                        style: 'danger',
+                        action: function() {
+                            $.post("{% url 'drug:deleteDrug' %}", { MedicamentId: selectRow.MedicamentId }, function (obj) {
+                                if (obj.status == 1) {
+                                    new $.flavr({ content : '删除成功！',
+                                    autoclose : true, timeout : 800 });
+                                    tableModel.row('.selected').remove().draw(false);
+                                    return false;
+                                }
+                                else {
+                                    new $.flavr({ content : obj.message,
+                                    autoclose : true, timeout : 2000 });
+                                    return false;
+                                }
+                            })
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        style: 'default'
+                    }
+                },
+            });
+        });
+        $("#btnTableExport").click(function () {
+            var index = '';
+            var url = '/dataReport/exportDrugShelfLifeData/?client_id=' + $('#cabinetSelect').val()+'&searchWord='+$("#searchValue").val();
+            $.fileDownload(url, {
+                prepareCallback: function (url) {
+                    index = parent.layer.load(2)
+                },
+                successCallback: function (url) {
+                    parent.layer.close(index)
+                },
+                 failCallback: function (url) {
+                     msg('数据异常, 下载失败');
+                     parent.layer.close(index)
+                 }
+
+
+
+            })
+
+        });
+        //  分配使用用户
+        $("#btnTableQx").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要分配用户的终端！");
+                return;
+            }
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "分配试剂禁止使用用户- 试剂名称：" + selectRow.Name,
+                shift: 2,
+                type: 2,
+                area: ['860px', '520px'],
+                
+                content: ["/drug/disabled_user/?barcode=" + selectRow.BarCode, 'no'],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#tablePre").click(function () {
+            $("#dataTableModel_previous").click();
+
+        });
+
+        $("#tableNext").click(function () {
+            $("#dataTableModel_next").click();
+
+        })
+    });
+    //
+    function judge_drugStatus(status) {
+        switch (status) {
+            case 1:
+                return "在库";
+            case 2:
+                return "出库";
+            case 3:
+                return "空瓶";
+            case 5:
+                return "预备入库";
+            default:
+                return "异常"
+        }
+}
+
+
+
+
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+
+{% endblock %}

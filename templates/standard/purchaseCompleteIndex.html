@@ -1,0 +1,256 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">采购单号</label>
+            <div class="layui-input-block">
+              <input type="text" name="PurchaseOrderCode" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">采购人</label>
+            <div class="layui-input-block">
+              <input type="text" name="CreateUserName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">试剂信息</label>
+            <div class="layui-input-block">
+              <input type="text" name="PurchaseOrderDrugInfo" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="layui-card-body">        
+        <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+        <script type="text/html" id="sexTpl">
+            {% verbatim %} 
+            {{#  if(d.Sex==1){ }}
+              <span>男</span>
+            {{#  } else { }}
+              <span>女</span>
+            {{#  } }}
+            {% endverbatim %}
+        </script> 
+        <script type="text/html" id="statusTpl">
+            {% verbatim %} 
+            {{#  if(d.PurchaseOrderStatus==1){ }}
+              <button class="layui-btn layui-btn-primary layui-btn-xs">未提交</button>
+            {{#  } else if(d.PurchaseOrderStatus==2) { }}
+              <button class="layui-btn layui-btn-warm layui-btn-xs">待审核</button>
+            {{#  } else if(d.PurchaseOrderStatus==3) { }}
+              <button class="layui-btn layui-btn-normal layui-btn-xs">已批准</button>
+            {{#  } else if(d.PurchaseOrderStatus==4) { }}
+              <button class="layui-btn layui-btn-danger layui-btn-xs">未批准</button>
+            {{#  } }}
+            {% endverbatim %}
+        </script> 
+        <script type="text/html" id="datatable-toolbar">
+          <a class="layui-btn layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-list"></i>查看</a>
+          <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="export"><i class="layui-icon layui-icon-export"></i>导出采购单</a>
+        </script>
+      </div>
+    </div>
+  </div>
+  <script>
+  layui.use(['index', 'table'], function(){
+    var table = layui.table
+    ,form = layui.form;
+
+    //列表数据
+    table.render({
+        elem: '#LAY-datatable'
+        ,url: "{% url 'standard:getCompletePurchaseListJson' %}"
+        ,size:'lg'
+        ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field: 'PurchaseOrderCode', width: 180, title: '采购单号'}
+        ,{field: 'PurchaseOrderDrugInfo', width: 400, title: '试剂内容', minWidth: 100}
+        ,{field: 'PurchaseOrderTotalCount', width: 120, title: '采购总数量'}
+        ,{field: 'Description', title: '具体描述'}
+        ,{field: 'CreateUserName', width: 150, title: '采购人'}
+        ,{field: 'CreateDate', width: 170, title: '采购完成时间'}
+        ,{title: '操作', width: 200, minWidth: 150, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar'}
+        ]]
+        ,page: {
+          layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+          ,prev:'上一页'
+          ,next:'下一页'
+        }
+        ,limit: 15
+        ,limits: [10, 15, 20, 25, 30]
+        ,height: 'full-110'
+    });
+    
+    //监听工具条
+    table.on('tool(LAY-datatable)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'del'){
+          top.layer.prompt({
+            formType: 1
+            ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+            top.layer.close(index);
+            if(hex_md5(value)!=top.CheckCode)
+            {
+                top.layer.msg("验证失败！");
+                return
+            }
+            top.layer.confirm('确定删除吗？', function(index) {
+                //提交
+                $.post("{% url 'standard:deletePurchaseOrder' %}", {deleteIds:data.PurchaseOrderId}, function (obj) {
+                    if (obj.status == 1) {
+                        top.layer.msg("删除成功", function () {
+                            top.layer.close(index);
+                        });
+                    }
+                    else {
+                        top.layer.msg("删除失败 " + obj.message);
+                    }
+                });
+                obj.del();
+                // table.reload('LAY-datatable');
+            });
+        });
+        } else if(obj.event === 'edit'){
+        var data = obj.data;
+        top.layer.confirm('确定已完成采购吗？', function(index) {
+                //提交
+                $.post("{% url 'standard:setCompletePurchase' %}", {PurchaseOrderId:data.PurchaseOrderId}, function (obj) {
+                    if (obj.status == 1) {
+                        top.layer.msg("设置成功", function () {
+                            top.layer.close(index);
+                        });
+                    }
+                    else {
+                        top.layer.msg("设置失败 " + obj.message);
+                    }
+                });
+                obj.del();
+                // table.reload('LAY-datatable');
+            });
+        } else if(obj.event === 'view'){
+        var tr = $(obj.tr);
+
+        top.layer.open({
+          type: 2
+          ,title: '查看采购计划'
+          ,content: "{% url 'standard:purchaseView' %}?PurchaseOrderId="+data.PurchaseOrderId
+          ,area: ['980px', '580px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+      }
+      else if(obj.event === 'export'){
+          top.layer.open({
+              type: 2
+              ,title: '采购单PDF文件导出预览'
+              ,content: "{% url 'standard:purchasePDFView' %}?PurchaseOrderId="+data.PurchaseOrderId
+              ,area: ['1150px', ($(window).height()>820?820:$(window).height())+'px']
+              ,yes: function(index, layero){
+                  var submitID = 'LAY-user-front-submit'
+                  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                  submit.trigger('click');
+              }        
+          });  
+        }
+    });
+    
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+      var field = data.field;
+      
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+  
+    //事件
+    var active = {
+      batchdel: function(){
+        var checkStatus = table.checkStatus('LAY-datatable')
+        ,checkData = checkStatus.data; //得到选中的数据
+
+        if(checkData.length === 0){
+          return layer.msg('请选择数据');
+        }
+        
+        top.layer.prompt({
+          formType: 1
+          ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+          top.layer.close(index);
+          if(hex_md5(value)!=top.CheckCode)
+          {
+            top.layer.msg("验证失败！");
+            return
+          }
+          top.layer.confirm('确定删除吗？', function(index) {
+            var deleteIds='';
+            checkData.forEach(function(element,index){
+                if(deleteIds!=''){deleteIds+=','}
+                deleteIds+=element.PurchaseOrderId;
+            });
+            //提交
+            $.post("{% url 'standard:deletePurchaseOrder' %}", {deleteIds:deleteIds}, function (obj) {
+                if (obj.status == 1) {
+                    top.layer.msg("删除成功", function () {
+                        top.layer.close(index);
+                    });
+                }
+                else {
+                    top.layer.msg("删除失败 " + obj.message);
+                }
+            });
+            table.reload('LAY-datatable');
+          });
+        });
+      }
+      ,add: function(){
+        top.layer.open({
+          type: 2
+          ,title: '添加采购计划'
+          ,content: "{% url 'standard:purchaseForm' %}"
+          ,area: ['980px', '650px']
+          ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+      }
+    };
+    
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+  </script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

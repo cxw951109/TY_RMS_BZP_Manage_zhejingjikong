@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+<style>
+
+
+</style>
+
+{% block content %}
+<div class="ibox-content" style="height:520px;padding:5px">
+    <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+        <thead>
+            <tr>
+                <th>试剂条码编号</th>
+                <th>CAS码</th>
+                <th>试剂名称</th>
+                <th>纯度</th>
+                <th>操作时间</th>
+                <th>操作类型</th>
+                <th>操作人</th>
+                <th>位置</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+        {% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
+                    <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var tableModel = $('#dataTableModel').DataTable({
+            searching: false,
+            lengthChange: false,
+            select: true,
+            order: [4, 'desc'],
+            "bPaginate": true,
+            iDisplayLength: 10,
+            "info": true,
+            "scrollY": "460px",
+            "scrollCollapse": true,
+            ajax: {
+                url: '{% url 'home:getRecordTypeDrugRecordListJson' %}',
+                data: { recordType: '{{ recordType }}', BarCode: '{{ BarCode }}',  varietyId: '{{ varietyId }}'},
+                dataSrc: 'data',
+            },
+            columns: [
+            { data: 'BarCode' },
+            { data: 'CASNumber' },
+            { data: 'Name' },
+            { data: 'Purity' },
+            { data: 'CreateDate' },
+            { data: 'RecordType' },
+            { data: 'CreateUserName' },
+            { data: 'Place' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(4).html(get_date(data.CreateDate));
+                $(row).children('td').eq(5).html(get_recordType(data.RecordType));
+                $(row).children('td').eq(7).html(data.ClientCode?data.ClientCode + '号终端' +(data.Place?data.Place:'') : '')
+            }
+
+        });
+        function get_recordType(params) {
+            switch (params) {
+                case 1:
+                    return '入库';
+                case 2:
+                    return '领用';
+                case 3:
+                    return '归还';
+            }
+        }
+ // 格式化sqlAlchemy的时间格式
+function get_date(params) {
+    if(params){
+               return params.replace('T', ' ')
+           }
+    }
+    });
+
+</script>
+
+{% endblock %}

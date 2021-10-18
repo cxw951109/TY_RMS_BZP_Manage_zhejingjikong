@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+    .myForm {
+        padding-top: 30px;
+        padding-left: 30px;
+    }
+</style>
+    {% load static %}
+
+<div class="ibox  float-e-margins">
+    <form class="form-horizontal myForm" role="form" style="margin-top:15px">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">试剂类型 *</label>
+            <div class="col-sm-8">
+                <input class="form-control" id="VarietyId" name="VarietyId" type="hidden" />
+                <input type="text" class="form-control" data-placeholder="请输入试剂类型..." id="drugTypeSelect" required="required" style="width:480px;" >
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">EnglishName </label>
+            <div class="col-sm-3">
+                <input class="form-control" id="EnglishName" maxlength="50" name="EnglishName" type="text"  value="" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">CAS码/标准号*</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="CASNumber" name="CASNumber" type="text" required="required" value="" />
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">生产日期 </label>
+            <div class="col-sm-3">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" id="ProductionDate" name="ProductionDate"  data-mask="9999-99-99">
+                </div>
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">纯度 *</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Purity" name="Purity" type="text" required="required" value="" />
+            </div>
+
+        </div>
+        <div class="form-group">
+
+
+            <label class="col-sm-2 control-label" for="ds_username">保质期（天）</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="ShelfLife" name="ShelfLife" oninput="this.value=this.value.replace(/[^0-9]+/,'');" type="number"  value="" />
+            </div>
+
+            <label class="col-sm-2 control-label" for="ds_username">导入数量（个) *</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="ExportCount" name="ExportCount" oninput="this.value=this.value.replace(/[^0-9]+/,'');"  type="number" required="required" value="" />
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-sm-2 control-label" for="ds_username">到期日期 </label>
+            <div class="col-sm-3">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" id="ExpirationDate" name="ExpirationDate"  data-mask="9999-99-99">
+                </div>
+            </div>
+
+            <label class="col-sm-2 control-label" for="ds_username"></label>
+            <div class="col-sm-3">
+               
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label class="col-sm-2 control-label" for="ds_username">价格（元）</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Price" name="Price" oninput="this.value=this.value.replace(/[^0-9.]+/,'');" type="number" required="required" value="" />
+            </div>
+
+            <label class="col-sm-2 control-label" for="ds_username">销售商</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Distributor" name="Distributor" type="text" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">规格 *</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Speci" name="Manufacturer" type="number" required="required" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_username">单位</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Unit" name="Distributor" value="瓶" type="text" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">规格单位</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="SpeciUnit" name="Manufacturer" type="text" required="required"  value="g"/>
+            </div>
+              <label class="col-sm-2 control-label" for="ds_username">生产厂商</label>
+            <div class="col-sm-3">
+                <input class="form-control" id="Manufacturer" name="Manufacturer" type="text" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">预估质量</label>
+            <div class="col-sm-3">
+                    <div class="input-group">
+                <input class="form-control" id="Remain" name="Remain" type="number" required="required"  value="0"/>
+                <span class="input-group-addon">g</span>
+            </div>
+            </div>
+              <label class="col-sm-2 control-label" for="ds_username"></label>
+            <div class="col-sm-3">
+                
+            </div>
+        </div>
+
+    </form>
+</div>
+{% load static %}
+<link href="{% static 'plugins/autosuggestjs/autosuggest.css' %}" rel="stylesheet" />
+<script src="{% static 'plugins/autosuggestjs/autosuggest-native.js' %}"></script>
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $("#drugTypeSelect").autosuggest({
+            url: '{% url 'drugTemplate:autoSearchDrugList' %} ',
+            queryParamName: 'keyWord',
+            maxNum: 5,
+            firstSelected: true,
+            onSelect: function (obj) {
+                    $("#CASNumber").val($(obj).attr("data-id"));
+                    $("#EnglishName").val($(obj).attr("data-EnglishName"));
+                    //setSupervise(obj.CASNumber);
+                //var reagentData = ReagentDB.GetReagent($(obj).attr("data-id"));
+                //$("#EnglishName").val(reagentData.EnglishName);
+                //$("#CASNumber").val(reagentData.CASNumber);
+            }
+        });
+
+        $("#IsSuperviseSwich").change(function () {
+
+            $("#IsSupervise").val($("#IsSuperviseSwich").is(":checked") ? 1 : 0);
+        });
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            $.post("", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败");
+                }
+            });
+            return false;
+        });
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+
+{% endblock %}

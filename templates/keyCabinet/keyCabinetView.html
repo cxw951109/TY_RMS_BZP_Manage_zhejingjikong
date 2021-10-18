@@ -1,0 +1,300 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .keyCabinetBox{
+        width: 1000px;
+        display: flex;
+        justify-content: center;
+    }
+    .keyCabinetBox ul{
+        width: 700px;
+        height: 430px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .keyCabinetBox li{
+        width: 135px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        background-color: green;
+        border-radius: 10px;
+        /* margin-right: 5px; */
+        color: #FFF;
+        font-size: 20px;
+        cursor: pointer;
+        border: 1px solid #000000;
+    }
+    .keyCabinetBoxView{
+
+        background-color: goldenrod !important;
+        color: #FFF;
+        font-size: 22px !important;
+
+    }
+    .keyCabinetBox .keyCabinetTitle{
+        text-align: center;
+        line-height: 30px;
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+    .keyCabinetBox .keyCabinetTitle input{
+        text-align: center;
+    }
+    .flowdrugList{
+        /* background-color:rgb(185, 178, 178); */
+        background-color: rgb(223, 223, 215);
+        border-radius: 5px;
+        padding:20px;
+    }
+    .flowList{
+        width:280px;
+        height:480px;
+        background-color: rgb(223, 223, 215);
+        border-radius: 5px;
+        margin-left: 10px;
+        display: flex;
+        flex-direction:column;
+        justify-content: start;
+        align-items: center;
+    }
+    .flowList .flowItem{
+        height:60px;
+        /* line-height: 60px; */
+        font-size:20px;
+        width:200px;
+        text-align: center;
+        background-color: #ffffff;
+        margin-bottom:10px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .flowdisplay{
+        margin-top: 10px;
+        display: flex;
+        width:200px;
+        justify-content: space-around;
+
+    }
+    .flowTitle{
+        font-size:12px;
+        margin-top: 8px;
+        color: #bfbebe;
+    }
+    .flowblock{
+        width:20px;
+        height:20px;
+        
+    }
+    .flowblock-blink{
+        background-color: yellowgreen;
+    }
+    .flowItemHover{
+        background-color:#1E9FFF !important;
+        color:#FFFFFF !important;
+    }
+    .drugkx{
+        background-color:rgb(231, 227, 227) !important;
+        
+    }
+    .cabinetTitle{
+        line-height: 90px;
+        font-size:20px;
+        color: gray;
+    }
+</style>
+<form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 0 0 0;width: 100%;">
+    <div style="display: flex; justify-content: center;width: 100%;">
+        <div class="keyCabinetBox">
+            <div class="flowList">
+                <div class="cabinetTitle">2号柜</div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">1层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock flowblock-blink"></div>
+                    </div>
+                    <div class="flowTitle">2层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">3层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">4层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">5层</div>
+                </div>
+            </div>
+            <div class="flowList fh">
+                <div  class="cabinetTitle">5号柜</div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">1层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">2层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock flowblock-blink"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">3层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">4层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">5层</div>
+                </div>
+            </div>
+            <div class="flowList fh">
+                <div  class="cabinetTitle">6号柜</div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">1层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">2层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">3层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">4层</div>
+                </div>
+                <div class="flowItem">
+                    <div class="flowdisplay">
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock flowblock-blink"></div>
+                        <div class="flowblock"></div>
+                        <div class="flowblock"></div>
+                    </div>
+                    <div class="flowTitle">5层</div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+        </div>
+    </div>
+</form>
+
+<script>
+    $(function() {
+        var type = getUrlParam('type');
+        if(type=='1')
+        {
+            $('.fh').hide();
+        }
+        // $(".flowdrugList ul").hide();
+        // $(".flowdrugList ul").eq(0).show();
+        // $(".flowItem").hover(function(){
+        //     $(this).addClass("flowItemHover").siblings().removeClass("flowItemHover");
+        //     $(".flowdrugList ul").hide();
+
+        //     $(".flowdrugList ul").eq($(this).index()).show();
+
+        // });
+
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,200 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    /* .layui-table-header .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    } */
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin"
+    style="background-color:#FFF;padding:0;">
+    <div id="PDFView" style="background-color:#FFF;height: 530px;">
+        <input type="hidden" id="PeriodCheckId" value="{% firstof PeriodCheckId%}">
+        <input type="text" style="color:#FFF;position: absolute;top: -20px; background-color:#FFF;height: 0px; border-width:0px;outline:none" autocomplete="off" id="focusInput" />
+        <div style="text-align: center;line-height: 60px;font-size: 20px;">核查试剂信息</div>
+        <div class="layui-form-item" style="margin-left: 30px; margin-right: 30px;background-color:#FFF;">
+            <table class="layui-table" id="LAY-datatable"
+                lay-data="{height: 420,defaultToolbar: []}" lay-filter="LAY-datatable">
+                <thead>
+                    <tr>
+                        <th lay-data="{type: 'numbers'}"></th>
+                        <th lay-data="{field:'Name', width:160, align: 'center'}">标准品名称</th>
+                        <th lay-data="{field:'BarCode', width:130, align: 'center'}">编号</th>
+                        <th lay-data="{field:'CASNumber', width:130, align: 'center'}">CAS码</th>
+                        <th lay-data="{field:'Speci', align: 'center'}">规格</th>
+                        <th lay-data="{field:'PeriodCheckMethod', width:130, align: 'center'}">核查方法</th>
+                        <th lay-data="{field:'Description', width:170}">描述</th>
+                        <th lay-data="{field:'CreateDate', width:170, align: 'center'}">核查时间</th>
+                        <th lay-data="{field:'Status', width:90, align: 'center', templet: '#statusTpl'}">核查结果</th>
+                </thead>
+            </table>
+            <script type="text/html" id="datatable-toolbar">
+                <div class="layui-btn-container">
+                </div>
+            </script>
+            <script type="text/html" id="statusTpl">
+                {% verbatim %} 
+                {{#  if(d.Status==2){ }}
+                  <button class="layui-btn layui-btn-normal layui-btn-xs">合格</button>
+                {{#  } else { }}
+                  <button class="layui-btn layui-btn-danger layui-btn-xs">不合格</button>
+                {{#  } }}
+                {% endverbatim %}
+            </script> 
+            <div style="line-height: 70px;font-size: 18px;text-align: center;" class="approve-status layui-bg-orange">
+                请扫描试剂条码或识别试剂RFID标签</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+
+    })
+</script>
+<script>
+
+    $("#focusInput").focus();
+    // flag_status 用来RFID入库禁止频繁弹窗
+    var flag_status = true;
+    var socket = new WebSocket("ws:" + window.location.host + "/drug/drug_socket/");
+    socket.onopen = function () {
+
+        console.log('WebSocket open');//成功连接上Websocket
+        socket.send('adasdasda1。。。。');//发送数据到服务端
+        setInterval(function () {
+            if (flag_status) {
+                socket.send('adasdasda1。。。。');
+            }
+        }, 1000);
+    };
+    var drugListData = [];
+    var currentIndex = -1;
+    var table=null;
+    layui.use(['table', 'form'], function () {
+        table = layui.table;
+        var form = layui.form;
+        table.init('LAY-datatable', {
+            url: "{% url 'standard:getPeriodCheckDetailedListJson' %}?PeriodCheckId="+$("#PeriodCheckId").val()
+            ,page: {
+            layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+            ,prev:'上一页'
+            ,next:'下一页'
+            }
+            ,limit: 15
+            ,limits: [10, 15, 20, 25, 30]
+            ,height: 'full-160'
+        });
+        //监听工具条
+        table.on('tool(LAY-datatable)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                drugListData.splice(index, 1);
+                table.reload('LAY-datatable', { data: drugListData });
+            }
+            else if (obj.event === 'edit') {
+                var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                currentIndex = index;
+                layer.open({
+                    type: 2
+                    , title: '编辑验收试剂'
+                    , content: "{% url 'standard:acceptanceDrugForm'%}?acceptanceDrugData=" + encodeURIComponent(JSON.stringify(data))
+                    , area: ['990px', '630px']
+                    , shade: [0.1, '#000']
+                    , offset: '30px'
+                    , btn: ['确定', '取消']
+                    , yes: function (index, layero) {
+                        var iframeWindow = window['layui-layer-iframe' + index]
+                        var submitID = 'LAY-user-front-submit'
+                            , submit = layero.find('iframe').contents().find('#' + submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function (data) {
+                            var field = data.field; //获取提交的字段
+
+                            drugListData[currentIndex] = field;
+                            table.reload('LAY-datatable', { data: drugListData });
+                            // form.render();
+                            layer.close(index); //关闭弹层
+                        });
+                        submit.trigger('click');
+                    }
+                    , end: function () {
+                        table.reload('LAY-datatable'); //数据刷新
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        //挂钩jquery插件，实现条码识别
+        $(document).barCodeScanerModeEnter(function (barCode) {
+            $.get("{% url 'drug:GetDrugJson' %}", { drugId: barCode }, function (obj) {
+                if (obj.data.status == 0) {
+                    msg('条码编号：' + barCode + ';' + obj.data.message);
+                    return;
+                }
+                obj.data = JSON.parse(obj.data.data ? obj.data.data : '');
+                addTableData(barCode);
+            });
+        });
+
+        socket.onmessage = function (e) {
+            $.get("{% url 'drug:GetDrugJson' %}", { drugId: e.data }, function (obj) {
+                if (obj.data.status == 0) {
+                    msg(obj.data.message);
+                    return;
+                }
+                obj.data = JSON.parse(obj.data.data ? obj.data.data : '');
+                addTableData(obj.data.BarCode);
+
+            });
+        }
+
+        function addTableData(drugCode){
+            top.layer.open({
+                type: 2
+                ,title: '编辑期间核查'
+                ,content: "{% url 'standard:periodCheckDrugForm' %}?DrugCode="+drugCode+"&PeriodCheckId="+$("#PeriodCheckId").val()
+                ,area: ['600px', '500px']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                    var submitID = 'LAY-user-front-submit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                    submit.trigger('click');
+                }        
+                ,end:function(){
+                    table.reload('LAY-datatable'); //数据刷新
+                    $("#focusInput").focus();
+                }
+            }); 
+        }
+    })
+</script>
+{% endblock %}

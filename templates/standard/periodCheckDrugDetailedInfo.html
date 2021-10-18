@@ -1,0 +1,99 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    .approve-content {
+        margin-top: 15px;
+    }
+
+    .approve-date {
+        font-weight: bold;
+        line-height: 40px;
+    }
+    .approve-status{
+        font-size: 30px;
+        height: 60px;
+        line-height: 60px;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin"
+    style="padding: 20px 30px 0 0;margin-left: 30px;">
+    <input name="ApproveInfoId" type="hidden" value="{% firstof model.ApproveInfoId '' %}" />
+    <fieldset class="layui-elem-field">
+        <legend>试剂信息</legend>
+        <div class="layui-field-box">
+            <div class="layui-form-item">
+                <label class="layui-form-label">试剂名:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof drugModel.Name '' %}</div>
+                </div>
+                <label class="layui-form-label">编号:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof drugModel.BarCode '' %}</div>
+                </div>
+                <label class="layui-form-label">CAS码:</label>
+                <div class="layui-input-inline">
+                    <div class="layui-form-mid layui-word-aux">{% firstof drugModel.CASNumber '' %}</div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field">
+        <legend>试剂期间核查信息</legend>
+        <div class="layui-field-box">
+            <ul class="layui-timeline">
+                {% for drugPeriodCheckDetailed in drugPeriodCheckDetailedList %}
+                <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <h3 class="layui-timeline-title">第{{drugPeriodCheckDetailed.SortIndex}}次：{{drugPeriodCheckDetailed.CreateDate}}</h3>
+                        {% if drugPeriodCheckDetailed.Status == 1 %}
+                        <p><span class="layui-badge layui-bg-danger">不合格</span></p>
+                        {% elif drugPeriodCheckDetailed.Status == 2 %}
+                        <p><span class="layui-badge layui-bg-normal">合格</span></p>
+                        {% endif %}
+                        <p class="approve-content">
+                            核查方法：{{drugPeriodCheckDetailed.PeriodCheckMethod}}
+                        </p>
+                        <p class="approve-content">
+                            核查描述：{{drugPeriodCheckDetailed.Description}}
+                        </p>
+                    </div>
+                </li>
+                {% endfor %}
+                <!-- <li class="layui-timeline-item">
+                    <i class="layui-icon layui-timeline-axis"></i>
+                    <div class="layui-timeline-content layui-text">
+                        <div class="layui-timeline-title">开始</div>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+    </fieldset>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            var fieldData = obj.field;
+            //提交修改
+            $.post("{% url 'approve:summitApproveDecide' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

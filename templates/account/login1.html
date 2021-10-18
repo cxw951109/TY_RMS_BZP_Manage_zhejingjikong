@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="renderer" content="webkit">
+    <meta name="referrer" content="always">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录-RMS后台管理系统</title>
+    <link href="{% static 'login/css/default.css' %}" rel="stylesheet" />
+    <!--必要样式-->
+    <link href="{% static 'login/css/styles.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/plugins/switchery/switchery.css' %}" rel="stylesheet" />
+    <link href="{% static 'plugins/virtualkeyboard/virtualkeyboard.css' %}" rel="stylesheet" />
+    <!--[if IE]>
+        <script src="http://libs.baidu.com/html5shiv/3.7/html5shiv.min.js"></script>
+    <![endif]-->
+    {% load static %}
+    <script type="text/javascript">
+        // 检测是否是IE6版本以下的IE浏览器
+        if (navigator.appName == "Microsoft Internet Explorer" && (navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE6.0" || navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE7.0" || navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE8.0" || navigator.appVersion.split(";")[1].replace(/[ ]/g, "") == "MSIE9.0")) {
+            location.href = "{% static 'html/ie.html' %}";
+        }
+    </script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'login/js/Particleground.js' %}"></script>
+    <script src="{% static 'js/plugins/layer/layer.min.js' %}"></script>
+    <script src="{% static 'plugins/virtualkeyboard/virtualkeyboard.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            // //粒子背景特效
+            // $('body').particleground({
+            //     dotColor: '#FFF',
+            //     lineColor: '#FFF'
+            // });
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class='login animated fadeInUpBig'>
+        <div class='login_title'>
+            <h2 style="width: 260px;">Talons 标准品管理系统</h2><span>账号登录</span>
+        </div>
+        <div class='login_fields'>
+            <div class='login_fields__user'>
+                <div class='icon'>
+                    <img src="{% static 'login/img/user_icon_copy.png' %}">
+                </div>
+                <input placeholder='用户名' type='text' id="userAccount" value="">
+                <div class='validation'>
+                    <img src="{% static 'login/img/tick.png' %}">
+                </div>
+                </input>
+            </div>
+            <div class='login_fields__password'>
+                <div class='icon'>
+                    <img src="{% static 'login/img/lock_icon_copy.png' %}">
+                </div>
+                <input placeholder='密码' type='password' id="userPassword" value="">
+                <div class='validation'>
+                    <img src="{% static 'login/img/tick.png' %}">
+                </div>
+            </div>
+            <div class='login_fields__submit'>
+                <input type='submit' value='登录'> &nbsp;&nbsp;
+                <input type='button' id="faceLogin" disabled value='人脸识别登录'>
+                <!--@*<div class='forgot'>-->
+                <!--<a href='#'>忘记密码?</a>-->
+                <!--</div>*@-->
+            </div>
+        </div>
+        <div class='success'>
+            <h2 id="loginStatus"></h2>
+            <p id="loginRedict"></p>
+        </div>
+        <!--@*<div class='disclaimer'>-->
+        <!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce semper laoreet placerat. Nullam semper auctor justo, rutrum posuere odio vulputate nec.</p>-->
+        <!--</div>*@-->
+    </div>
+    <div class='authent'>
+        <img src="{% static 'login/img/puff.svg' %}">
+        <p>认证中...</p>
+    </div>
+    <script src="{% static 'login/js/stopExecutionOnTimeout.js' %}"></script>
+
+    <script src="{% static 'js/plugins/switchery/switchery.js' %}"></script>
+    <script src="{% static 'login/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/qwebchannel-js.js' %}"></script>
+    <script>
+        var P_Face;
+        var visitType = window.parent.frames.getUrlParam('visitType');
+        var flag_login = false;
+        $(function () {
+            
+            if ("undefined" != typeof qt) {
+                new QWebChannel(qt.webChannelTransport, function (channel) {
+                    P_Face = channel.objects.P_Face;
+                    setTimeout(function () {
+                        P_Face.initFaceList('1002437b-debf-46d6-b186-3e16bcf0cc0f');
+                        $('#faceLogin').removeAttr("disabled");
+                    }, 1000);
+                });
+            }
+            else {
+                $("#faceLogin").hide();
+            }
+            if(visitType=='2')
+            {
+                if(typeof(P_Sys)!="undefined")
+                {
+                    P_Sys.setZoomLevel(1.1);
+                }
+            }
+            $('#userAccount').blur(function () {
+                flag_login = true
+            });
+            $('#userPassword').blur(function () {
+                flag_login = true
+            });
+
+            $('#userAccount').focus(function () {
+                flag_login = false
+            });
+            $('#userPassword').focus(function () {
+                flag_login = false
+            });
+            $("#faceLogin").click(function () {
+
+                P_Face.startFaceReco();
+            });
+
+
+            //挂钩jquery插件，实现条码识别
+            $(document).barCodeScanerModeEnter(function (barCode) {
+                barCodeLogin(barCode);
+            });
+
+
+            window.setTimeout(function () {
+                $('.login').removeClass('animated fadeInUpBig');
+                // 当延迟动画加载完毕, 用户名输入框自动获得焦点
+                $('#userAccount').focus();
+
+            }, 1000);
+            // 当用户输入框获得焦点或者密码输入框获得焦点enter键按下时提交事件触发
+            $(document).keyup(function (event) {
+                if (!flag_login) {
+                    if (event.keyCode == 13) {
+                        $('input[type="submit"]').trigger("click");
+                    }
+                }
+
+            });
+
+            $('input[type="submit"]').click(function () {
+                var _userAccount = $("#userAccount").val();
+                var _userPassword = $("#userPassword").val();
+                if (_userAccount == "" || _userPassword == "") {
+                    layer.msg("用户名或密码不能为空");
+                    return;
+                }
+
+                $('.login').addClass('test');
+                setTimeout(function () {
+                    $('.login').addClass('testtwo');
+                }, 300);
+
+                setTimeout(function () {
+                    $('.authent').show().animate({ right: -320 }, {
+                        easing: 'easeOutQuint',
+                        duration: 600,
+                        queue: false
+                    });
+                    $('.authent').animate({ opacity: 1 }, {
+                        duration: 200,
+                        queue: false
+                    }).addClass('visible');
+                }, 500);
+
+                var loginObj;
+                setTimeout(function () {
+                    $('.authent').show().animate({ right: 90 }, {
+                        easing: 'easeOutQuint',
+                        duration: 600,
+                        queue: false
+                    });
+                    $('.authent').animate({ opacity: 0 }, {
+                        duration: 200,
+                        queue: false
+                    }).addClass('visible');
+                    $('.login').removeClass('testtwo');
+                    $.post("{% url 'account_login' %}", { userAccount: _userAccount, userPassword: _userPassword }, function (obj) {
+                        setTimeout(function () {
+                            $('.login').removeClass('test');
+                            $('.login div').fadeOut(123);
+                            var loginObj = obj;
+                            setTimeout(function () {
+                                if (loginObj.status == 1) {
+                                    $("#loginStatus").text("认证成功");
+                                    $("#loginRedict").text("正在进入系统...");
+                                }
+                                else {
+                                    $("#loginStatus").text(loginObj.message);
+                                    $("#loginRedict").text("自动返回重新登录");
+                                }
+                                $('.success').fadeIn();
+                                setTimeout(function () {
+                                    if (loginObj.status == 1) {
+                                        //$("body").addClass("animated fadeOutUp")
+                                        if (visitType == '1' || "undefined" != typeof qt) {
+                                            location.href = "/?visitType=1";
+
+                                        }
+                                        else if (visitType == '2') {
+                                            location.href = "/?visitType=2";
+                                        }
+                                        else {
+                                            location.href = "/";
+                                        }
+                                    }
+                                    else {
+                                        window.setTimeout(function () {
+                                            location.reload();
+                                        }, 1000);
+                                    }
+                                }, 1000);
+                            }, 200);
+
+                        }, 200);
+                    });
+                }, 2500);
+            });
+            $('input[type="text"],input[type="password"]').focus(function () {
+                $(this).prev().animate({ 'opacity': '1' }, 200);
+            });
+            $('input[type="text"],input[type="password"]').blur(function () {
+                $(this).prev().animate({ 'opacity': '.5' }, 200);
+            });
+            $('input[type="text"],input[type="password"]').keyup(function () {
+                if (!$(this).val() == '') {
+                    $(this).next().animate({
+                        'opacity': '1',
+                        'right': '30'
+                    }, 200);
+                } else {
+                    $(this).next().animate({
+                        'opacity': '0',
+                        'right': '20'
+                    }, 200);
+                }
+            });
+            var open = 0;
+            $('.tab').click(function () {
+                $(this).fadeOut(200, function () {
+                    $(this).parent().animate({ 'left': '0' });
+                });
+            });
+        });
+        function faceLoginCallback(loginObj) {
+            if (loginObj.status == 0) {
+                barCodeLogin(loginObj.data.BarCode);
+            }
+            else {
+                layer.msg(loginObj.message);
+            }
+
+        }
+
+        function barCodeLogin(barCode) {
+            if (flag_login) {
+                $('.login').addClass('test');
+                setTimeout(function () {
+                    $('.login').addClass('testtwo');
+                }, 300);
+
+                setTimeout(function () {
+                    $('.authent').show().animate({ right: -320 }, {
+                        easing: 'easeOutQuint',
+                        duration: 600,
+                        queue: false
+                    });
+                    $('.authent').animate({ opacity: 1 }, {
+                        duration: 200,
+                        queue: false
+                    }).addClass('visible');
+                }, 500);
+
+                var loginObj;
+                setTimeout(function () {
+                    $('.authent').show().animate({ right: 90 }, {
+                        easing: 'easeOutQuint',
+                        duration: 600,
+                        queue: false
+                    });
+                    $('.authent').animate({ opacity: 0 }, {
+                        duration: 200,
+                        queue: false
+                    }).addClass('visible');
+                    $('.login').removeClass('testtwo');
+                    $.get("{% url 'account_barcode' %}", { barCode: barCode, }, function (obj) {
+                        setTimeout(function () {
+                            $('.login').removeClass('test');
+                            $('.login div').fadeOut(123);
+                            var loginObj = obj;
+                            setTimeout(function () {
+                                if (loginObj.status == 1) {
+                                    $("#loginStatus").text("认证成功");
+                                    $("#loginRedict").text("正在进入系统...");
+                                }
+                                else {
+                                    $("#loginStatus").text(loginObj.message);
+                                    $("#loginRedict").text("自动返回重新登录");
+                                }
+                                $('.success').fadeIn();
+                                setTimeout(function () {
+                                    if (loginObj.status == 1) {
+                                        //$("body").addClass("animated fadeOutUp")
+                                        if (visitType == '1' || "undefined" != typeof qt) {
+                                            location.href = "/?visitType=1";
+
+                                        }
+                                        else if (visitType == '2') {
+                                            location.href = "/?visitType=2";
+                                        }
+                                        else {
+                                            location.href = "/";
+                                        }
+                                    }
+                                    else {
+                                        window.setTimeout(function () {
+                                            location.reload();
+                                        }, 1000);
+                                    }
+                                }, 1000);
+                            }, 200);
+
+                        }, 200);
+                    });
+                }, 2500);
+            }
+
+        }
+    </script>
+</body>
+
+</html>

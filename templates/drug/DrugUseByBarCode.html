@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body{
+        overflow: hidden;
+    }
+    .dl-horizontal dt {
+        line-height: 45px;
+        font-size: 15px;
+    }
+
+    .dl-horizontal dd {
+        line-height: 45px;
+        font-size: 15px;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInDown" style="overflow: hidden">
+
+    <div class="row">
+
+            <div class="col-md-5" style="text-align:center;padding-top:200px"><i class="fa fa-barcode fa-4x" style="font-size:12em"></i><div style="font-size:45px">请在此扫描您的条码</div>
+                <div style="font-size:30px;color:red" id="status">点击此页面准备扫描</div><input type="text" style="color:#F3F3F4; background-color:#F3F3F4; border-width:0px;outline:none" id="fff" />
+            </div>
+        <div class="col-md-7" style="border-left-color:#8B8989;border-left-width:1px;border-left-style:solid;height:650px;padding-top:110px">
+
+
+
+            <div class="wrapper wrapper-content animated fadeInDown">
+                <div class="mail-box-header">
+                    <h2>
+            
+                            试剂领用列表
+                        </h2>
+
+                </div>
+                <div class="ibox-content">
+                    <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+                        <thead>
+                            <tr>
+                                <th>条码编号</th>
+                                <th>试剂名称</th>
+                                <th>CAS码</th>
+                                <th>纯度</th>
+                            </tr>
+                        </thead>
+                        <tbody id="shuju">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+    </div>
+</div>
+{% load static %}
+<script src="{% static 'js/utils.js' %}"></script>
+
+            <script src="{% static 'js/warning.js' %}"></script>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $('#navTitle', window.parent.document).text('试剂领用');
+        $("#fff").focus();
+        $(document).click(function () {
+            $("#status").text("等待扫描...")
+        })
+        var flag_status = true;
+    
+    window.focus();   // 当前页面获得焦点用来RFID扫描
+        //挂钩jquery插件，实现条码识别
+        $(document).barCodeScanerModeEnter(function (barCode) {
+            // alert(barCode);
+            var index = layer.load(2, {shade: 0.01});
+            $.ajax({
+
+                type: 'POST',
+                url: '{% url 'drug:drugUseView' %}',
+                data: { drugId: barCode },
+                success:function (data) {
+                    layer.close(index);
+                    if (data.status == 0) {
+                    layer.msg("试剂领用成功！");
+                    resultData=JSON.parse(data.data);
+                    $("#shuju").append("<tr><td>"+resultData.BarCode+"</td><td>"+resultData.Name+"</td><td>"+resultData.CASNumber+"</td><td>"+resultData.Purity+"</td></tr>")
+                }else{
+
+                                                  
+                                new $.flavr({
+                                         modal: false,
+                                        autoclose: false,
+                                        timeout: 2000,
+                                        buttons: {OK: {
+                                        text: '确认',
+                                        style: 'danger',
+                                        addClass: null,
+                                        action: function (e) {
+
+                                           flag_status = true;
+                                            // socket.send('123123');
+                                        }
+                                    },},
+                                    content: data.message
+                                });
+                }
+                },
+                error: function () {
+                    alert('数据异常！');
+                    flag_status = true;
+                    layer.close(index);
+                    // socket.send('886');
+                }
+                });
+        });
+            // flag_status 用来RFID入库禁止频繁弹窗
+
+    var flag_status = true;
+        function format_status(params){
+            switch (params) {
+                case 1:
+                    return '在库';
+                case 2:
+                return '出库';
+                case 3:
+                return '空瓶';
+                default:
+                    return ''
+            }
+        }
+    })
+
+</script>
+
+</div>
+
+{% endblock %}

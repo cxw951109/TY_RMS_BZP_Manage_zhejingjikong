@@ -1,0 +1,334 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    /* .layui-table-header .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    } */
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+        padding: 0 15px;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        box-sizing: border-box;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="AcceptanceOrderId" type="hidden" value="{% firstof model.AcceptanceOrderId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">验收单号</label>
+        <div class="layui-input-inline">
+            <input type="text" readonly name="AcceptanceOrderCode"
+                value="{% firstof model.AcceptanceOrderCode NewAcceptanceOrderCode %}" lay-verify="required"
+                placeholder="采购单号" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">验收内容</label>
+        <div class="layui-input-block">
+            <table class="layui-table" id="LAY-datatable" lay-data="{height: 380,toolbar: '#datatable-toolbar',defaultToolbar: []}" lay-filter="LAY-datatable">
+                <thead>
+                    <tr>
+                        <th lay-data="{type: 'numbers', width:50}" rowspan="2">序号</th>
+                        <th lay-data="{field:'DrugName', width:80, align: 'center'}" rowspan="2">标准品名称</th>
+                        <th lay-data="{field:'CASNumber', width:80, align: 'center'}" rowspan="2">编号及批次号</th>
+                        <th lay-data="{field:'Speci', width:80, align: 'center', templet: '#speciTpl'}" rowspan="2">标准品规格</th>
+                        <th lay-data="{field:'PackageStatus', width:60, align: 'center'}" rowspan="2">包装完好</th>
+                        <th lay-data="{field:'MarkStatus', width:60, align: 'center'}" rowspan="2">标识完好</th>
+                        <th lay-data="{field:'CertificateStatus', width:80, align: 'center'}" rowspan="2">证书对应性</th>
+                        <th lay-data="{align:'center'}" colspan="2">证书信息</th>
+                        <th lay-data="{field:'DetectionMethod', width:80, align: 'center'}" rowspan="2">检测方法</th>
+                        <th lay-data="{align:'center'}" colspan="2">检测结果</th>
+                        <th lay-data="{field:'BasicComponent', width:80, align: 'center'}" rowspan="2">基本组成</th>
+                        <th lay-data="{field:'BuyDate', width:80, align: 'center'}" rowspan="2">购入日期</th>
+                        <th lay-data="{field:'Count', width:60, align: 'center'}" rowspan="2">购入数量</th>
+                        <th lay-data="{field:'Manufacturer', width:80, align: 'center'}" rowspan="2">生产商</th>
+                        <th lay-data="{field:'StorageConditions', width:80, align: 'center'}" rowspan="2">保存条件</th>
+                        <th lay-data="{field:'Security', width:80, align: 'center'}" rowspan="2">安全防护</th>
+                        <th lay-data="{field:'SpecialRequirements', width:80, align: 'center'}" rowspan="2">特殊运输要求</th>
+                        <th lay-data="{field:'AcceptanceUserName', width:80, align: 'center'}" rowspan="2">验收人</th>
+                        <th lay-data="{field:'AcceptanceComment', width:80, align: 'center'}" rowspan="2">验收结论</th>
+                        <th lay-data="{width: 150, align: 'center', toolbar: '#datatable-tool'}" rowspan="2">操作</th>
+                    </tr>
+                    <tr>
+                        <th lay-data="{field:'CertCharaValue', width:60, align: 'center'}">特性量值</th>
+                        <th lay-data="{field:'CertUncertainty', width:60, align: 'center'}">不确定度</th>
+                        <th lay-data="{field:'DetectionCharaValue', width:60, align: 'center'}">特性量值</th>
+                        <th lay-data="{field:'DetectionUncertainty', width:60, align: 'center'}">不确定度</th>
+                    </tr>
+                </thead>
+            </table>
+            <script type="text/html" id="speciTpl">
+                {% verbatim %} 
+                {{ d.Speci+d.SpeciUnit }}
+                {% endverbatim %}
+            </script> 
+            <script type="text/html" id="datatable-toolbar">
+                <div class="layui-btn-container">
+                  <button class="layui-btn layui-btn-sm" lay-event="addAcceptanceDrug">添加验收试剂信息</button>
+                  <!-- <button class="layui-btn layui-btn-sm" lay-event="exportPDF">导出PDF文件</button> -->
+                </div>
+            </script>
+            <script type="text/html" id="datatable-tool">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              </script>
+            <script>
+                var staticPath="{% static '/' %}";
+                var drugListData = {{ AcceptanceOrderContent| safe}};
+                var currentIndex = -1;
+                layui.use(['table', 'form'], function () {
+                    var table = layui.table;
+                    var form = layui.form;
+                    table.init('LAY-datatable', {
+                        data: drugListData
+                    });
+                    //头工具栏事件
+                    table.on('toolbar(LAY-datatable)', function(obj){
+                        switch(obj.event){
+                        case 'addAcceptanceDrug':
+                            currentIndex = -1;
+                            layer.open({
+                                type: 2
+                                ,title: '添加验收试剂'
+                                ,content: "{% url 'standard:acceptanceDrugForm' %}"
+                                ,area: ['990px', '630px']
+                                ,shade: [0.1, '#000']
+                                ,offset: '30px'
+                                ,btn: ['确定', '取消']
+                                ,yes: function(index, layero){
+                                    var iframeWindow = window['layui-layer-iframe'+ index]
+                                    var submitID = 'LAY-user-front-submit'
+                                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                                    //监听提交
+                                    iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+                                        var field = data.field; //获取提交的字段
+                                        field.uuid=uuid();
+                                        drugListData.unshift(field);
+                                        table.reload('LAY-datatable',{data:drugListData});
+                                        // form.render();
+                                        layer.close(index); //关闭弹层
+                                        // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                        // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                    });  
+                                    submit.trigger('click');
+                                }        
+                                ,end:function(){
+                                    table.reload('LAY-datatable'); //数据刷新
+                                }
+                            }); 
+                        break;
+                        case 'exportPDF':
+                            top.layer.open({
+                                type: 2
+                                ,title: '验收单PDF文件导出预览'
+                                ,content: "{% url 'standard:acceptancePDFView' %}?acceptanceDrugListData="+encodeURIComponent(JSON.stringify(drugListData))
+                                ,area: ['1600px', '820px']
+                                ,offset: '30px'
+                                ,yes: function(index, layero){
+                                    var submitID = 'LAY-user-front-submit'
+                                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+                                    submit.trigger('click');
+                                }        
+                            }); 
+                        break;
+                        };
+                    });
+                    //监听工具条
+                    table.on('tool(LAY-datatable)', function(obj){
+                        var data = obj.data;
+                        if(obj.event === 'del'){
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            drugListData.splice(index,1);
+                            table.reload('LAY-datatable',{data:drugListData});
+                        }
+                        else if(obj.event === 'edit'){
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            currentIndex = index;
+                            layer.open({
+                                type: 2
+                                ,title: '编辑验收试剂'
+                                ,content: "{% url 'standard:acceptanceDrugForm'%}?acceptanceDrugData="+encodeURIComponent(JSON.stringify(data))
+                                ,area: ['990px', '630px']
+                                ,shade: [0.1, '#000']
+                                ,offset: '30px'
+                                ,btn: ['确定', '取消']
+                                ,yes: function(index, layero){
+                                    var iframeWindow = window['layui-layer-iframe'+ index]
+                                    var submitID = 'LAY-user-front-submit'
+                                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                                    //监听提交
+                                    iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+                                        var field = data.field; //获取提交的字段
+                                        
+                                        drugListData[currentIndex] = field;
+                                        table.reload('LAY-datatable',{data:drugListData});
+                                        // form.render();
+                                        layer.close(index); //关闭弹层
+                                        // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                        // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                        // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                    });  
+                                    submit.trigger('click');
+                                }        
+                                ,end:function(){
+                                    table.reload('LAY-datatable'); //数据刷新
+                                }
+                            }); 
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">验收附言</label>
+        <div class="layui-input-block">
+            <textarea type="text" rows="" name="Description" autocomplete="off"
+                class="layui-textarea">{% firstof model.Description '' %}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">验收单图片</label>
+        <div class="layui-input-inline" style="width: 500px;">
+            <div style="width: 500;height: 100;">
+                <input type="hidden" name="AcceptanceOrderImageUrl" id="AcceptanceOrderImageUrl" value="{% firstof model.AcceptanceOrderImageUrl '' %}">
+                <div style="width: 210px; height: 100px;border: 1px solid red;float: left; margin-right: 5px;">
+                {% if model.AcceptanceOrderImageUrl %}
+                    <img style="width: 210px; height: 100px;" src="{{model.AcceptanceOrderImageUrl}}" id="acceptancePicture" />
+                {% else %}
+                    <img style="width: 210px; height: 100px;display: none;" src="#" id="acceptancePicture" />
+                    <div class="layui-bg-gray" id="noPicture" style="width: 210px; height: 100px;text-align: center; line-height: 100px;">未上传图片</div>
+                {% endif %}
+                </div>
+                <div style="width: 100px; height: 100px;float: left;">
+                    <button type="button" class="layui-btn layui-btn-primary" id="btnPhotograph">拍照上传</button><br/>
+                    <button type="button" style="margin-top: 5px;" id="btnViewPicture" class="layui-btn layui-btn-primary">查看图片</button>
+                </div>
+            </div>
+        </div>
+        <label class="layui-form-label">确认验收</label>
+        <div class="layui-input-inline" style="width: 50px;height: 38px;">
+            {% if model.AcceptanceOrderStatus == 1 or model.AcceptanceOrderStatus is None %}
+            <input type="checkbox" lay-filter="switch" name="AcceptanceOrderStatus" lay-skin="switch" lay-text="是|否">
+            {% else %}
+            <input type="checkbox" checked lay-filter="switch" name="AcceptanceOrderStatus" lay-skin="switch"
+                lay-text="是|否">
+            {% endif %}
+        </div>
+        <div class="layui-form-mid layui-word-aux">确认验收后，信息将不可更改</div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+    <div id="approveContent" class="layui-hide">
+        <style>
+            #approveContentTable .laytable-cell-1-0-1 {
+                width: 230px !important;
+            }
+        </style>
+        <div id="approveContentTable" class="layui-form layui-border-box layui-table-view" style="height: 280px;"></div>
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            var fieldData = obj.field;
+            fieldData = $.extend({ AcceptanceOrderStatus: 1 }, fieldData);
+            fieldData.AcceptanceOrderStatus = fieldData.AcceptanceOrderStatus == 'on' ? 2 : 1;
+            
+            fieldData.AcceptanceOrderContent = JSON.stringify(drugListData);
+            var AcceptanceOrderTotalCount = 0;
+            var AcceptanceOrderDrugInfo = ''
+            drugListData.forEach(function(element,index){
+                AcceptanceOrderTotalCount += parseInt(element.Count);
+                if (AcceptanceOrderDrugInfo != '') { AcceptanceOrderDrugInfo += '，' }
+                AcceptanceOrderDrugInfo += element.DrugName + "(" + element.Speci + element.SpeciUnit + "):" + element.Count + "个";
+            });
+            fieldData.AcceptanceOrderTotalCount = AcceptanceOrderTotalCount;
+            fieldData.AcceptanceOrderDrugInfo = AcceptanceOrderDrugInfo;
+            //提交修改
+            $.post("{% url 'standard:saveAcceptanceOrderData' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+
+        $("#btnPhotograph").click(function(){
+            layer.open({
+                type: 2
+                ,title: '签字验收单拍照上传'
+                ,content: "{% url 'standard:photographForm' %}"
+                ,area: ['800px', '630px']
+                ,shade: [0.1, '#000']
+                ,offset: '30px'
+                ,btn: ['保存', '取消']
+                ,yes: function(index, layero){
+                    var iframeWindow = window['layui-layer-iframe'+ index]
+                    var submitID = 'LAY-user-front-submit'
+                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                    // //监听提交
+                    // iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+
+                    //     // form.render();
+                    //     layer.close(index); //关闭弹层
+                    //     // $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                    //     // $("#approveContent .layui-table-view .layui-table-tool").remove();
+                    //     // $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                    //     // $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                    // });  
+                    submit.trigger('click');
+                }
+                ,end:function(){
+                    var photographDataSrc= sessionStorage.getItem("photographDataSrc");
+                    if(photographDataSrc!=null)
+                    {
+                        var psrc=staticPath+photographDataSrc;
+                        $("#noPicture").hide();
+                        $("#acceptancePicture").prop("src",psrc).show();
+                        $("#AcceptanceOrderImageUrl").val(psrc);
+                        sessionStorage.removeItem("photographDataSrc")             
+                    }
+
+                }        
+            }); 
+        });
+        $("#btnViewPicture").click(function(){
+            layer.photos({
+                photos: { "data": [{"src": $("#acceptancePicture").prop("src")}] }
+                ,offset:'auto'
+            });
+        });
+    });
+</script>
+{% endblock %}

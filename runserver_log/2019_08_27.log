@@ -1,0 +1,1472 @@
+具体时间:[2019-08-27 10:22:20,549][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:22:20,841][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:22:27,918][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:25:56,545][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:33:47,562][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:33:53,023][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:36:16,717][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:36:21,004][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:38:08,690][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:38:42,900][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:38:50,526][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:40:55,306][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:41:15,536][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:45:27,597][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:45:32,488][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:45:51,664][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:47:07,246][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:49:54,569][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:50:09,523][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:50:24,508][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:50:39,506][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:50:54,511][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:51:09,511][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:51:24,493][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:51:39,512][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:51:54,513][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 175, in translate_token
+    op = OPERATORS[token]
+KeyError: "request.GET.get('visitType')"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 34, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 144, in get_template
+    template, origin = self.find_template(template_name)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\engine.py", line 126, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loaders\base.py", line 30, in get_template
+    contents, origin, origin.template_name, self.engine,
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 160, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 198, in compile_nodelist
+    return parser.parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 483, in parse
+    raise self.error(token, e)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 481, in parse
+    compiled_result = compile_func(self, token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 955, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 888, in __init__
+    super().__init__(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 166, in __init__
+    mapped_tokens.append(self.translate_token(token))
+  File "D:\Program Files\Python36\lib\site-packages\django\template\smartif.py", line 177, in translate_token
+    return self.create_var(token)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 891, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 568, in compile_filter
+    return FilterExpression(token, self)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 668, in __init__
+    "from '%s'" % (token[upto:], token))
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '('visitType')' from 'request.GET.get('visitType')'
+具体时间:[2019-08-27 10:52:56,972][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+具体时间:[2019-08-27 10:53:04,500][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:53:11,411][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:53:12,997][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '/account/login' not found. '/account/login' is not a valid view function or pattern name.
+具体时间:[2019-08-27 10:56:37,852][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:56:46,224][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:56:52,895][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:57:42,827][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:57:45,473][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:57:53,194][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 10:57:54,755][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Reverse for 'account_logout' with keyword arguments '{'visitType': 1}' not found. 1 pattern(s) tried: ['account/logout/$']
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'account_logout' with keyword arguments '{'visitType': 1}' not found. 1 pattern(s) tried: ['account/logout/$']
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'account_logout' with keyword arguments '{'visitType': 1}' not found. 1 pattern(s) tried: ['account/logout/$']
+具体时间:[2019-08-27 10:59:27,436][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 10:59:34,252][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 11:00:03,111][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:00:09,675][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 11:05:06,149][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:05:12,927][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-27 11:05:14,524][default:ERROR(244)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py]模块名:[Utils:]函数名:[wrapper]:
+[第244行]-[Error in Lib.Utils] msg: Reverse for '' not found. '' is not a valid view function or pattern name.
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 49, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '' not found. '' is not a valid view function or pattern name.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\Utils.py", line 240, in wrapper
+    func(*args, **kwargs)
+  File "D:\Program Files\Python36\lib\site-packages\django\views\decorators\http.py", line 40, in inner
+    return func(request, *args, **kwargs)
+  File "D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py", line 53, in home
+    return render(request, 'home.html', locals())
+  File "D:\Program Files\Python36\lib\site-packages\django\shortcuts.py", line 36, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 314, in render
+    return nodelist.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 943, in render
+    bit = node.render_annotated(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\base.py", line 910, in render_annotated
+    return self.render(context)
+  File "D:\Program Files\Python36\lib\site-packages\django\template\defaulttags.py", line 447, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\base.py", line 88, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "D:\Program Files\Python36\lib\site-packages\django\urls\resolvers.py", line 632, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '' not found. '' is not a valid view function or pattern name.
+具体时间:[2019-08-27 11:14:50,938][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:14:57,455][default:INFO(141)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第141行]-登录成功
+
+具体时间:[2019-08-27 11:20:55,220][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:21:03,508][default:INFO(145)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第145行]-登录成功
+
+具体时间:[2019-08-27 11:28:59,891][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:29:06,612][default:INFO(145)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第145行]-登录成功
+
+具体时间:[2019-08-27 11:29:44,793][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:29:51,423][default:INFO(145)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第145行]-登录成功
+
+具体时间:[2019-08-27 11:30:02,591][default:INFO(145)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第145行]-登录成功
+
+具体时间:[2019-08-27 11:41:48,103][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:41:51,829][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:44:32,619][default:INFO(150)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第150行]-登录成功
+
+具体时间:[2019-08-27 11:47:18,394][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:47:25,644][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:47:54,889][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:48:04,579][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:48:11,213][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:49:10,336][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:49:55,219][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:53:53,664][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:54:22,459][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:54:29,168][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:56:53,156][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 11:56:59,801][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 11:57:22,937][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 12:00:39,226][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+
+具体时间:[2019-08-27 13:28:40,477][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 13:28:40,734][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 13:28:47,217][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 13:28:47,322][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 13:28:57,369][default:INFO(171)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第171行]-账号或密码不正确, 登录失败
+
+具体时间:[2019-08-27 13:28:59,905][default:INFO(22)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第22行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-27 13:32:42,272][default:INFO(152)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第152行]-登录成功
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../static/css/layui/css/layui.css">
+    <style>
+        #select_div {
+            width: 100%;
+            margin: 0px 0 0px 0;
+        }
+
+        .select_value_sty {
+            margin: 2px 0 2px 0;
+        }
+
+        .text_sty {
+            height: 38px;
+
+
+        }
+
+        .layui-input-block {
+            line-height: 38px;
+            width: 780px;
+            padding: 0 10px 0 10px;
+            background-color: #fff;
+        }
+
+        .layui-form-label {
+            text-align: center;
+        }
+        #select_value_data {
+            margin: 0 0 0 5%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form">
+
+        <div class="layui-input-inline" style="width: 60%; margin: 20px 20% 2px 20%;">
+            <h1 style="text-align: center;margin-bottom: 10px;">MSDS数据库表单</h1>
+            <input type="text"  name="title" required lay-verify="required" placeholder="请输入你想要搜索的化学品名称" autocomplete="off"
+                class="layui-input" id="danger_value" oninput="enterInput()" onclick="input_click()">
+        </div>
+        <div class="layui-input-inline" style="width: 60%; margin: 0px 20% 0px 20%;" id="select_data"></div>
+        <div class="layui-form-item" style="width: 56.4%; margin: 15px 27% 15px 16.6%;" id="select_value">
+
+        </div>
+    </div>
+    <script src="../../static/Scripts/jquery-1.10.2.min.js"></script>
+    <script>
+        let jsonData
+        function input_click() {
+            let name = document.getElementById("danger_value").value;
+            $.post("{% url 'drug:danger' %}", { name: name, isType: false }, function (res) {
+                jsonData = JSON.parse(res)
+                delect_search()
+                delect_value()
+                add_search(jsonData)
+            });
+        }
+        function select_click(id) {
+            delect_search()
+            add_value(id)
+        }
+        function add_value(id) {
+            console.log(jsonData[id])
+            let template_div = $("<div id='select_value_data'></div>")
+            $("#select_value").append(template_div);
+            // let template_value = $('<div class="select_value_sty"><label class="layui-form-label">名称</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].cname + '></div></div><div class="select_value_sty"><label class="layui-form-label">英文名称</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].ename + '></div></div><div class="select_value_sty"><label class="layui-form-label">别名</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].othername + '></div></div><div class="select_value_sty"><label class="layui-form-label">重量</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].weight + '></div></div><div class="select_value_sty"><label class="layui-form-label">用途</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].yongtu + '></div></div><div class="select_value_sty"><label class="layui-form-label">储存方法</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].chucunfangfa + '></div></div><div class="select_value_sty"><label class="layui-form-label">危害等级</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].dangerpic + '></div></div><div class="select_value_sty"><label class="layui-form-label">稳定性</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].xingzhiyuwendingxing + '></div></div><div class="select_value_sty"><label class="layui-form-label">生态性</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].shengtaixue + '></div></div><div class="select_value_sty"><label class="layui-form-label">注意事项</label><div class="layui-input-block"><input type="text" class="layui-input" disabled="disabled" value=' + jsonData[id].safestr + '></div></div>')
+            let template_value = $('' +
+                '<div class="select_value_sty"><label class="layui-form-label">名称</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].cname + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">英文名称</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].ename + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">别名</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].othername + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">CAS号</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].cas + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">分子式</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].formula + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">分子量</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].weight + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">物性数据</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].wuxing + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">毒理学数据</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].dulixue + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">用途</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].yongtu + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">储存方法</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].chucunfangfa + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">危害等级</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].dangerpic + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">稳定性</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].xingzhiyuwendingxing + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">生态性</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].shengtaixue + '</text></div></div>' +
+                '<div class="select_value_sty"><label class="layui-form-label">注意事项</label><div class="layui-input-block"><text class="text_sty">' + jsonData[id].safestr + '</text></div></div>'
+            )
+            $("#select_value_data").append(template_value);
+
+
+
+        }
+        function delect_value() {
+            $("#select_value_data").remove();
+        }
+        function add_search(data) {
+            let template_div = $("<div id='select_div'></div>")
+            $("#select_data").append(template_div);
+            if (String(data).length != 0){
+            for (let i in data) {
+                let template_value = $('<input type="text" class="layui-input" value=' + data[i].cname + ' id=' + i + ' readonly="readonly" onclick="select_click(id)">')
+                $("#select_div").append(template_value)
+            }
+            }else{
+                let template_value = $('<input type="text" class="layui-input" value="暂时没有这个药剂,看看别的吧" id="" readonly="readonly" onclick="select_click(id)">')
+                $("#select_div").append(template_value)
+            }
+
+        }
+        function delect_search() {
+            $("#select_div").remove();
+        }
+        function enterInput() {
+            let name = document.getElementById("danger_value").value;
+            $.post("{% url 'drug:danger' %}", { name: name, isType: false }, function (res) {
+                jsonData = JSON.parse(res)
+                delect_search()
+                delect_value()
+                add_search(jsonData)
+            });
+        }
+        $(function () {
+            $("#danger_value").trigger("click");
+        });
+        
+    </script>
+    <script src="../../static/css/layui/layui.all.js" charset="utf-8"></script>
+</body>
+
+</html>

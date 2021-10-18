@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style type="text/css">
+    .tongjiBox {
+       cursor:pointer;
+    }
+    .tongjiBox .font-bold {
+
+        margin-top:12px !important;
+
+    }
+
+</style>
+
+<div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox-content">
+                        <div class="col-md-12">
+                        <div class="col-md-2">
+                        <h2>试剂信息统计 </h2></div>
+                        </div>
+
+                        <div class="todo-list m-t">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getOverviewInfo' %}">
+                                                <div class="m-b-md">
+                                                    <i class="fa fa-th fa-4x"></i>
+                                                    <h3 class="font-bold no-margins">
+                                                       库存信息总览
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getPutInInfo' %}">
+                                        <div class="m-b-md">
+                                            <i class="fa fa-star fa-4x"></i>
+                                            <h3 class="font-bold no-margins">
+                                                入库信息查询
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getDrugDetailInfo' %}">
+                                        <div class="m-b-md">
+                                            <i class="fa fa-tasks fa-4x"></i>
+                                            <h3 class="font-bold no-margins">
+                                                试剂详细信息统计
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                    <div class="col-sm-12">
+                        <div class="ibox-content">
+                            <div class="col-md-12">
+                            <div class="col-md-2">
+                            <h2>保质期统计 </h2></div>
+                            </div>
+
+                            <div class="todo-list m-t">
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                                <div class="widget red-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getShelflifeInfo' %}">
+                                                    <div class="m-b-md">
+                                                        <i class="fa fa-info fa-4x"></i>
+                                                        <h3 class="font-bold no-margins">
+                                                                当前保质期统计
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="widget red-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getShelflifeWarning' %}">
+                                            <div class="m-b-md">
+                                                <i class="fa fa-warning fa-4x"></i>
+                                                <h3 class="font-bold no-margins">
+                                                        当前保质期预警统计
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox-content">
+                                <div class="col-md-12">
+                                <div class="col-md-2">
+                                <h2>试剂使用统计 </h2></div>
+                                </div>
+
+                                <div class="todo-list m-t">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                                    <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getUseFrequencyInfo' %}">
+                                                        <div class="m-b-md">
+                                                            <i class="fa fa-tasks fa-4x"></i>
+                                                            <h3 class="font-bold no-margins">
+                                                                    使用频率统计
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getDrugConsumeInfo' %}">
+                                                <div class="m-b-md">
+                                                    <i class="fa fa-hourglass-end fa-4x"></i>
+                                                    <h3 class="font-bold no-margins">
+                                                            消耗统计
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                                <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getStagnantInfo' %}">
+                                                    <div class="m-b-md">
+                                                        <i class="fa fa-flask fa-4x"></i>
+                                                        <h3 class="font-bold no-margins">
+                                                                当前库存呆滞料统计
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                    <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getDrugUseRecordInfo' %}">
+                                                        <div class="m-b-md">
+                                                            <i class="fa fa-hand-lizard-o fa-4x"></i>
+                                                            <h3 class="font-bold no-margins">
+                                                                    试剂使用历史信息
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox-content">
+                                <div class="col-md-12">
+                                <div class="col-md-2">
+                                <h2>试剂消耗统计 </h2></div>
+                                </div>
+
+                                <div class="todo-list m-t">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                                    <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getUserConsumeInfo' %}">
+                                                        <div class="m-b-md">
+                                                            <i class="fa fa-tasks fa-4x"></i>
+                                                            <h3 class="font-bold no-margins">
+                                                                    人员用量统计
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:getDrugUseCategotyConsumeInfo' %}">
+                                                <div class="m-b-md">
+                                                    <i class="fa fa-hourglass-end fa-4x"></i>
+                                                    <h3 class="font-bold no-margins">
+                                                            试剂种类消耗统计
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+     <div class="row" style="display:none">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <div class="col-md-12">
+                <div class="col-md-2">
+                <h2>试剂类统计 </h2></div>
+                <div class="col-md-1 col-md-offset-9">
+                    <div class="btn-group" >
+                      <button  type="button" id="btnTableExport" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      导出所有报表
+                      </button>
+                    </div></div></div>
+
+                <div class="todo-list m-t">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:drugRecordList' %}">
+                                <div class="m-b-md">
+                                    <i class="fa fa-hand-lizard-o fa-4x"></i>
+                                    <h3 class="font-bold no-margins">
+                                        试剂流转记录报表
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:categoryCountList' %}">
+                                <div class="m-b-md">
+                                    <i class="fa fa-th fa-4x"></i>
+                                    <h3 class="font-bold no-margins">
+                                       库存信息概览报表
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="widget yellow-bg p-lg text-center tongjiBox" value="{% url 'dataReport:drugShelfLifeList' %}">
+                                <div class="m-b-md">
+                                    <i class="fa fa-list-alt fa-4x"></i>
+                                    <h3 class="font-bold no-margins">
+                                        试剂数据明细报表
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display:none">
+        <div class="col-sm-12">
+            <div class="ibox-content">
+                <h2>其他报表统计</h2>
+                <div class="todo-list m-t">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="widget red-bg p-lg text-center tongjiBox" value="{% url 'dataReport:warningList' %}">
+                                <div class="m-b-md">
+                                    <i class="fa fa-warning fa-4x"></i>
+                                    <h3 class="font-bold no-margins">
+                                        系统预警数据记录报表
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="widget red-bg p-lg text-center tongjiBox" value="{% url 'dataReport:userList' %}">
+                                <div class="m-b-md">
+                                    <i class="fa fa-users fa-4x"></i>
+                                    <h3 class="font-bold no-margins">
+                                        用户角色数据统计报表
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% load static %}
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+    <script src="{% static 'js/warning.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+$('#btnTableExport').click(function () {
+    var index = '';
+    var url = "{% url 'dataReport:exportAllReportData' %}";
+    $.fileDownload(url, {
+        httpMethod: 'GET',
+        prepareCallback: function (url) {
+           index = parent.layer.load(2)
+        },
+        successCallback: function (url) {
+            parent.layer.close(index);
+        },
+         failCallback: function (url) {
+                     msg('数据异常, 下载失败');
+                     parent.layer.close(index)
+                 }
+
+
+    })
+
+})
+
+
+
+$('#navTitle', window.parent.document).text('报表统计');
+
+
+        $('.tongjiBox').each(function () {
+            animationHover(this, 'pulse');
+        });
+
+        $(".tongjiBox").click(function () {
+          location.href = $(this).attr("value");
+        });
+
+    })
+</script>
+
+
+{% endblock %}

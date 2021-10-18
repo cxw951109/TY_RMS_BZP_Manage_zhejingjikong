@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<style type="text/css">
+    .dataTables_filter {
+    display:none
+    }
+    video{
+object-fit:fill;
+}
+
+</style>
+
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="ibox-content" style="width:1700px;height:900px">
+        <video style="width:100% !important; height:100% !important; object-fit: fill" id="" controls="controls" src="../../static/img/20210527160745.mp4"></video>
+    </div>
+</div>
+
+{#<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"  rel="stylesheet" type="text/css"/>#}
+{#<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>#}
+{#<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>#}
+{#<script src="{% static 'js/utils.js' %}"></script>#}
+
+{% load static %}
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+                    <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+     $.fn.dataTable.ext.search.push(
+    function (settings, data, dataIndex) {
+        var min = new Date($('#startDate').val());
+        var max = new Date($('#endDate').val());
+
+        var date = new Date(data[0]) || 0; // use data for the age column
+
+        if ((isNaN(min) && isNaN(max)) ||
+             (isNaN(min) && date <= max) ||
+             (min <= date && isNaN(max)) ||
+             (min <= date && date <= max)) {
+            return true;
+        }
+        return false;
+    });
+
+    $(function () {
+        $('#navTitle', window.parent.document).text('日志数据');
+        searchValue = $('#searchValue').val();
+        $('#searchValue').text(searchValue);
+        var tableModel = $('#dataTableModel').DataTable(
+            {//searching: false,
+            lengthChange: false,
+            select: true,
+            ordering: false,
+            // 档处理大数据时, 延迟渲染数据, 有效的提高了Datatabale处理能力
+            deferRender:true,
+                // 后端分页
+                searching: false,
+                serverSide:true ,
+                bPaginate:true, //是否显示（应用）分页器
+                iDisplayLength:10,
+                sLoadingRecords: true,
+                Info: true,  // 显示表格左下角信息
+                destroy: true,//解决Cannot reinitialise DataTable
+                bProcessing: true,
+                oLanguage: { 
+            sProcessing: "数据加载中...", 
+        },
+
+
+         /*     ajax: {
+                url: "",
+                data: { searchValue: searchValue },
+                dataSrc: 'data',
+            },*/
+              ajax: function(data, callback, settings){
+                    var params = {};
+                    params.startIndex  = data.start;
+                    params.pageSize = 15;
+                    params.page =  (data.start / 10)+1;
+                    startDate = $('#startDate').val();
+                    endDate = $('#endDate').val()
+                    $.ajax({
+                        async:true,
+                        maskLoad:true,
+                        url: "{% url 'log:getLogListJson' %}",
+                        data: {
+                            searchValue: searchValue,
+                            params: JSON.stringify(params),
+                            startDate:startDate,
+                            endDate: endDate,
+                        },
+                        success: function(result){
+                            var returnData = {};
+                            returnData.draw = data.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                            returnData.recordsTotal = result.total;//返回数据全部记录 总共数据的长度
+                            returnData.recordsFiltered = result.total;//后台不实现过滤功能，每次查询均视作全部结果
+                            returnData.data = result.data;//返回的数据列表
+                            callback(returnData)
+                        },
+                    })
+                },
+            columns: [
+            { data: 'OperateDate' },
+            { data: 'OperateUserName' },
+            { data: 'IPAddress' },
+            { data: 'OperateType' },
+            { data: 'ExecuteResult' }
+            ],
+            iDisplayLength: 15,
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(0).html(replace_time(data.OperateDate))
+            },
+
+
+
+
+        });
+
+      /*  ajax: function(data, callback, settings){
+            var params = {};
+            params.startIndex  = data.start;
+            params.pageSize = 10;
+            params.page =  (data.start / 10)+1;
+        }*/
+
+
+        $('#startDate, #endDate').change(function () {
+
+            tableModel.draw();
+        });
+        $("#btnTableReload").click(function () {
+            location.href = "{% url 'log:index' %}";
+        });
+
+        $("#btnTableEdit").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要编辑的数据！");
+                return;
+            }
+            parent.layer.open({
+                title: "编辑试剂",
+                shift: 2,
+                type: 2,
+                area: ['860px', '520px'],
+                //
+                content: ['@Url.Content("~/Drug/Form?drugId=")' + selectRow.drugId, 'no'],
+                end: function () {
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+
+
+
+        　　
+         /*   if (iframe.attachEvent) {
+                iframe.attachEvent("onload", function() {
+                    //iframe加载完成后你需要进行的操作
+                    console.log('触发');
+                    alert(1)
+                });
+            } else {
+                iframe.onload = function () {
+                     console.log('触发122');
+                    alert(221)
+                    //iframe加载完成后你需要进行的操作
+                };
+            } */
+
+
+         $("#btnTableExport").click(function () {
+             var index = '';
+              var url = "{% url 'log:exportLogData' %}";
+         $.fileDownload(url,{
+            httpMethod: 'GET',
+            prepareCallback:function(url){
+             index = parent.layer.load(2)
+            },
+            successCallback:function(url){
+                console.log('下载完成');
+               parent.layer.close(index)
+            },
+            failCallback: function (html, url) {
+               console.log('文件下载失败');
+               parent.layer.close(index)
+            }
+         });
+        });
+        $("#btnTableDelete").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                layer.msg("请选择要删除的数据！");
+                return;
+            }
+            parent.layer.confirm('确定要删除试剂“' + selectRow.name + '（' + selectRow.drugId + '）”', function (index) {
+                parent.layer.close(index);
+                $.post('@Url.Content("~/Drug/DeleteDrug")', { drugId: selectRow.drugId }, function (obj) {
+
+                    if (obj.status == 1) {
+                        layer.msg("删除成功！");
+                        tableModel.row('.selected').remove().draw(false);
+                    }
+                    else {
+                        layer.msg("删除失败！");
+                    }
+                })
+            });
+        });
+   function replace_time(params) {
+            if(params){
+               return params.replace('T', ' ')
+           }
+        }
+    });
+</script>
+
+    <iframe src=""  width=0 height=0 frameborder="0" id="export"></iframe>
+{% endblock %}

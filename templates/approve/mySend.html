@@ -1,0 +1,242 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">审批单号</label>
+            <div class="layui-input-block">
+              <input type="text" name="ApproveInfoCode" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">受理人</label>
+            <div class="layui-input-block">
+              <input type="text" name="ApproveCurAcceptUserName" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">审批类型</label>
+            <div class="layui-input-block">
+              <select name="ApproveTypeCode">
+                <option value="">不限</option>
+                <option value="Purchase">采购审批</option>
+                <option value="DrugEdit">试剂信息修改审批</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">审批状态</label>
+            <div class="layui-input-block">
+              <select name="ApproveStatus">
+                <option value="">不限</option>
+                <option value="1">未开始</option>
+                <option value="2">处理中</option>
+                <option value="3">已完成：通过</option>
+                <option value="4">已完成：驳回</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-user-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="layui-card-body">
+        <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+          <script type="text/html" id="progressTpl">
+            {% verbatim %} 
+            <div class="layui-progress layuiadmin-order-progress" lay-filter="progress-"+ {{ d.ApproveInfoId }} +"">
+              <div class="layui-progress-bar layui-bg-blue" lay-percent= "{{ d.ApproveCompleteStepCount / d.ApproveTotalStepCount * 100  }}%" style="width: {{ d.ApproveCompleteStepCount / d.ApproveTotalStepCount * 100  }}%;"></div>
+            </div>
+            {% endverbatim %} 
+          </script>
+          <script type="text/html" id="statusTpl">
+            {% verbatim %} 
+            {{#  if(d.ApproveStatus == 1){ }}
+              <button class="layui-btn layui-btn-primary layui-btn-xs">未开始</button>
+            {{#  } else if(d.ApproveStatus == 2){ }}
+              <button class="layui-btn layui-btn-warm layui-btn-xs">处理中</button>
+            {{#   } else if(d.ApproveStatus == 3){  }}
+              <button class="layui-btn layui-btn-normal layui-btn-xs">已完成：通过</button>
+            {{#   } else if(d.ApproveStatus == 4){  }}
+              <button class="layui-btn layui-btn-danger layui-btn-xs">已完成：驳回</button>
+            {{#  } }}
+            {% endverbatim %} 
+          </script>
+        <script type="text/html" id="datatable-toolbar">
+          <a class="layui-btn layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-list"></i>查看</a>
+        </script>
+      </div>
+    </div>
+  </div>
+  <script>
+  layui.use(['index', 'table'], function(){
+    var table = layui.table
+    ,form = layui.form;
+
+    //列表数据
+    table.render({
+        elem: '#LAY-datatable'
+        ,url: "{% url 'approve:getMySendApproveInfoListJson' %}"
+        ,size:'lg'
+        ,cols: [[
+        {type: 'numbers', fixed: 'left'}
+        ,{field: 'ApproveInfoCode', width: 180, title: '审批单号'}
+        ,{field: 'ApproveTypeName', width: 150, title: '审批类型'}
+        ,{field: 'ApproveObjectCode',  title: '审批对象编号'}
+        ,{field: 'ApproveInfoProcess', width: 300, title: '审批流程'}
+        ,{field: 'ApproveCompleteStepCount', title: '总进度', width: 200, align: 'center', templet: '#progressTpl'}
+        ,{field: 'ApproveCurAcceptUserName', width: 150, title: '当前受理人员'}
+        ,{field: 'CreateDate', width: 170, title: '申请时间'}
+        ,{field: 'ApproveStatus',width: 150, title: '审批状态', templet: '#statusTpl', minWidth: 80, align: 'center'}
+        ,{title: '操作', width: 130, minWidth: 130, align: 'center', fixed: 'right', toolbar: '#datatable-toolbar'}
+        ]]
+        ,page: {
+          layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+          ,prev:'上一页'
+          ,next:'下一页'
+        }
+        ,limit: 15
+        ,limits: [10, 15, 20, 25, 30]
+        ,height: 'full-110'
+    });
+    
+    //监听工具条
+    table.on('tool(LAY-datatable)', function(obj){
+        var data = obj.data;
+        if(obj.event === 'del'){
+          top.layer.prompt({
+            formType: 1
+            ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+            top.layer.close(index);
+            if(hex_md5(value)!=top.CheckCode)
+            {
+                top.layer.msg("验证失败！");
+                return
+            }
+            top.layer.confirm('确定删除吗？', function(index) {
+                //提交
+                $.post("{% url 'user:deleteUser' %}", {deleteIds:data.UserId}, function (obj) {
+                    if (obj.status == 1) {
+                        top.layer.msg("删除成功", function () {
+                            top.layer.close(index);
+                        });
+                    }
+                    else {
+                        top.layer.msg("删除失败 " + obj.message);
+                    }
+                });
+                obj.del();
+                // table.reload('LAY-datatable');
+            });
+        });
+        } else if(obj.event === 'view'){
+        var tr = $(obj.tr);
+
+        top.layer.open({
+          type: 2
+          ,title: '查看审批信息'
+          ,offset: '60px'
+          ,content: "{% url 'approve:approveView' %}?ApproveInfoId="+data.ApproveInfoId
+          ,area: ['1100px', '800px']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+      }
+    });
+    
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function(data){
+      var field = data.field;
+      
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+  
+    //事件
+    var active = {
+      batchdel: function(){
+        var checkStatus = table.checkStatus('LAY-datatable')
+        ,checkData = checkStatus.data; //得到选中的数据
+
+        if(checkData.length === 0){
+          return layer.msg('请选择数据');
+        }
+        
+        top.layer.prompt({
+          formType: 1
+          ,title: '敏感操作，请验证密码'
+        }, function(value, index){
+          top.layer.close(index);
+          if(hex_md5(value)!=top.CheckCode)
+          {
+            top.layer.msg("验证失败！");
+            return
+          }
+          top.layer.confirm('确定删除吗？', function(index) {
+            var deleteIds='';
+            checkData.forEach(function(element,index){
+                if(deleteIds!=''){deleteIds+=','}
+                deleteIds+=element.UserId;
+            });
+            //提交
+            $.post("{% url 'user:deleteUser' %}", {deleteIds:deleteIds}, function (obj) {
+                if (obj.status == 1) {
+                    top.layer.msg("删除成功", function () {
+                        top.layer.close(index);
+                    });
+                }
+                else {
+                    top.layer.msg("删除失败 " + obj.message);
+                }
+            });
+            table.reload('LAY-datatable');
+          });
+        });
+      }
+      ,add: function(){
+        top.layer.open({
+          type: 2
+          ,title: '添加用户'
+          ,content: "{% url 'user:form' %}"
+          ,area: ['600px', '500px']
+          ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var submitID = 'LAY-user-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+            submit.trigger('click');
+          }        
+          ,end:function(){
+            table.reload('LAY-datatable'); //数据刷新
+          }
+        }); 
+      }
+    };
+    
+    $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+  </script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+{% endblock %}

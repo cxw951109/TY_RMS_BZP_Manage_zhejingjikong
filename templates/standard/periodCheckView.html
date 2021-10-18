@@ -1,0 +1,162 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="PeriodCheckId" type="hidden" id="PeriodCheckId" value="{% firstof model.PeriodCheckId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">核查单号</label>
+        <div class="layui-input-inline">
+            <div class="layui-form-mid layui-word-aux">{% firstof model.PeriodCheckCode '' %}</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">核查内容</label>
+        <div class="layui-input-block">
+            <table class="layui-hide" id="LAY-datatable" lay-filter="LAY-datatable"></table>
+            <script type="text/html" id="datatable-toolbar">
+                <div class="layui-btn-container">
+                  <button class="layui-btn layui-btn-sm" lay-event="addPeriodCheckDrug">核查试剂信息</button>
+                </div>
+            </script>
+            <script type="text/html" id="datatable-tool">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+            <script type="text/html" id="statusTpl">
+                {% verbatim %} 
+                {{#  if(d.Status==2){ }}
+                  <button class="layui-btn layui-btn-normal layui-btn-xs">合格</button>
+                {{#  } else { }}
+                  <button class="layui-btn layui-btn-danger layui-btn-xs">不合格</button>
+                {{#  } }}
+                {% endverbatim %}
+            </script> 
+            <script>
+                var drugListData=[];
+                layui.use(['table', 'form'], function(){
+                    var table = layui.table;
+                    var form = layui.form;
+                    table.render({
+                        elem: '#LAY-datatable'
+                        ,url: "{% url 'standard:getPeriodCheckDetailedListJson' %}?PeriodCheckId="+$("#PeriodCheckId").val()
+                        ,height: 280
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,defaultToolbar: []
+                        ,title: '用户数据表'
+                        ,cols: [[
+                        {type:'numbers'}
+                        ,{field:'Name', align: 'center', title: '标准品名称'}
+                        ,{field:'BarCode', align: 'center', width:130, title: '编号'}
+                        ,{field:'CASNumber', align: 'center', width:100, title: 'CAS码'}
+                        ,{field:'Speci', align: 'center', width:120, title: '规格'}
+                        ,{field:'PeriodCheckMethod', align: 'center', width:130, title: '核查方法'}
+                        ,{field:'Description', width:130, title: '描述'}
+                        ,{field:'CreateDate', align: 'center', width:170, title: '核查时间'}
+                        ,{field:'Status', align: 'center', width:90, title: '核查结果', templet: '#statusTpl'}
+                        ]]
+                        ,page: {
+                        layout: [ 'count', 'prev', 'page', 'next',] //自定义分页布局
+                        ,prev:'上一页'
+                        ,next:'下一页'
+                        }
+                        ,limit: 5
+                        ,limits: [10, 15, 20, 25, 30]
+
+                    
+                    });
+                    //头工具栏事件
+                    table.on('toolbar(LAY-datatable)', function(obj){
+                        switch(obj.event){
+                        case 'addPeriodCheckDrug':
+                            top.layer.open({
+                                type: 2
+                                ,title: '核查试剂信息'
+                                ,content: "{% url 'standard:periodCheckDrugForm' %}"
+                                ,area: ['1200px', '650px']
+                                ,shade: [0.9, '#000']
+                                ,btn: ['确定', '取消']
+                                ,yes: function(index, layero){
+                                    var iframeWindow = window['layui-layer-iframe'+ index]
+                                    var submitID = 'LAY-user-front-submit'
+                                    ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                                    //监听提交
+                                    iframeWindow.layui.form.on('submit(LAY-user-front-submit)', function(data){
+                                        var field = data.field; //获取提交的字段
+                                        field.uuid=uuid();
+                                        drugListData.unshift(field);
+                                        table.reload('LAY-datatable',{data:drugListData});
+                                        // form.render();
+                                        layer.close(index); //关闭弹层
+                                        $("#approveContent .layui-table-view").html($(".layui-table-view").html());
+                                        $("#approveContent .layui-table-view .layui-table-tool").remove();
+                                        $("#approveContent .layui-table-view .layui-table-fixed").remove();
+                                        $("#approveContent .layui-table-view .layui-table-col-special").remove();
+                                    });  
+                                    submit.trigger('click');
+                                }        
+                                ,end:function(){
+                                    table.reload('LAY-datatable'); //数据刷新
+                                }
+                            }); 
+                        break;
+                        };
+                    });
+                    //监听工具条
+                    table.on('tool(LAY-datatable)', function(obj){
+                        var data = obj.data;
+                        if(obj.event === 'del'){
+                            var index = drugListData.findIndex(function(x){
+                                return x.uuid==obj.data.uuid;
+                            });
+                            drugListData.splice(index,1);
+                            table.reload('LAY-datatable',{data:drugListData});
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">具体描述</label>
+        <div class="layui-input-block">
+            <div class="layui-form-mid layui-word-aux">{% firstof model.Description '' %}</div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+    <div id="approveContent" class="layui-hide">
+        <style>
+            #approveContentTable .laytable-cell-1-0-1{
+                width: 230px !important;
+            }
+        </style>
+        <div id="approveContentTable" class="layui-form layui-border-box layui-table-view" style="height: 280px;"></div>
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            var fieldData = obj.field;
+            fieldData= $.extend({PeriodCheckStatus:1},fieldData);
+            fieldData.PeriodCheckStatus=fieldData.PeriodCheckStatus=='on'? 2:1;
+            //提交修改
+            $.post("{% url 'standard:savePeriodCheckData' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

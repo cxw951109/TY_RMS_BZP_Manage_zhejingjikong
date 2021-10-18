@@ -1,0 +1,115 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    * {
+      
+      margin:  0 !important;  
+    }
+</style>
+<script src="{% static 'Scripts/jquery-1.10.2.min.js' %}"></script>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin">
+    <input name="PurchaseOrderId" type="hidden" value="{% firstof model.PurchaseOrderId '' %}" />
+    <div class="layui-form-item">
+        <div class="photographBox" style="position: relative;">
+            <!-- <button id="snap" style="position: absolute;z-index: 999999 !important;">Snap Photo</button> -->
+            <canvas id="canvas" width="800" height="450" style="position: absolute;z-index: 99998;"></canvas>
+            <!-- rosybrown -->
+            <div style="width: 600px; height: 350px;color: #FFF; text-align: center; line-height: 350px; position: absolute; top: 50px; left: 99px;z-index: 99996; border:red dashed  1px">
+            将单据放置于虚线框内
+            </div>
+            <video id="video" width="800" height="450" style="position: absolute; z-index: 9;background-color: #000;" autoplay></video>
+        </div>
+        <div style="height: 75px;background-color: #2F4056;position: relative;top: 450px; text-align: center; line-height: 75px;">
+            <button type="button" id="snap" class="layui-btn layui-btn-lg layui-btn-primary layui-btn-radius">拍照</button>
+            <button type="button" id="cancel" class="layui-btn layui-btn-danger layui-hide"><i class="layui-icon"></i>撤销</button>
+        </div>
+        
+        
+        
+        <script type="text/javascript">
+            var pictureBase64 = ''
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var video = document.getElementById("video");
+            $(document).ready(function() {
+                videoObj = {
+                    "video": true
+                };
+                var errBack = function(error) {
+                    console.log("Video capture error: ", error.code);
+                };
+                if (navigator.getUserMedia) { // Standard
+                    navigator.getUserMedia(videoObj, function(stream) {
+                        video.srcObject = stream;
+                        video.play();
+                    }, errBack);
+                } else if (navigator.webkitGetUserMedia) { // WebKit-prefixed
+                    navigator.webkitGetUserMedia(videoObj, function(stream) {
+                        video.src = window.webkitURL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                } else if (navigator.mozGetUserMedia) { // Firefox-prefixed
+                    navigator.mozGetUserMedia(videoObj, function(stream) {
+                        video.src = window.URL.createObjectURL(stream);
+                        video.play();
+                    }, errBack);
+                };
+                $("#snap").on("click", function() {
+                    $("#canvas").show();
+                    $("#canvas").attr("width",1280);
+                    $("#canvas").attr("height",720);
+                    context.drawImage(video, 0, 0, 1280, 720);
+                    $(this).addClass("layui-hide");
+                    $("#cancel").removeClass("layui-hide");
+                    pictureBase64=canvas.toDataURL("image/png");
+                    pictureBase64= pictureBase64.split(',')[1];
+                    $("#canvas").attr("width",800);
+                    $("#canvas").attr("height",450);
+                    context.drawImage(video, 0, 0, 800, 450);
+                });
+                $("#cancel").click(function(){
+                    pictureBase64=''
+                    $("#canvas").hide();
+                    $(this).addClass("layui-hide");
+                    $("#snap").removeClass("layui-hide");
+                })
+            });
+        </script>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    sessionStorage.removeItem("photographDataSrc");
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function (obj) {
+            // var fieldData = obj.field;
+            // fieldData= $.extend({PurchaseOrderStatus:1},fieldData);
+            if(pictureBase64=="")
+            {
+                layer.msg("没有图片信息！");
+                return false;
+            }
+            var fieldData={"pictureBase64":pictureBase64};
+            //提交修改
+            $.post("{% url 'standard:savePhotographData' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        sessionStorage.setItem('photographDataSrc',obj.data)
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+{% endblock %}

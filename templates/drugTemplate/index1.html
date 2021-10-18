@@ -1,0 +1,390 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% load static %}
+
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" action="{% url 'drugTemplate_index' %}" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="searchValue" value="{{ searchValue }}" name="searchValue" placeholder="搜索">
+                <div class="input-group-btn">
+                    <button type="submit" id="btnTableSearch" class="btn btn-sm btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="mail-tools tooltip-demo">
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableAdd" data-placement="top" title="添加新模板">
+                <i class="fa fa-plus-circle"> 新增试剂模板</i>
+            </button>
+           <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableEdit" data-placement="top" title="编辑选中模板">
+                <i class="fa fa-edit"> 编辑试剂模板</i> 
+            </button>  
+            <button class="btn btn-white btn-sm centerVisit" data-toggle="tooltip" id="btnBarAdd" data-placement="top" title="一维条码入库">
+                <i class="fa fa-plus-circle"> 一维条码入库</i>
+            </button>
+            <button class="btn btn-white btn-sm centerVisit" data-toggle="tooltip" id="RFIDAdd" data-placement="top" title="RFID试剂入库">
+                <img src="{% static 'img/RFID.png' %}" alt="" style="height: 18px"> RFID试剂入库
+            </button>
+
+            <button class="btn btn-white btn-sm centerVisit" data-toggle="tooltip" id="printer_template_code" data-placement="top" title="打印用户条码">
+                <img src="{% static 'img/barcode.png' %}" alt=""> 打印选中入库模板条码
+            </button>
+            <button class="btn btn-white btn-sm centerVisit" data-toggle="tooltip" id="export_template" data-placement="top" title="导入入库模板">
+                导入入库模板
+                        </button>
+
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableDelete" data-placement="top" title="删除选中模板">
+                <i class="fa fa-trash-o"> 删除</i>
+            </button>
+          <!--  <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出模板到本地"><i class="fa fa-download"></i> 导出选中模板</button>
+            <button class="btn btn-white btn-sm" type="button" data-toggle="tooltip" id="btnTableBarCode" data-placement="top" title="打印所选模板条码">
+                    <i class="fa fa-trash-o"> 打印所选模板条码</i>
+                </button> -->
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>模板Id</th>
+                    <th width="100">模板名称</th>
+                    <th width="100">所属药柜</th>
+                    <th width="100">入库数量</th>
+                    <!-- <th>条码范围</th> -->
+                    <th width="100">创建时间</th>
+                    <th width="100">创建人</th>
+                    <th width="500" style="text-align:center">详细内容</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div style="margin-bottom:1600px"></div>
+<div id="selectGuizi" style="overflow: hidden;height: 300px;">
+<div class="input-daterange input-group pull-left"  style="width:360px;margin-top: 30px;margin-left: 50px; margin-bottom: 30px">
+    <span class="input-group-addon"> &nbsp;&nbsp;选择药柜：</span>
+    <select data-placeholder="选择所属药柜..." id="cabinetSelect" required="required" class="chosen-select" style="width:200px;height:20px">
+        <option value="">全部</option>
+    </select>
+</div>
+<div class="form-group">
+
+    <div class="col-sm-12 col-sm-offset-1">
+        <div class="hr-line-dashed"></div>
+        <button class="btn btn-primary" id="submitExport" type="button">确认导入</button>&nbsp;&nbsp;&nbsp;
+    </div>
+</div>
+</div>
+<script src="{% static 'js/utils.js' %}"></script>
+{#<script src="{% static 'js/socket/socket.io.min.js' %}"></script>#}
+            <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    var visitType=window.parent.frames.getUrlParam('visitType');
+    // if(visitType!='1')
+    // {
+    //     $(".centerVisit").hide();
+    // }
+    $(function () {
+        $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
+
+$(obj.data).each(function (index, data) {
+    $("#cabinetSelect").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+});
+$(".chosen-select").chosen({
+    no_results_text: "没有找到",
+    disable_search: true,
+    allow_single_deselect: true
+});
+});
+        $('#navTitle', window.parent.document).text('试剂入库');
+        var searchValue = $("#searchValue").val();
+        $("#searchValue").val(searchValue);
+        var tableModel = $('#dataTableModel').DataTable({
+            // searching: false,
+            lengthChange: false,
+            select: true,
+            ajax: {
+                url:  "{% url 'drugTemplate_getTemplateListJson' %}",
+                data: { searchValue: searchValue },
+                dataSrc: 'data'
+            },
+            columns: [
+            { data: 'TemplateId' },
+            { data: 'TemplateName' },
+            { data: 'ClientName' },
+            { data: 'BarCodeCount' },
+            // { data: 'StartBarCode' },  // 条码范围 经过createdRow进行修改
+            { data: 'CreateDate' },
+            { data: 'CreateUserName' },
+            { data: 'TemplateContent' }
+            ],
+            iDisplayLength: 15,
+            "order": [[4, "desc"]],
+            createdRow: function (row, data, dataIndex) {
+                var xxnrObj=JSON.parse(data.TemplateContent);
+                var xxnr='';
+                $.each(xxnrObj,function(index,item){
+                    xxnr+=item.Name+':'+item.Manufacturer+",";
+
+                });
+                $(row).children('td').eq(5).html(xxnr);
+                // alert(xxnrObj.length);
+                //$(row).children('td').eq(9).attr('style', 'text-align: center;')
+                // $(row).children('td').eq(6).html(data.IsWaitExport == 1 ? "<span class='label label-warning'>是</span>" : "<span class='label label-default'>否</span>");
+                // $(row).children('td').eq(6).attr('style', 'text-align: center;');
+                // 格式化条码范围
+                // $(row).children('td').eq(3).html(data.StartBarCode ?data.StartBarCode + '~' + (data.StartBarCode + parseInt(data.BarCodeCount) - 1): '')
+            },
+            columnDefs: [
+    {
+        "targets": [0],
+        "visible": false
+    }
+            ]
+
+        });
+        $("#searchValue").keyup(function () {
+            // $("#searchValue").attr('ReserveSearch', $("#searchValue").val());
+            tableModel.search($("#searchValue").val()).draw();
+
+        })
+        $("#btnTableReload").click(function () {
+            location.href =  "{% url 'drugTemplate_index' %}";
+        });
+
+        $("#btnTableAdd").click(function () {
+            quiteTime = Infinity;
+            parent.layer.open({
+                title: "添加试剂模板",
+                shift: 2,
+                type: 2,
+                area: ['1000px', '560px'],
+                content: ["{% url 'drugTemplate_form'  %}"],
+                end: function () {
+                    currentTime = 0;
+                    quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+
+        // 用户点击打印模板条码
+        $('#printer_template_code').click(function () {
+            var selectRow = tableModel.row('.selected').data();
+           if(selectRow == null){
+               msg("请选择要打印的模板数据！");
+               return false;
+           }
+            if(!selectRow.StartBarCode){
+                msg("该模板暂不支持打印！");
+               return false;
+            }
+
+            console.log(selectRow);
+            quiteTime = Infinity;
+
+            new $.flavr({ content : '确定要打印条码范围 <h1 style="color:red">' + selectRow.StartBarCode + '~' + (selectRow.StartBarCode + parseInt(selectRow.BarCodeCount) - 1)  + '</h1>吗？',
+
+                            dialog : 'confirm',
+                            buttons: {
+                    danger: {
+                        text: '确定',
+                        style: 'danger',
+                        action: function() {
+                             // 调用layer加载框
+                           var layer_index = parent.layer.load(2, {
+                                  shade: [0.01,'#fff'] //0.1透明度的白色背景
+                                });
+                           $.ajax({
+                               url: '{% url 'drugTemplate:printer_drug_code' %}',
+                               type: 'GET',
+                               data: {
+                                TemplateId: selectRow.TemplateId
+                               },
+                               success: function (e) {
+                                   parent.layer.close(layer_index)
+
+                                   if(e.data.status == 0){
+                                       currentTime = 0;
+                                       quiteTime = 600;
+                                        new $.flavr('打印成功！');
+                                   }else{
+                                        currentTime = 0;
+                                        quiteTime = 600;
+                                       new $.flavr(e.data.message);
+                                   }
+                               },
+                               error: function () {
+                                    currentTime = 0;
+                                    quiteTime = 600;
+                                    parent.layer.close(layer_index);
+                                   new $.flavr('请求失败！');
+                               }
+                           });
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        style: 'default'
+                    }
+                },
+                    onConfirm : function(){
+
+                    }
+                            });
+
+        });
+        $('#btnBarAdd').click(function(){
+
+            var selectRow = tableModel.row('.selected').data();
+            if(selectRow == null){
+               msg("请选择一维条码入库的模板数据！");
+               return false;
+           }
+           //  layer弹出一个新的一维条码入库框
+            quiteTime = Infinity;
+           parent.layer.open({
+               title: "一维条码试剂入库",
+               shift: 2,
+               type: 2,
+               area: ['1000px', '730px'],
+            //    content: ['/drug/DrugPutInByBarCode/?template_id=' + selectRow.TemplateId],
+               content: ['/drug/' + selectRow.TemplateId  + '/DrugPutInByBarCode/'],
+               end: function () {
+                   currentTime = 0;
+                   quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+           })
+        });
+
+        $('#RFIDAdd').click(function () {
+           var selectRow = tableModel.row('.selected').data();
+           if(selectRow == null){
+               msg("请选择RFID入库的模板数据！");
+               return false;
+           }
+           //  layer弹出一个新的RFID入库框
+            quiteTime = Infinity;
+           parent.layer.open({
+               title: "RFID试剂入库",
+               shift: 2,
+               type: 2,
+               area: ['1000px', '730px'],
+               content: ['/drugTemplate/' + selectRow.TemplateId  + '/RFIDStorage/'],
+               end: function () {
+                   currentTime = 0;
+                   quiteTime = 600;
+                    tableModel.ajax.reload();
+                }
+           })
+        });
+
+       $("#btnTableEdit").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                msg("请选择要编辑的数据！");
+                return;
+            }
+            parent.layer.open({
+                title: "编辑试剂模板",
+                shift: 2,
+                type: 2,
+                area: ['1000px', '560px'],
+                content: ['/drugTemplate/' + selectRow.TemplateId  + '/update_form/'],
+                end: function () {
+                    tableModel.ajax.reload();
+                }
+            });
+        });  
+        $("#export_template").click(function(){
+            layer.open({
+  type: 1,
+  shade: false,
+  title: "选择导入模板药柜", //不显示标题
+  area: ['480px', '360px'], //宽高
+  content: $('#selectGuizi'), //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+  cancel: function(){
+
+  }
+});
+
+
+        });
+        $("#submitExport").click(function(){
+            if($('#cabinetSelect').val()=="")
+            {
+                layer.msg('请先选择药柜！', {time: 5000, icon:6});
+                return;
+
+            }
+            $.get('{% url 'drugTemplate:exportPutInTemplate' %}', { ClientId: $('#cabinetSelect').val() },  function (obj) {
+                if(obj.data.status==1)
+                {
+                    layer.alert(obj.data.message);
+                }else{
+            msg(obj.data.message,function () {
+                location.reload();
+              });
+           }
+        })
+
+        });
+        $("#btnTableDelete").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                msg("请选择要删除的数据！");
+                return;
+            }
+             new $.flavr({
+                 content : '确定要删除模板 “' + selectRow.TemplateName + '” 吗？',
+                 dialog : 'confirm',
+                 buttons: {
+                    danger: {
+                        text: '确定',
+                        style: 'danger',
+                        action: function() {
+                           $.post("{% url 'drugTemplate_deleteTemplate' %}", { templateId: selectRow.TemplateId }, function (obj) {
+                            if (obj.status == 1) {
+                               new $.flavr({ content : '删除成功！',
+
+                            autoclose : true, timeout : 2000 });
+                                tableModel.row('.selected').remove().draw(false);
+                            }
+                            else {
+                                  new $.flavr({ content : '删除失败！',
+
+                            autoclose : true, timeout : 2000 });
+                            }
+                        })
+                        }
+                    },
+                    cancel: {
+                        text: '取消',
+                        style: 'default'
+                    }
+                },
+                 });
+        });
+        $("#btnTableExport").click(function () {
+            var selectRow = tableModel.row('.selected').data();
+            if (selectRow == null) {
+                msg("请选择要导出到本地的模板！");
+                return;
+            }
+            document.getElementById("export").src = '@Url.Content("~/Template/ExportTemplate?templateId=")' + selectRow.TemplateId;
+        })
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+
+
+
+{% endblock %}

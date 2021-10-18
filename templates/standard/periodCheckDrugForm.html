@@ -1,0 +1,81 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input name="PeriodCheckDetailedId" type="hidden" value="{% firstof model.PeriodCheckDetailedId '' %}" />
+    <input name="PeriodCheckId" type="hidden" value="{% firstof PeriodCheckId '' %}" />
+    <input name="DrugId" type="hidden" value="{% firstof drugModel.MedicamentId '' %}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">试剂名称</label>
+        <div class="layui-input-inline" style="width: 80px;">
+            <div class="layui-form-mid layui-word-aux">{% firstof drugModel.Name '' %}</div>
+        </div>
+        <label class="layui-form-label">编号</label>
+        <div class="layui-input-inline" style="width: 80px;">
+            <div class="layui-form-mid layui-word-aux">{% firstof drugModel.BarCode '' %}</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">CAS码</label>
+        <div class="layui-input-inline" style="width: 80px;">
+            <div class="layui-form-mid layui-word-aux">{% firstof drugModel.CASNumber '' %}</div>
+        </div>
+        <label class="layui-form-label">规格</label>
+        <div class="layui-input-inline" style="width: 80px;">
+            <div class="layui-form-mid layui-word-aux">{% firstof drugModel.Speci '' %}{% firstof drugModel.SpeciUnit '' %}</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">核查方法</label>
+        <div class="layui-input-inline">
+            <input type="text" name="PeriodCheckMethod" value="{% firstof model.PeriodCheckMethod '' %}" lay-verify="required" placeholder="请输入核查方法" autocomplete="off"
+                class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述</label>
+        <div class="layui-input-block">
+            <textarea type="text" rows="" name="Description" autocomplete="off"
+                class="layui-textarea">{% firstof model.Description '' %}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">核查结果：</label>
+        <div class="layui-input-block">
+            {% if model.Status != 1 %}
+                <input type="radio" name="Status" value="2" title="合格" checked>
+                <input type="radio" name="Status" value="1" title="不合格">
+            {% else %}
+                <input type="radio" name="Status" value="2" title="合格">
+                <input type="radio" name="Status" value="1" title="不合格" checked>
+            {% endif %}
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+</div>
+<script>
+    var index = parent.layer.getFrameIndex(window.name);
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(LAY-user-front-submit)', function(obj){
+            var fieldData= obj.field;
+            //提交修改
+            $.post("{% url 'standard:savePeriodCheckDetailedData' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+    })
+</script>
+{% endblock %}

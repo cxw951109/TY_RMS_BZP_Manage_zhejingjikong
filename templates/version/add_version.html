@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+</style>
+
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_host">版本号*</label>
+            <div class="col-sm-4">
+                <input class="form-control" type="hidden" id="VersionId" name="VersionId" value="{% firstof version_obj.VersionId '' %}"/>
+                <input class="form-control" id="VersionCode" maxlength="50" required="required" name="VersionCode" type="text" value="{% firstof version_obj.VersionCode '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_name">版本名称*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="VersionName" maxlength="50" required="required" name="VersionName" type="text" value="{% firstof version_obj.VersionName '' %}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">下载链接*</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="DownLink" name="DownLink" maxlength="50" required="required" type="text" value="{% firstof version_obj.DownLink '' %}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">版本信息</label>
+            <div class="col-sm-10">
+                <textarea id="VersionInfo" name="VersionInfo" class="form-control" maxlength="50" style="height:250px"  aria-required="true">{% firstof version_obj.VersionInfo '' %}</textarea>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2">
+                <button class="btn btn-primary" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $("#IsSuperviseSwich").change(function () {
+
+            $("#IsSupervise").val($("#IsSuperviseSwich").is(":checked") ? 1 : 0);
+        })
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            $.post('{% url 'version:save_version' %}', $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        })
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+
+{% endblock %}

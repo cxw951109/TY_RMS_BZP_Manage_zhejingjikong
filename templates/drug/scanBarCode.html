@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    .dl-horizontal dt {
+        line-height: 45px;
+        font-size: 15px;
+    }
+
+    .dl-horizontal dd {
+        line-height: 45px;
+        font-size: 15px;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInDown" style="overflow: hidden">
+
+    <div class="row">
+
+        <div class="col-md-5" style="text-align:center;padding-top:200px"><i class="fa fa-barcode fa-4x"
+                style="font-size:12em"></i>
+            <div style="font-size:45px">请在此扫描您的条码</div>
+            <div style="font-size:30px;color:red" id="status">点击此页面准备扫描</div><input type="text"
+                style="color:#F3F3F4; background-color:#F3F3F4; border-width:0px;outline:none" id="fff" />
+        </div>
+        <div class="col-md-7"
+            style="border-left-color:#8B8989;border-left-width:1px;border-left-style:solid;height:650px;padding-top:110px">
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="m-b-md" style="text-align:center">
+                            <h1>详细信息</h1>
+                        </div>
+                        <dl class="dl-horizontal">
+                            <dt>条码编号：</dt>
+                            <dd>
+                                <span class="label label-primary" id="barcode"></span>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <dl class="dl-horizontal">
+
+                            <dt>试剂名称：</dt>
+                            <dd id="yjmc"></dd>
+                            <dt>CAS码：</dt>
+                            <dd id="cas"></dd>
+                            <dt>生产日期：</dt>
+                            <dd id="scrq">
+
+                            </dd>
+                            <dt>生产厂商：</dt>
+                            <dd id="sccs"></dd>
+                            <dt>当前状态：</dt>
+                            <dd id="dqzt"></dd>
+                            <dt>所属终端：</dt>
+                            <dd id="sszd"></dd>
+
+                        </dl>
+                    </div>
+                    <div class="col-sm-6" id="cluster_info">
+                        <dl class="dl-horizontal">
+
+                            <dt>英文名称：</dt>
+                            <dd id="ywmc"></dd>
+                            <dt>纯度：</dt>
+                            <dd id="cd"></dd>
+                            <dt>过期日期：</dt>
+                            <dd id="gqrq"></dd>
+                            <dt>经销商：</dt>
+                            <dd id="jxs"></dd>
+                            <dt>是否监管：</dt>
+                            <dd id="sfjg"></dd>
+                            <dt>最后使用人：</dt>
+                            <dd id="zhsyr"></dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% load static %}
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/warning.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#navTitle', window.parent.document).text('扫码查询');
+            $("#fff").focus();
+            $(document).click(function () {
+                $("#status").text("等待扫描...")
+            });
+            //挂钩jquery插件，实现条码识别
+            $(document).barCodeScanerModeEnter(function (barCode) {
+                $.get('{% url 'drug:GetDrugJson' %}', { drugId: barCode }, function (obj) {
+                    if (obj.data.status == 0) {
+                        msg('条码编号：' + barCode + ';' + obj.data.message);
+                        return;
+                    }
+                    obj.data = JSON.parse(obj.data.data ? obj.data.data : '');
+                    $("#barcode").text(obj.data.BarCode ? obj.data.BarCode : '');
+                    $("#yjmc").text(obj.data.Name ? obj.data.Name : '');
+                    $("#ywmc").text(obj.data.EnglishName ? obj.data.EnglishName : '');
+                    $("#cas").text(obj.data.CASNumber ? obj.data.CASNumber : '');
+                    $("#cd").text(obj.data.Purity ? obj.data.Purity : '');
+                    $("#scrq").text(obj.data.ProductionDate ? obj.data.ProductionDate : '');
+                    $("#gqrq").text(obj.data.ExpirationDate ? obj.data.ExpirationDate : '');
+                    $("#sccs").text(obj.data.Manufacturer ? obj.data.Manufacturer : '');
+                    $("#jxs").text(obj.data.Distributor ? obj.data.Distributor : '');
+                    $("#sszd").text((obj.data.ClientCode ? obj.data.ClientCode : '') + '号终端');
+                    $("#dqzt").text(format_status(obj.data.Status));
+                    $("#sfjg").text(obj.data.IsSupervise == 1 ? "是" : "否");
+                    $("#zhsyr").text(obj.data.ByUserName ? obj.data.ByUserName : '');
+
+                });
+            });
+
+            // flag_status 用来RFID入库禁止频繁弹窗
+            var flag_status = true;
+            var socket = new WebSocket("ws:" + window.location.host + "/drug/drug_socket/");
+            socket.onopen = function () {
+
+                console.log('WebSocket open');//成功连接上Websocket
+                socket.send('adasdasda1。。。。');//发送数据到服务端
+                setInterval(function () {
+                    if (flag_status) {
+                        socket.send('adasdasda1。。。。');
+                    }
+                }, 1000);
+            };
+            socket.onmessage = function (e) {
+                console.log('message: ' + e.data);//打印服务端返回的数据
+                $.get('{% url 'drug:GetDrugJson' %}', { drugId: e.data }, function (obj) {
+                    if (obj.data.status == 0) {
+                        msg(obj.data.message);
+                        return;
+                    }
+                    obj.data = JSON.parse(obj.data.data ? obj.data.data : '');
+                    $("#barcode").text(obj.data.BarCode ? obj.data.BarCode : '');
+                    $("#yjmc").text(obj.data.Name ? obj.data.Name : '');
+                    $("#ywmc").text(obj.data.EnglishName ? obj.data.EnglishName : '');
+                    $("#cas").text(obj.data.CASNumber ? obj.data.CASNumber : '');
+                    $("#cd").text(obj.data.Purity ? obj.data.Purity : '');
+                    $("#scrq").text(obj.data.ProductionDate ? obj.data.ProductionDate : '');
+                    $("#gqrq").text(obj.data.ExpirationDate ? obj.data.ExpirationDate : '');
+                    $("#sccs").text(obj.data.Manufacturer ? obj.data.Manufacturer : '');
+                    $("#jxs").text(obj.data.Distributor ? obj.data.Distributor : '');
+                    $("#sszd").text((obj.data.ClientCode ? obj.data.ClientCode : '') + '号终端');
+                    $("#dqzt").text(format_status(obj.data.Status));
+                    $("#sfjg").text(obj.data.IsSupervise == 1 ? "是" : "否");
+                    $("#zhsyr").text(obj.data.ByUserName ? obj.data.ByUserName : '');
+
+                });
+            }
+            function format_status(params) {
+                switch (params) {
+                    case 1:
+                        return '在库';
+                    case 2:
+                        return '出库';
+                    case 3:
+                        return '空瓶';
+                    default:
+                        return ''
+                }
+            }
+        })
+
+    </script>
+
+</div>
+
+{% endblock %}

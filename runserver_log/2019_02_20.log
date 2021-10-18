@@ -1,0 +1,164 @@
+具体时间:[2019-02-20 09:00:13,515][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 09:00:13,516][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 09:00:19,465][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 09:00:23,298][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 09:02:35,674][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 09:18:41,932][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 10:51:19,860][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 10:51:27,851][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 10:52:26,790][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 10:52:59,187][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 13:19:43,965][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 14:15:12,164][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 14:15:13,265][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-20 14:15:19,218][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 14:16:29,521][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 14:16:29,740][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-20 14:17:21,784][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 14:17:21,814][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-20 14:17:30,740][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 14:17:30,781][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-20 15:09:03,974][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-20 15:09:31,205][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 15:09:31,247][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-20 15:09:32,808][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 15:09:32,829][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-20 15:22:58,305][default:INFO(255)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第255行]-进入RFID
+
+具体时间:[2019-02-20 15:22:58,332][default:INFO(264)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\drug\views.py]模块名:[views:]函数名:[drug_socket]:
+[第264行]-通讯。。。。
+
+具体时间:[2019-02-21 10:02:56,983][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 10:02:57,764][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 10:02:58,364][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 10:02:59,902][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 11:02:46,685][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 11:02:47,691][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 11:02:53,711][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-21 18:15:51,640][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 18:15:52,672][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-21 18:15:59,370][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+
+具体时间:[2019-02-22 17:27:51,458][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-22 17:27:51,935][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-22 17:27:54,558][default:INFO(21)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-02-22 17:27:59,886][default:INFO(137)]
+当前文件位置:[E:\web\TY_RMS_Multiple_Manage\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第137行]-登录成功
+

@@ -1,0 +1,24 @@
+具体时间:[2019-08-12 16:12:52,238][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-12 16:12:52,579][default:INFO(21)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\user\login_required.py]模块名:[login_required:]函数名:[process_request]:
+[第21行]-用户没有登录, 跳转到登录页面
+
+具体时间:[2019-08-12 16:13:00,770][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+
+具体时间:[2019-08-12 16:13:36,778][default:DEBUG(310)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\reportExcel.py]模块名:[reportExcel:]函数名:[download_excel]:
+[第310行]-读取文件异常
+
+具体时间:[2019-08-12 16:25:54,689][default:DEBUG(310)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\Lib\reportExcel.py]模块名:[reportExcel:]函数名:[download_excel]:
+[第310行]-读取文件异常[Errno 2] No such file or directory: '库存药剂总览表2019081216255432.xlsx'
+
+具体时间:[2019-08-12 16:47:00,806][default:INFO(139)]
+当前文件位置:[D:\WorkData\VSCodeProjects\TY_RMS_Multiple_Manage_Python\TY_RMS_Multiple_Manage\views.py]模块名:[views:]函数名:[account_login]:
+[第139行]-登录成功
+

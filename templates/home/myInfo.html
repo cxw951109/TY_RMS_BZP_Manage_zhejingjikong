@@ -1,0 +1,217 @@
+{% extends 'baseBZPForm.html' %}
+
+{% block content %}
+{% load static %}
+<style>
+    html {
+        background-color: #FFF;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">基本信息</li>
+                            <li>修改密码</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card-body" pad15>
+                                    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin">
+                                        <input name="UserId" type="hidden" value="{% firstof user.UserId '' %}" />
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">角色</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="username" value="{% firstof user.RoleName '' %}" readonly
+                                                    class="layui-input">
+                                            </div>
+                                            <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">工号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="UserCode" value="{% firstof user.UserCode '' %}" readonly
+                                                    class="layui-input">
+                                            </div>
+                                            <div class="layui-form-mid layui-word-aux">不可更改，用于账号登录</div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">姓名</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="RealName" value="{% firstof user.RealName '' %}" lay-verify="required"
+                                                    autocomplete="off" placeholder="请输入姓名" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">性别</label>
+                                            <div class="layui-input-block">
+                                                {% if user.Sex != '0' %}
+                                                    <input type="radio" name="Sex" value="1" title="男" checked>
+                                                    <input type="radio" name="Sex" value="0" title="女">
+                                                {% else %}
+                                                    <input type="radio" name="Sex" value="1" title="男">
+                                                    <input type="radio" name="Sex" value="0" title="女" checked>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">手机</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="Mobile" value="{% firstof user.Mobile '' %}" placeholder="请输入手机号" lay-verify="phone"
+                                                    autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">邮箱</label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" name="Email" value="{% firstof user.Email '' %}" placeholder="请输入邮箱" lay-verify="email"
+                                                    autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">签名图片</label>
+                                            <div class="layui-input-inline">
+                                                <input name="SignUrl" readonly id="SignUrl"
+                                                    placeholder="签名图片地址" value="{% firstof user.SignUrl '' %}" class="layui-input">
+                                            </div>
+                                            <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                                                <button type="button" class="layui-btn layui-btn-primary"
+                                                    id="btnUploadSignature">
+                                                    <i class="layui-icon">&#xe67c;</i>上传签名图片
+                                                </button>
+                                                <button class="layui-btn layui-btn-primary" id="btnViewPicture"
+                                                    layadmin-event="avartatPreview">查看当前签名</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item layui-form-text">
+                                            <label class="layui-form-label">描述</label>
+                                            <div class="layui-input-block">
+                                                <textarea name="Description" placeholder="请输入内容"
+                                                    class="layui-textarea">{% firstof user.Description '' %}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <button class="layui-btn boot-btn-primary" lay-submit lay-filter="setMyInfo" id="setMyInfo">确认修改</button>
+                                                <!-- <button type="reset" class="layui-btn layui-btn-primary">重新填写</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-card-body" pad15>
+                                    <div class="layui-form" lay-filter="layuiadmin-form-admin1" id="layuiadmin-form-admin1">
+                                        <input name="UserId" type="hidden" value="{% firstof user.UserId '' %}" />
+
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">原密码</label>
+                                            <div class="layui-input-inline">
+                                                <input type="password" name="OldPwd" lay-verify="required"
+                                                    autocomplete="off" placeholder="请输入原密码" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">新密码</label>
+                                            <div class="layui-input-inline">
+                                                <input type="password" name="NewPwd" lay-verify="required" id="NewPwd" placeholder="请输入新密码" class="layui-input"
+                                                    autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">确认密码</label>
+                                            <div class="layui-input-inline">
+                                                <input type="password" name="NewPwd1" id="NewPwd1" placeholder="请输入确认密码"
+                                                    autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <button class="layui-btn boot-btn-primary" lay-submit lay-filter="setMyPassword" id="setMyPassword">确认修改</button>
+                                                <!-- <button type="reset" class="layui-btn layui-btn-primary">重新填写</button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['index', 'form'], function () {
+        var form = layui.form;
+        form.on('submit(setMyInfo)', function(obj){
+            var fieldData= obj.field;
+            //提交修改
+            $.post("{% url 'home:saveMyBaseInfo' %}", fieldData, function (obj) {
+
+                if (obj.status == 1) {
+                    msg("保存成功");
+                }
+                else {
+                    msg("保存失败 " + obj.message);
+                }
+            });
+            return false;
+        });
+        form.on('submit(setMyPassword)', function(obj){
+            var fieldData= obj.field;
+            if ($("#NewPwd").val() != $("#NewPwd1").val()) {
+                msg("确认密码与新密码不一致！");
+                return false;
+            }
+            $.post("{% url 'home:saveMyPwd' %}", fieldData, function (obj) {
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        window.parent.location.href = '{% url "account_login" %}'
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        });
+        $("#btnUploadSignature").click(function () {
+            top.layer.open({
+                type: 2
+                , title: '签名上传'
+                , content: "{% url 'standard:cropperImgForm' %}"
+                , area: ['700px', '490px']
+                , yes: function (index, layero) {
+                    var iframeWindow = window['layui-layer-iframe' + index]
+                    var submitID = 'LAY-user-front-submit'
+                        , submit = layero.find('iframe').contents().find('#' + submitID);
+                    submit.trigger('click');
+                }
+                , end: function () {
+                    var photoDataSrc = sessionStorage.getItem("photoDataSrc");
+                    if (photoDataSrc != null) {
+                        var psrc = staticPath + photoDataSrc;
+                        $("#SignUrl").val(psrc);
+                        sessionStorage.removeItem("photoDataSrc")
+                    }
+
+                }
+            });
+
+        });
+        $("#btnViewPicture").click(function () {
+            layer.photos({
+                photos: { "data": [{ "src": $("#SignUrl").val()}] }
+                , offset: 'auto'
+            });
+        });
+    });
+</script>
+{% endblock %}

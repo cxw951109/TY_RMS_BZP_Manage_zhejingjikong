@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="wrapper wrapper-content animated fadeInDown">
+    <div class="mail-box-header">
+        <form method="get" action="" class="pull-right mail-search" accept-charset="UTF-8">
+            <div class="input-group">
+                <input type="text" class="form-control" id="searchValue" name="searchValue" placeholder="搜索预警内容、预警时间关键字">
+                <div class="input-group-btn">
+                    <button type="button" id="btnTableSearch" class="btn btn-primary">
+                        搜索
+                    </button>
+                </div>
+            </div>
+        </form>
+        <h2>
+            系统预警数据记录报表
+        </h2>
+        <div class="mail-tools tooltip-demo m-t-md">
+            <div class="btn-group pull-right">
+                <a type="submit" class="btn btn-primary btn-sm" href="{% url 'dataReport:index' %}">
+                    返回统计目录
+                </a>
+            </div>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableReload" data-placement="left" title="刷新统计列表"><i class="fa fa-refresh"></i> 刷新</button>
+            <button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableExport" data-placement="left" title="导出报表统计列表"><i class="fa fa-download"></i> 导出报表</button>
+{#            @*<button class="btn btn-white btn-sm" data-toggle="tooltip" id="btnTableChart" data-placement="left" title="以图表形式显示统计数据"><i class="fa fa-pie-chart"></i> 图表统计</button>*@#}
+        </div>
+    </div>
+    <div class="ibox-content">
+        <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
+            <thead>
+                <tr>
+                    <th>预警对象</th>
+                    <th>预警内容</th>
+                    <th>预警时间</th>
+                    <th>状态</th>
+                    <th>解决时间</th>
+                    <th>解决人员</th>
+                    <th>解决方式</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>预警对象</th>
+                    <th>预警内容</th>
+                    <th>预警时间</th>
+                    <th>状态</th>
+                    <th>解决时间</th>
+                    <th>解决人员</th>
+                    <th>解决方式</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+    {% load static %}
+    <script src="{% static 'js/fileDownload.js' %}"></script>
+    <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var tableModel = $('#dataTableModel').DataTable({
+            //searching: false,
+            lengthChange: false,
+            select: true,
+            //"scrollX": true,
+            ajax: {
+                url: '{% url 'dataReport:getWarningListJson' %}',
+                data: {},
+                dataSrc: 'data',
+            },
+            order: ['2', 'desc'],
+            columns: [
+            { data: 'ObjectType' },
+            { data: 'WarningContent' },
+            { data: 'WarningDate' },
+            { data: 'IsSolve' },
+            { data: 'SolveDate' },
+            { data: 'SolveUserName' },
+            { data: 'SolveContent' }
+            ],
+            createdRow: function (row, data, dataIndex) {
+                $(row).children('td').eq(3).html(data.IsSolve == 1 ? "<span class='label label-warning'>已解决</span>" : "<span class='label label-default'>未解决</span>");
+                $(row).children('td').eq(3).attr('style', 'text-align: center;');
+                $(row).children('td').eq(2).html(replace_time(data.WarningDate));
+                $(row).children('td').eq(4).html(replace_time(data.SolveDate));
+                $(row).children('td').eq(0).html(replaceObjType(data.ObjectType));
+            }
+        });
+        $("#btnTableSearch").click(function () {
+            tableModel.search($("#searchValue").val()).draw();
+        });
+        $("#searchValue").keyup(function () {
+            tableModel.search($("#searchValue").val()).draw();
+        });
+        $("#btnTableReload").click(function () {
+            location.href = '{% url 'dataReport:warningList' %}';
+        });
+
+        $("#tablePre").click(function () {
+            $("#dataTableModel_previous").click();
+
+        })
+        $("#btnTableChart").click(function () {
+            parent.layer.open({
+                title: "图表统计",
+                shift: 2,
+                type: 2,
+                area: ['1000px', '500px'],
+                
+                content: ['@Url.Content("~/DataReport/DrugRecordChart")', 'no'],
+                end: function () {
+                    tableModel.ajax.reload();
+                }
+            });
+        });
+        $("#tableNext").click(function () {
+            $("#dataTableModel_next").click();
+
+        })
+        $("#btnTableExport").click(function () {
+            var index = '';
+            var url = '{% url 'dataReport:exportWarningData' %}';
+            $.fileDownload(url, {
+                prepareCallback: function (url) {
+                    index = parent.layer.load(2)
+                },
+                successCallback: function (url) {
+                    parent.layer.close(index)
+                },
+                 failCallback: function (url) {
+                     msg('数据异常, 下载失败');
+                     parent.layer.close(index)
+                 }
+
+            })
+        });
+        $('#searchValue').focus(function () {
+            $(this).keydown(function () {
+                switch (event.keyCode) {
+                    case 13:
+                        return false;
+                }
+            })
+        });
+           function replace_time(params) {
+                    if(params){
+                            return params.replace('T', ' ')
+                        }
+                }
+
+            function replaceObjType(params) {
+                switch (params) {
+                    case '1':
+                        return '试剂保质期预警';
+                    case '2':
+                        return '试剂过期报警';
+                    case '3':
+                    return '试剂余量预警';
+
+                    case '4':
+                    return '药柜温湿度预警';
+
+                    case '5':
+                    return '药柜滤芯保质期预警';
+
+                    case '6':
+                    return '试剂出库超期预警';
+                }
+            }
+    });
+</script>
+<iframe width=0 height=0 frameborder=0 id="export" />
+
+
+
+{% endblock %}

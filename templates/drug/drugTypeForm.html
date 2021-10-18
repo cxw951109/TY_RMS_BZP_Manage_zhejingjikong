@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<link href="{% static 'plugins/autosuggestjs/autosuggest.css' %}" rel="stylesheet" />
+<style type="text/css">
+    body {
+        background-color: #FFF !important;
+    }
+
+    .myForm {
+        padding-top: 30px;
+        padding-right: 50px;
+    }
+</style>
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">试剂类名*</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="VarietyId" name="VarietyId" type="hidden" value="{% firstof  drugType_obj.VarietyId '' %}" />
+                <input class="form-control" id="Name" name="Name" required="required" type="text" value="{% firstof drugType_obj.Name '' %}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_password">英文名称*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="EnglishName" maxlength="50" name="EnglishName" required="required" type="text" value="{% firstof drugType_obj.EnglishName '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_name">CAS码*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="CASNumber" name="CASNumber" required="required" type="text" value="{% firstof drugType_obj.CASNumber '' %}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">纯度*</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Purity" name="Purity" required="required" type="text" value="{% firstof drugType_obj.Purity '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">预警量*</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" id="InventoryWarningValue" name="InventoryWarningValue" type="number" required="required" value="{% firstof drugType_obj.InventoryWarningValue '' %}" />
+                    <span class="input-group-addon">瓶</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_password">保质期预警天数*</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" id="ShelfLifeWarningValue" name="ShelfLifeWarningValue" type="number" required="required" value="{% firstof drugType_obj.ShelfLifeWarningValue '' %}" />
+                    <span class="input-group-addon">天</span>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">出库预警天数*</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <input class="form-control" id="UseDaysWarningValue" name="UseDaysWarningValue" type="number" required="required" value="{% firstof drugType_obj.UseDaysWarningValue '' %}" />
+                    <span class="input-group-addon">天</span>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">说明1</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark1" name="Remark1" type="text" maxlength="100" value="{% firstof drugType_obj.Remark1  '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">说明2</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark2" name="Remark2" type="text" maxlength="100" value="{% firstof drugType_obj.Remark2 '' %}" />
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">说明3</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="Remark3" name="Remark3" type="text" maxlength="100" value="{% firstof drugType_obj.Remark3  '' %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password">是否监管</label>
+            <div class="col-sm-4">
+
+                   {% if drugType_obj.IsSupervise == 1 %}
+
+                        <input type="checkbox" class="js-switch_2" id="IsSuperviseSwich"  checked />
+
+                    {% else %}
+                        <input type="checkbox" class="js-switch_2" id="IsSuperviseSwich" />
+                {% endif %}
+                <input type="hidden" id="IsSupervise" name="IsSupervise" value="{% firstof drugType_obj.IsSupervise  0 %}" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="ds_username">是否称重</label>
+            <div class="col-sm-4">
+               
+                {% if drugType_obj.IsWeigh == 1 %}
+
+                <input type="checkbox" class="js-switch_3" id="IsWeighSwich"  checked />
+
+            {% else %}
+                <input type="checkbox" class="js-switch_3" id="IsWeighSwich" />
+        {% endif %}
+        <input type="hidden" id="IsWeigh" name="IsWeigh" value="{% firstof drugType_obj.IsWeigh  0 %}" />
+            </div>
+            <label class="col-sm-2 control-label" for="ds_password"></label>
+            <div class="col-sm-4">
+
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2">
+                <button class="btn btn-primary" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'plugins/autosuggestjs/autosuggest-native.js' %}"></script>
+<script src="{% static 'js/plugins/datapicker/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/utils.js' %}"></script>
+
+                <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $("#IsSupervise").val($("#IsSuperviseSwich").is(":checked") ? 1 : 0);
+    $("#IsWeigh").val($("#IsWeighSwich").is(":checked") ? 1 : 0);
+    $(function () {
+        $("#IsSuperviseSwich").change(function () {
+            $("#IsSupervise").val($("#IsSuperviseSwich").is(":checked") ? 1 : 0);
+        });
+        $("#IsWeighSwich").change(function () {
+            $("#IsWeigh").val($("#IsWeighSwich").is(":checked") ? 1 : 0);
+        });
+        $("#Name").autosuggest({
+            url: '{% url 'drugTemplate:autoSearchDrugList' %}',
+            queryParamName: 'keyWord',
+            maxNum: 5,
+            firstSelected: true,
+            onSelect: function (obj) {
+                    $("#CASNumber").val($(obj).attr("data-id"));
+                    $("#EnglishName").val($(obj).attr("data-EnglishName"));
+                    //setSupervise(obj.CASNumber);
+                //var reagentData = ReagentDB.GetReagent($(obj).attr("data-id"));
+                //$("#EnglishName").val(reagentData.EnglishName);
+                //$("#CASNumber").val(reagentData.CASNumber);
+            }
+        });
+          /* $("#Name").autosuggest({
+            url: '@Url.Content("~/Drug/GetReagentList")',
+            queryParamName: 'keyWord',
+            maxNum: 5,
+            firstSelected: true,
+            onSelect: function (obj) {
+                /Drug/GetReagent?CASNumber
+                $.get("@Url.Content()" + $(obj).attr("data-id"), function (obj) {
+                    $("#EnglishName").val(obj.EnglishName);
+                    $("#CASNumber").val(obj.CASNumber);
+                    //setSupervise(obj.CASNumber);
+                });
+                //var reagentData = ReagentDB.GetReagent($(obj).attr("data-id"));
+                //$("#EnglishName").val(reagentData.EnglishName);
+                //$("#CASNumber").val(reagentData.CASNumber);
+            }
+        }); */
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            $.post("{% url 'drug:createDrugType' %}", $(this).serialize(), function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg(obj.message);
+                }
+            });
+            return false;
+        });
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    })
+</script>
+
+{% endblock %}

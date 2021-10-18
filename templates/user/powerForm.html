@@ -1,0 +1,92 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="ibox float-e-margins">
+    <form class="form-horizontal myForm" role="form">
+        <div class="ibox-content" style="height:500px">
+            <h2>功能列表</h2>
+
+            <input class="form-control" type="hidden" id="UserId" value="{{ UserId }}" />
+            <ul class="todo-list m-t" style="height:320px;overflow-y:scroll">
+                <input type="checkbox" style="margin-left: 18px;" value="{{ each_function_obj.ModuleId }}" id="all_checked"/><span class="m-l-xs">全选</span>
+                    {% for each_function_obj in function_model_obj_list %}
+                        <li>
+                        {# 判断ModuleId 是否在后端传入的object_id_list里面, 如果在, 则选中 #}
+                        {% if each_function_obj.ModuleId in object_id_list %}
+                            <input type="checkbox" value="{{ each_function_obj.ModuleId }}" class="power" name="checkbox" checked />
+                            <span class="m-l-xs">{{ each_function_obj.ModuleName }}</span>
+                            {% else %}
+                            <input type="checkbox" value="{{ each_function_obj.ModuleId }}" class="power" />
+                            <span class="m-l-xs">{{ each_function_obj.ModuleName }}</span>
+                       {% endif %}
+                        </li>
+
+                {% endfor %}
+
+               <!-- @*<li>
+                        <input type="checkbox" value="" name="" class="i-checks" checked />
+                        <span class="m-l-xs">试剂领用</span>
+                    </li>
+                    <li>
+                        <input type="checkbox" value="" name="" class="i-checks" />
+                        <span class="m-l-xs">试剂归还</span>
+                    </li>*@ -->
+            </ul>
+
+        </div>
+        <div style="position:absolute; left:13px; bottom:10px;width:832px">
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button class="btn btn-primary" id="saveData" type="submit">保存内容</button>&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="{% static 'js/utils.js' %}"></script>
+ <script src="{% static 'js/warning.js' %}"></script>
+
+<script type="text/javascript">
+    var index = parent.layer.getFrameIndex(window.name);
+    $(function () {
+        $(".myForm").submit(function () {
+            var loadIndex = layer.load(2);
+            var powerValue = "";
+            $(".power:checked").each(function (index, obj) {
+                if (powerValue != "") {
+                    powerValue += ",";
+                }
+                powerValue += $(".power:checked").eq(index).val();
+            });
+            $.post("{% url 'user:savePowerData' %}", { userId: $("#UserId").val(), powerValue: powerValue }, function (obj) {
+                layer.close(loadIndex);
+                if (obj.status == 1) {
+                    msg("保存成功", function () {
+                        parent.layer.close(index);
+                    });
+                }
+                else {
+                    msg("保存失败");
+                }
+            });
+            return false;
+        });
+        $('#all_checked').click(function () {
+            var flag_ = $(this).is(':checked');
+            if(flag_){
+               $('.power').prop('checked', true)
+            }else{
+                 $('.power').prop('checked', false)
+            }
+        });
+        $("#closeForm").click(function () {
+            parent.layer.close(index);
+        });
+    });
+</script>
+
+
+{% endblock %}

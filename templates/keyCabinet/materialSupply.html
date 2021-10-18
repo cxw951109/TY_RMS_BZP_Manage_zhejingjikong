@@ -1,0 +1,235 @@
+{% extends 'baseBZP.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<div class="layui-fluid">
+  <div class="layui-card">
+    <div class="layui-card-header" style="font-size: 20px;font-weight: bold;">待补货试剂列表</div>
+    <div class="layui-card-body" style="padding: 15px;">
+      <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
+    </div>
+    <script type="text/html" id="statusTpl-HandoutMaterials">
+        <button class="layui-btn layui-btn-normal layui-btn-xs">合法</button>
+        <!-- <button class="layui-btn layui-btn-danger layui-btn-xs">不合法</button> -->
+      </script>
+    <script type="text/html" id="datatable-toolbar-use">
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>从列表中移除</a>
+      </script>
+  </div>
+</div>
+<script>
+  layui.use(['index', 'table'], function () {
+    var table = layui.table
+      , form = layui.form;
+    var remain=0;
+      $.get("{% url 'cabinet:getSelectClientListJson' %}",{}, function (obj) {
+            $(obj).each(function (index, data) {
+                $("#clientId").append("<option value='" + data.value + "'>" + data.name + "</option>");
+            });
+            form.render('select');
+        });
+    var tableConfig={
+      elem: '#LAY-datatable'
+      , url: "{% url 'keyCabinet:getSupplyDrugCategoryListJson' %}"
+      ,size:'lg'
+      , cols: [[
+        { type: 'numbers', unresize: true, title: '序号' }
+        , { field: 'Name', width: 190, title: '试剂名称' }
+        , { field: 'EnglishName', title: '英文名称', minWidth: 180 }
+        , { field: 'CASNumber', title: 'CAS码', width: 150 }
+        , { field: 'Purity', title: '纯度', width: 150 }
+        , { field: 'Speci', title: '试剂规格', width: 130,templet:function(data){
+            return data.Speci+data.SpeciUnit;
+        } }
+        , { field: 'WarningContent', title: '剩余瓶数', width: 130,templet:function(data){
+            return data.WarningContent.split(',')[1].split('瓶')[0].substr(10,2);
+        } }
+        , {field: 'InventoryWarningValue', title: '提醒线(瓶)', width: 170}
+      ]]
+      , page: {
+        layout: ['count', 'prev', 'page', 'next',] //自定义分页布局
+        , prev: '上一页'
+        , next: '下一页'
+      }
+      , limit: 15
+      , limits: [10, 15, 20, 25, 30]
+      , height: 'full-110'
+
+      , parseData: function (res) {
+        console.log("res", res);
+        return {
+          "code": 0, //解析接口状态
+          "count": res.count, //解析数据长度
+          "data": res.data //解析数据列表
+        }
+      },
+    };
+    //列表数据
+    table.render(tableConfig);
+
+    //监听工具条
+    table.on('tool(LAY-datatable)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'del') {
+
+      } else if (obj.event === 'addUseList') {
+        var tr = $(obj.tr);
+
+        if (waitUseList.length != 0) {
+          if (data.CellPositionCode != waitUseList[0].CellPositionCode) {
+            LayerErrorMsg("钥匙柜和货架试剂不能同时归还！");
+            return;
+          }
+          if (data.CellPositionCode == 100 && data.Place != waitUseList[0].Place) {
+            LayerErrorMsg("只能同时归还同一个钥匙柜格子的试剂！");
+            return;
+          }
+        }
+        remain=data.Remain;
+        $(".returnInfo").show();
+        layer.open({
+            type: 1
+            , title: '归还试剂信息'
+            , content: $(".returnInfo")
+            , area: ['400px', '230px']
+            , btn: ['确定', '取消']
+            , yes: function (index, layero) {
+
+              var UseQuantity= $("#UseQuantity").val()==""?0:parseFloat($("#UseQuantity").val());
+
+              if(UseQuantity>data.Remain){
+                LayerErrorMsg("用量不能大于余量！");
+                return;
+              }
+              data.UseQuantity=UseQuantity;
+              data.UsePurpose=$("#UsePurpose").val();
+              data.Remain=data.Remain-UseQuantity;
+              waitUseList.push(data);
+              console.log(waitUseList);
+              tr.remove();
+              table.reload('LAY-datatable-use', { data: waitUseList });
+              $("#UsePurpose").val("");
+              $("#UseQuantity").val("0")
+              $("#setEmpty").removeProp("checked")
+              layer.close(index);
+            }
+            , end: function () {
+              $(".returnInfo").hide();
+            }
+          });
+
+      }
+    });
+    //监听工具条
+    table.on('tool(LAY-datatable-use)', function (obj) {
+      var data = obj.data;
+      if (obj.event === 'del') {
+        var tr = $(obj.tr);
+        tr.remove();
+        waitUseList = waitUseList.filter(function (item) {
+          return item.MedicamentId != data.MedicamentId
+        });
+        table.reload('LAY-datatable-use', { data: waitUseList });
+      }
+    });
+
+    //监听搜索
+    form.on('submit(LAY-user-front-search)', function (data) {
+      var field = data.field;
+
+      //执行重载
+      table.reload('LAY-datatable', {
+        where: field
+      });
+    });
+    $("#setEmpty").change(function(){
+      if($(this).prop("checked")==true)
+      {
+        $("#UseQuantity").val(remain);
+      }else{
+        $("#UseQuantity").val(0);
+      }
+    });
+    $("#cancelReceiveSamplesBtn").click(function(){
+      location.href = "/main";
+
+    });
+    $("#okUseBtn").click(function () {
+      if (waitUseList.length == 0) {
+        LayerErrorMsg("无待归还试剂！");
+        return;
+      }
+      if(waitUseList[0].CellPositionCode==100){
+        var waitUseMIDList = JSLINQ(waitUseList).Select("MedicamentId,Remain,UsePurpose").toArray();
+      var loadIndex = LayerLoadMsg("正在执行");
+      $.ajax({
+        type: 'POST',
+        url: '{% url 'drug:drugReturnView' %}',
+        data: { drugId: JSON.stringify(waitUseMIDList) },
+        success: function (data) {
+          layer.close(loadIndex)
+          if (data.status == 0) {
+            
+            localStorage.setItem("keyCabinetViewPlace", '1号钥匙柜-'+waitUseList[0].FlowPositionCode);
+            top.layer.open({
+              type: 2
+              , title: '领用试剂钥匙柜位置显示'
+              , content: "{% url 'keyCabinet:keyCabinetView' %}"
+              , area: ['800px', '600px']
+              , btn: ['重新开门', '完成']
+              , yes: function (index, layero) {
+                // var submitID = 'LAY-user-front-submit'
+                //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                // submit.trigger('click');
+                layero.find('iframe')[0].contentWindow.location.reload(true);
+              }
+              , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+              }
+            });
+            
+          } else {
+            LayerErrorMsg(data.message);
+
+          }
+        },
+        error: function () {
+          alert('数据异常！');
+          flag_status = true;
+          layer.close(index);
+          // socket.send('886');
+        }
+      });
+      }else{
+
+        localStorage.setItem("materialUseList", JSON.stringify(waitUseList));
+        top.layer.open({
+              type: 2
+              , title: '货架试剂归还'
+              , content: "{% url 'keyCabinet:shelfReturn' %}"
+              , area: ['1000px', '600px']
+              , btn: ['完成']
+              , yes: function (index, layero) {
+                // var submitID = 'LAY-user-front-submit'
+                //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                // submit.trigger('click');
+                top.layer.close(index);
+              }
+              , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+              }
+            });
+      }
+
+
+    });
+    var waitUseList = [];
+  });
+</script>
+{% endblock %}
