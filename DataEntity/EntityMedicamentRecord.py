@@ -14,7 +14,7 @@ class EntityMedicamentRecord(declarative_base()):
     CustomerId = Column(String(50)) #客户ID
     VarietyId = Column(String(50)) #试剂类型ID
     MedicamentId = Column(String(50)) #试剂ID
-    RecordType = Column(Integer) #记录类型（1：入库 2：领用 3：归还）
+    RecordType = Column(Integer) #记录类型（1：入库 2： 3：归还）
     Price = Column(Float) #试剂价格
     RecordRemain = Column(Float) #试剂使用余量
     UseQuantity = Column(Float) #试剂单次使用量

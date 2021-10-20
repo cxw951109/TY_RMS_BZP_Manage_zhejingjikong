@@ -2,6 +2,7 @@ import socket
 import re
 import time
 import threading
+from  Business.BllMedicament import *
 
 class AccuLockTcpServer:
     """
@@ -17,9 +18,9 @@ class AccuLockTcpServer:
     server.listen(5)
     acceptClientFlag=False
     monitorLockFlag=True
-    Data={"terminal":"JY-163","mes":"lighton1~3~5"}
+    Data={"terminal":"","mes":""}
     deviceSetList={
-        '127.0.0.1':'JY-163',
+        '127.0.0.1':'1号终端',
     }
 
     @classmethod
@@ -52,7 +53,6 @@ class AccuLockTcpServer:
             except Exception as e:
                 print('监听客户端加入错误:',str(e))
 
-
     @classmethod
     def startMonitorLock(cls):
         """
@@ -68,20 +68,54 @@ class AccuLockTcpServer:
         cls.monitorLockFlag=False
 
     @classmethod
+    def clear_data(cls):
+        """
+        清空变量
+        """
+        cls.Data = {"terminal":"","mes":""}
+
+    @classmethod
+    def get_data(cls,data,clientId,clientSock):
+        """
+        接收数据入库
+        """
+        data_list =[]
+        for i in data:
+            barcode =str(i["rfid"])
+            index =i["index"]+1
+            data_list.append(str(index))
+            if barcode =='00000000':
+                medicament_obj = BllMedicament().findEntity(and_(EntityMedicament.ClientId ==clientId,EntityMedicament.Place == index))
+                if medicament_obj:
+                    medicament_obj.Place = ''
+                    BllMedicament().update(medicament_obj)
+            else:
+                medicament_obj = BllMedicament().findEntity(and_(EntityMedicament.ClientId ==clientId,EntityMedicament.BarCode == barcode))
+                if medicament_obj:
+                    medicament_obj.Place = index
+                    BllMedicament().update(medicament_obj)
+        clientSock.send(('lightoff'+"~".join(data_list)).encode())
+        print('灭灯:','lightoff'+"~".join(data_list))
+        time.sleep(0.2)
+
+    @classmethod
     def monitorLockFun(cls,clientSock,terminal):
         """
         监听用户
         """
-        print(terminal, clientSock)
         last_result = []
-        while cls.monitorLockFlag:
+        client_obj = BllClient().findEntity(EntityClient.ClientName == terminal)
+        if client_obj:
+            clientId =client_obj.ClientId
+        print("clientId:", clientId)
+        while cls.monitorLockFlag and clientId:
             try:
-                if cls.Data["terminal"]== terminal:
+                if cls.Data["terminal"]== terminal and cls.Data["mes"] !="clockopen":
                     clientSock.send(cls.Data["mes"].encode())
-                    cls.Data = {"terminal":"","mes":""}
+                    cls.clear_data()
                 clientSock.send('dooropen'.encode())
                 door_status =clientSock.recv(cls.BUFSIZ)#获取门状态1开门0关门
-                print(door_status.decode())
+                print("获取"+terminal+"门状态:",door_status.decode())
                 if door_status.decode() =='1':
                     clientSock.send('getrfiddata'.encode())
                     result_data=clientSock.recv(cls.BUFSIZ)
@@ -90,12 +124,19 @@ class AccuLockTcpServer:
                         diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1)) if result_data1[i] != last_result[i]]
                     else:
                         diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1))]
-                    print(diff)
-                    #与上次结果对比,RMS_Medicament入库位置
+                    print("RFID diff:",diff)
+                    if diff:
+                        cls.get_data(diff,clientId,clientSock)
+                    #与上次结果对比,RMS_Medicament入库
                     last_result =result_data1
-                time.sleep(1)
+                else:
+                    if cls.Data["terminal"] == terminal and cls.Data["mes"] == "clockopen":
+                        clientSock.send("clockopen".encode())
+                        print(terminal,"开锁")
+                        cls.clear_data()
+
             except Exception as e:
-                print('监听'+terminal+'错误:',str(e))
+                print('监听' + terminal + '错误:', str(e))
                 if e.errno == 10053 or e.errno ==10038:
                     break
 

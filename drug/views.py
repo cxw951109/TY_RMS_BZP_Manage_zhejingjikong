@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
+from Business.BllClient import BllClient
 from Business.BllMedicament import *
 from Business.BllUser import *
 from Business.BllUserMedicament import *
@@ -17,6 +18,7 @@ from Lib.RFIDDevice import RFIDDevice
 from Lib.Utils import logger
 from Lib.Model import *
 from TY_RMS_Multiple_Manage.AccuLockTcpServer import *
+from Business.BllMedicament import *
 
 try:
     RFID_cls = RFIDDevice()
@@ -549,7 +551,8 @@ def drugPutInView(request):
             drugId = Utils.UUID()
             drugEntity.MedicamentId = drugId
             drugEntity.VarietyId = drugVariety.VarietyId
-            drugEntity.BarCode = barCode
+            # drugEntity.BarCode = barCode
+            drugEntity.BarCode ='00000001'
             drugEntity.CustomerId = customerId
             drugEntity.ClientId = clientEntity.ClientId
             drugEntity.ClientCode = clientEntity.ClientCode
@@ -592,8 +595,14 @@ def drugPutInView(request):
 
             # retrunData = Utils.resultData(0,'试剂入库成功！',drugEntity)
             retrunData = Utils.resultData(0, '试剂入库成功！', data=drugId)
+            client_obj = BllClient().findEntity(clientId)
+            datalist = BllMedicament().get_boxlist(clientId,type='up')
+            if datalist != False:
+                AccuLockTcpServer.Data={"terminal":client_obj.ClientName,"mes":'lighton'+'~'.join(datalist)}
+                print('入库亮灯:','lighton'+"~".join(datalist))
+                time.sleep(0.2)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'clockopen'}
 
-            AccuLockTcpServer.Data={"terminal":"JY-163","mes":"lighton1~3~7"}
 
         # except Exception as e:
         #     print(e)
@@ -610,28 +619,38 @@ def drugUseView(request):
         drugIdList = request.POST.get("drugId", "").split(',')
         retrunData = ''
         userInfo = request.session['login_user']
+        out_list =[]
 
         try:
             for drugId in drugIdList:
                 print('drugId:', drugId)
                 drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
                 print('drugEntity:', drugEntity)
-                if (drugEntity.Status != DrugStatus.Normal and drugEntity.Status != DrugStatus.Empty):
+                if (drugEntity.Status != DrugStatus.Normal and drugEntity.Status != DrugStatus.Empty and drugEntity.Place !=''):
                     continue
-                elif (drugEntity.Status == DrugStatus.Empty):
+                elif (drugEntity.Status == DrugStatus.Empty and drugEntity.Place !=''):
                     continue
                 else:
-                    print('drugEntity1:', drugEntity)
-                    customerId = drugEntity.CustomerId
-                    clientId = drugEntity.ClientId
-                    goodDrug = BllMedicament().getDrugNearExpired(drugEntity.VarietyId, customerId)
-                    drugEntity.ByUserDate = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    drugEntity.ByUserId = userInfo.get('UserId')
-                    drugEntity.ByUserName = userInfo.get('RealName')
-                    drugEntity.Status = DrugStatus.Out
-                    BllMedicament().drugUse(drugEntity, BllClient().findEntity(clientId),
-                                            BllUser().findEntity(userInfo.get('UserId')))
+                    if drugEntity.Place !='':
+                        out_list.append(drugEntity.Place)
+                        print('drugEntity1:', drugEntity)
+                        customerId = drugEntity.CustomerId
+                        clientId = drugEntity.ClientId
+                        goodDrug = BllMedicament().getDrugNearExpired(drugEntity.VarietyId, customerId)
+                        drugEntity.ByUserDate = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        drugEntity.ByUserId = userInfo.get('UserId')
+                        drugEntity.ByUserName = userInfo.get('RealName')
+                        drugEntity.Status = DrugStatus.Out
+                        BllMedicament().drugUse(drugEntity, BllClient().findEntity(clientId),
+                                                BllUser().findEntity(userInfo.get('UserId')))
+
             retrunData = Utils.resultData(0, '试剂领用成功！')
+            if out_list:
+                client_obj = BllClient().findEntity(drugEntity.ClientId)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + '~'.join(out_list)}
+                print('领用亮灯:', 'lighton' + "~".join(out_list))
+                time.sleep(0.2)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'clockopen'}
 
         except Exception as e:
             print(e)

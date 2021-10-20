@@ -433,7 +433,7 @@
         let columnCount = 6;
         var putInPostion = "";
         var putFlag = true;
-        var lastLabelData = null;
+        var lastLabelData =[[1],[1]];
         var lastPositionData = [];
         sessionStorage.putInLable = "";
 
@@ -444,7 +444,7 @@
         sessionStorage.usePositionList = "";
         $(function () {
             // $(".flowdrugListShow").hide();
-            controlSwitch('31', "1");
+           // controlSwitch('31', "1");
             $(".flowItem").eq(1).addClass("flowItemHover").siblings().removeClass("flowItemHover");
             $(".flowItem").hover(function () {
                 $(this).addClass("flowItemHover").siblings().removeClass("flowItemHover");
@@ -469,6 +469,7 @@
         function getData() {
             $.get("/cabinet/getStayLabelJson/", function (obj) {
                 console.log("obj", obj)
+                console.log("************************",lastLabelData,selectList,showType)
                 let currentPositionData = obj.data[1];
                 let currentLabelData = obj.data[0];
                 if ($(".flowItemHover").attr('val') == '2') {
@@ -481,7 +482,7 @@
 
                 if (lastLabelData) {
 
-
+                    console.log("****************8")
                     if (showType == 1) {
                         let newPutIn = array_difference(currentLabelData, lastLabelData);
                         console.log('newPutIn:', JSON.stringify(newPutIn));
@@ -494,7 +495,8 @@
                         }
 
                     } else if (showType == 2) {
-                        let useList = array_difference(lastLabelData, currentLabelData);
+                        {#let useList = array_difference(lastLabelData, currentLabelData);#}
+                        let useList = currentLabelData
                         console.log(useList);
                         for (let i = 0; i < useList.length; i++) {
                             console.log("label", useList[i]);
@@ -530,7 +532,8 @@
                         }
 
                     } else if (showType == 3) {
-                        let returnList = array_difference(currentLabelData, lastLabelData);
+                        {#let returnList = array_difference(currentLabelData, lastLabelData);#}
+                        let returnList = currentLabelData
                         for (let i = 0; i < returnList.length; i++) {
                             console.log("label", returnList[i]);
                             let Position = currentPositionData[currentLabelData.indexOf(returnList[i])]

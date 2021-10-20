@@ -204,3 +204,16 @@ class BllMedicament(Repository):
             dangerData.append({"ename": i["ename"], "cname": i["cname"],"cas":i["cas"],"formula":i["formula"],"wuxing":i["wuxing"],"dulixue":i["dulixue"],"chucunfangfa": i["chucunfangfa"], "yongtu": i["yongtu"], "weight": i["weight"],
                               "xingzhiyuwendingxing": i["xingzhiyuwendingxing"], "dangerpic": i["dangerpic"], "shengtaixue": i["shengtaixue"], "othername": i["othername"], "safestr": i["safestr"]})
         return dangerData
+
+    #获取推荐货道
+    def get_boxlist(self,clientId,type):
+        if type =='up':
+            query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==
+                                          clientId, EntityMedicament.Place != '',EntityMedicament.Status == 1).all()
+            query =[int(i[0]) for i in query]
+            num = self.findCount(EntityMedicament.Status ==DrugStatus.Normal,EntityMedicament.Place =='')
+            null_place =['%s' %i for i in range(1,31) if i not in query]
+            if num <= len(null_place):
+                return null_place[0:num]
+            else:
+                return False

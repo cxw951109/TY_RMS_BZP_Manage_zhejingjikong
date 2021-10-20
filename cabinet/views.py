@@ -6,12 +6,14 @@ from Business.BllClient import *
 from Business.BllClientUser import *
 from Business.BllClientCellUser import *
 from Business.BllUser import *
+from Business.BllMedicament import *
 from DataEntity.EntityClient import *
 from DataEntity.EntityClientCellUser import *
 from Lib.RFIDNew import RFIDNew
 from Lib.Relay import Relay
 from Lib.Utils import *
 # from Lib.RelayControl import RelayControl
+from TY_RMS_Multiple_Manage.AccuLockTcpServer import *
 
 try:
     RFID_object = RFIDNew()
@@ -31,9 +33,9 @@ data_relay = {"1_6": 1, "2_6": 2, "3_6": 3, "4_6": 4, "5_6": 5, "1_5": 6, "2_5":
 @require_http_methods(['GET'])
 def getStayLabelJson(request):
     if request.method == 'GET':
-        data = RFID_object.get_stay_label()
-        print("标签-位置-------", data)
-        # data = [[], []]
+        # data = RFID_object.get_stay_label()
+        # print("标签-位置-------", data)
+        data = [[1], [1]]
         return JsonResponse(Utils.resultData(1, "成功", data))
 
 
