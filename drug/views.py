@@ -600,8 +600,6 @@ def drugPutInView(request):
             if datalist != False:
                 AccuLockTcpServer.Data={"terminal":client_obj.ClientName,"mes":'lighton'+'~'.join(datalist)}
                 print('入库亮灯:','lighton'+"~".join(datalist))
-                time.sleep(0.2)
-                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'clockopen'}
 
 
         # except Exception as e:
@@ -619,12 +617,12 @@ def drugUseView(request):
         drugIdList = request.POST.get("drugId", "").split(',')
         retrunData = ''
         userInfo = request.session['login_user']
-        out_list =[]
 
         try:
             for drugId in drugIdList:
                 print('drugId:', drugId)
                 drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
+                client_obj = BllClient().findEntity(drugEntity.ClientId)
                 print('drugEntity:', drugEntity)
                 if (drugEntity.Status != DrugStatus.Normal and drugEntity.Status != DrugStatus.Empty and drugEntity.Place !=''):
                     continue
@@ -632,7 +630,6 @@ def drugUseView(request):
                     continue
                 else:
                     if drugEntity.Place !='':
-                        out_list.append(drugEntity.Place)
                         print('drugEntity1:', drugEntity)
                         customerId = drugEntity.CustomerId
                         clientId = drugEntity.ClientId
@@ -643,14 +640,10 @@ def drugUseView(request):
                         drugEntity.Status = DrugStatus.Out
                         BllMedicament().drugUse(drugEntity, BllClient().findEntity(clientId),
                                                 BllUser().findEntity(userInfo.get('UserId')))
+                        AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + drugEntity.Place}
+                        print('领用亮灯:', 'lighton' + drugEntity.Place)
 
             retrunData = Utils.resultData(0, '试剂领用成功！')
-            if out_list:
-                client_obj = BllClient().findEntity(drugEntity.ClientId)
-                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + '~'.join(out_list)}
-                print('领用亮灯:', 'lighton' + "~".join(out_list))
-                time.sleep(0.2)
-                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'clockopen'}
 
         except Exception as e:
             print(e)
@@ -685,7 +678,14 @@ def drugReturnView(request):
                                            BllUser().findEntity(userInfo.get('UserId')))
                 retrunData = Utils.resultData(0, '药剂归还成功！', data=Utils.resultAlchemyData(drugEntity))
 
+                client_obj = BllClient().findEntity(clientId)
+                null_place = BllMedicament().get_boxlist(clientId, type='back')
+                if null_place != False:
+                    AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + null_place}
+                    print('归还亮灯:', 'lighton' + null_place)
+
         except Exception as e:
+            print(e)
             retrunData = Utils.resultData(1, str(e))
         return JsonResponse(retrunData)
 

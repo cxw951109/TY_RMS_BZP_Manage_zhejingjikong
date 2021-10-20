@@ -507,7 +507,8 @@
                             $.ajax({
                                 type: 'POST',
                                 url: '{% url 'drug:drugUseView' %}',
-                                data: {drugId: useList[i], forceUse: true},
+                                {#data: {drugId: useList[i], forceUse: true},#}
+                                data:{drugId:"8bdad3b4-3164-11ec-83e3-70b5e89148f8",forceUse: true},
                                 success: function (data) {
                                     // console.log('dataaaaaaaaaaaaaaa:', data);
                                     if (data.status == 0) {
@@ -540,7 +541,8 @@
                             $.ajax({
                                 type: 'POST',
                                 url: '{% url 'drug:drugReturnView' %}',
-                                data: {drugId: returnList[i], Place: Position},
+                                {#data: {drugId: returnList[i], Place: Position},#}
+                                data:{drugId:"00000002",Place: Position},
                                 success: function (data) {
                                     // console.log('dataaaaaaaaaaaaaaa:', data);
                                     if (data.status == 0) {

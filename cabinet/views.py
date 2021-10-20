@@ -100,9 +100,12 @@ def getCabinetListJson(request):
 def getSelectClientListJson(request):
     if request.method == 'GET':
         ClientUseCode = request.GET.get('type', '')
-        client_list = BllClient().getSelectClient(ClientUseCode)
-        print(ClientUseCode, "1111111111111")
-        return JsonResponse(client_list, safe=False)
+        if ClientUseCode:
+            client_list = BllClient().getSelectClient(ClientUseCode)
+            print(ClientUseCode, "1111111111111")
+            return JsonResponse(client_list, safe=False)
+        else:
+            return JsonResponse([], safe=False)
 
 
 

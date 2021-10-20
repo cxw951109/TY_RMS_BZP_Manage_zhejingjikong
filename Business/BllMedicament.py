@@ -217,3 +217,13 @@ class BllMedicament(Repository):
                 return null_place[0:num]
             else:
                 return False
+        else:
+            query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==
+                                          clientId, EntityMedicament.Place != '').all()
+            query =[int(i[0]) for i in query]
+            null_place =['%s' %i for i in range(1,31) if i not in query]
+            if len(null_place) > 0:
+                return str(null_place[0])
+            else:
+                return False
+
