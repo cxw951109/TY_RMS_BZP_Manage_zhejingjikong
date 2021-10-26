@@ -134,7 +134,6 @@
         //前端模拟分页，获取当前页、分页显示数据量
         var page = $("#layui-table-page1").find(".layui-laypage-em").next().html();
         var limit = $("#layui-table-page1").find(".layui-laypage-limits select").val();
-        console.log(page + ", " + limit);
         if (page == undefined || page == null || page == "") {
           page = 1;
         }

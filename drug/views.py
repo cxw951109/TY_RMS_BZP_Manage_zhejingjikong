@@ -666,11 +666,18 @@ def drugReturnView(request):
         Place = request.POST.get("Place")
         retrunData = ''
         userInfo = request.session['login_user']
+        if drugIdList:
+            drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugIdList[0])
+            client_obj = BllClient().findEntity(drugEntity.ClientId)
+            null_place = BllMedicament().get_boxlist(drugEntity.ClientId, type='back', num=len(drugIdList))
+            if null_place == False:
+                retrunData = Utils.resultData(1, '柜子余位不足！', data={"terminal":client_obj.ClientName,"result":[]})
+                return JsonResponse(retrunData)
         try:
             re={"terminal":'',"result":[]}
             for drugId in drugIdList:
-                drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
-                client_obj = BllClient().findEntity(drugEntity.ClientId)
+                # drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
+                # client_obj = BllClient().findEntity(drugEntity.ClientId)
                 if (drugEntity is None):
                     retrunData = Utils.resultData(1, '药剂条码无效！')
                 elif (drugEntity.Status != DrugStatus.Out):

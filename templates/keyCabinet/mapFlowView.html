@@ -219,7 +219,6 @@
         for (let index = 0; index < selectList.length; index++) {
             const element = selectList[index];
         }
-        console.log("selectList-----------", selectList)
 
         let rowCount = 5;
         let columnCount = 6;
@@ -246,28 +245,20 @@
                 if (newPutIn.length != 0) {
                     sessionStorage.putInLable = newPutIn[0];
                     sessionStorage.putInPosition = currentPositionData[currentLabelData.indexOf(newPutIn[0])];
-                    // controlSwitch(currentPositionData[currentLabelData.indexOf(newPutIn[0])], "0");
                     top.layer.close(index);
                 }
-
             } else if (showType == 2) {
-                let currentPositionData = selectList;
                 let currentLabelData = useDrugList;
                 $.ajax({
                     type: 'POST',
                     url: '{% url 'drug:drugUseView' %}',
                     data:{drugId:JSON.stringify(currentLabelData),forceUse: true},
                     success: function (data) {
+                        createPositionBoxMap(data.data)
                         if (data.status == 0) {
-                            if (data.data != ''){
-                                console.log("***********************1",data.data,selectList)
-                                {#diff = selectList.filter(function(x) {#}
-                                {#    return data.data.indexOf(x) < 0 })#}
-                            }
-                            createPositionBoxMap(data.data)
                             console.log("领用成功")
                         } else {
-                            LayerErrorMsg("领用失败" + data.message);
+                            top.layer.msg("领用失败" + data.message)
                         }
                     },
                 })
@@ -278,24 +269,19 @@
                     url: '{% url 'drug:drugReturnView' %}',
                     data:{"drugId":JSON.stringify(currentLabelData),"Place": ""},
                     success: function (data) {
+                        createPositionBoxMap(data.data);
                         if (data.status == 0) {
-                            if (data.data != ''){
-                                console.log("selectList*************11",selectList)
-                            }
-                            createPositionBoxMap(data.data);
                             console.log("归还成功")
                         } else {
-                            LayerErrorMsg("归还失败" + data.message);
+                            top.layer.msg("归还失败," + data.message, { icon: 2, time: 3000 })
                         }
                     },
                 })
-
             }
         }
 
 
         function createPositionBoxMap(re){
-            console.log(re)
             {#let result ={"terminal":"1号柜","data":[{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"琥珀","Place":"5"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"琥珀","Place":"5"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"}]}#}
             let postionHtml = `<div class="cabinetTitle">
                                     ${re.terminal}

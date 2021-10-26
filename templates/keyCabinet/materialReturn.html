@@ -151,7 +151,6 @@
         //前端模拟分页，获取当前页、分页显示数据量
         var page = $("#layui-table-page1").find(".layui-laypage-em").next().html();
         var limit = $("#layui-table-page1").find(".layui-laypage-limits select").val();
-        console.log(page + ", " + limit);
         if (page == undefined || page == null || page == "") {
           page = 1;
         }
@@ -226,7 +225,6 @@
               data.Remain=data.Remain-UseQuantity;
               data.IsEmpty=$("#setEmpty").prop("checked")==true?1:0;
               waitUseList.push(data);
-              console.log(waitUseList);
               tr.remove();
               table.reload('LAY-datatable-use', { data: waitUseList });
               $("#UsePurpose").val("");
