@@ -253,8 +253,11 @@ def drug_GetDrugListJson(request):
         user = request.session['login_user']
         allSearch = request.GET.get("allSearch", '1')
         drug_list = BllMedicament().getAllDrugList(name, PageParam(1, 0),clientId)
-        if(status!=''):
-            drug_list=[x for x in drug_list if x.get("Status")==int(status)]
+        if(status =='1'):
+            drug_list=[x for x in drug_list if x.get("Status")!=2 and x.get("Place") != '']
+        else:
+            drug_list = [x for x in drug_list if x.get("Status") == 2 and x.get("Place") == '']
+
         if(isMyUse=='1'):
             drug_list=[x for x in drug_list if x.get("ByUserId")==user["UserId"]]
         return JsonResponse({'data': drug_list,'code' : 0,'msg':'','count':len(drug_list)})

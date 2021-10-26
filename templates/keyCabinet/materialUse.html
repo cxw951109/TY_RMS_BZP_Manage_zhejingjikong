@@ -104,8 +104,8 @@
         , prev: '上一页'
         , next: '下一页'
       }
-      , limit: 15
-      , limits: [10, 15, 20, 25, 30]
+      , limit: 10
+      {#, limits: [10, 15, 20, 25, 30]#}
       , height: '350'
 
       , parseData: function (res) {
@@ -189,9 +189,9 @@
           }
         }
         waitUseList.push(data);
-        console.log(waitUseList);
         tr.remove();
         table.reload('LAY-datatable-use', { data: waitUseList });
+        {#table.reload('LAY-datatable', {data:[]});#}
       }
     });
     //监听工具条
@@ -231,10 +231,14 @@
       sessionStorage.setItem("useDrugIdList", JSON.stringify(JSLINQ(waitUseList).Select("MedicamentId").toArray()));
       top.layer.open({
               type: 2
-              , title: '6号柜领用位置示意'
+              , title: '领用成功列表示意'
               , content: "{% url 'keyCabinet:mapFlowView' %}?showType=2"
               , area: ['1100px', '600px']
               , btn: []
+              ,end:function (){
+                  table.reload('LAY-datatable-use', { data: [] });
+                  waitUseList =[]
+          }
       });
 
     });

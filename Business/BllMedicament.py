@@ -206,24 +206,14 @@ class BllMedicament(Repository):
         return dangerData
 
     #获取推荐货道
-    def get_boxlist(self,clientId,type):
+    def get_boxlist(self,clientId,type,num=0):
         if type =='up':
-            query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==
-                                          clientId, EntityMedicament.Place != '',EntityMedicament.Status == 1).all()
-            query =[int(i[0]) for i in query]
-            num = self.findCount(EntityMedicament.Status ==DrugStatus.Normal,EntityMedicament.Place =='')
-            null_place =['%s' %i for i in range(1,31) if i not in query]
-            if num <= len(null_place):
-                return null_place[0:num]
-            else:
-                return False
+            num = self.findCount(EntityMedicament.ClientId ==clientId,EntityMedicament.Status ==DrugStatus.Normal,EntityMedicament.Place =='')+1
+        query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==clientId, EntityMedicament.Place != '').all()
+        query =[int(i[0]) for i in query]
+        null_place =['%s' %i for i in range(1,31) if i not in query]
+        if num <= len(null_place):
+            return null_place[0:num]
         else:
-            query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==
-                                          clientId, EntityMedicament.Place != '').all()
-            query =[int(i[0]) for i in query]
-            null_place =['%s' %i for i in range(1,31) if i not in query]
-            if len(null_place) > 0:
-                return str(null_place[0])
-            else:
-                return False
+            return False
 

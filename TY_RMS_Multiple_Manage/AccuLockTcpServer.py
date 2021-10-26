@@ -84,19 +84,23 @@ class AccuLockTcpServer:
             barcode =str(i["rfid"])
             index =i["index"]+1
             data_list.append(str(index))
+            data_list2= []
             if barcode =='00000000':
                 medicament_obj = BllMedicament().findEntity(and_(EntityMedicament.ClientId ==clientId,EntityMedicament.Place == index))
                 if medicament_obj:
                     medicament_obj.Place = ''
                     BllMedicament().update(medicament_obj)
+                    data_list2.append(str(index))
             else:
                 medicament_obj = BllMedicament().findEntity(and_(EntityMedicament.ClientId ==clientId,EntityMedicament.BarCode == barcode))
                 if medicament_obj:
                     medicament_obj.Place = index
                     BllMedicament().update(medicament_obj)
-        clientSock.send(('lightoff'+"~".join(data_list)).encode())
-        print('灭灯:','lightoff'+"~".join(data_list))
-        time.sleep(0.2)
+                    data_list2.append(str(index))
+        if data_list2:
+            clientSock.send(('lightoff'+"~".join(data_list2)).encode())
+            print('灭灯:','lightoff'+"~".join(data_list2))
+
 
     @classmethod
     def monitorLockFun(cls,clientSock,terminal):

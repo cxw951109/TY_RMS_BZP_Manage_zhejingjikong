@@ -35,7 +35,7 @@ def getStayLabelJson(request):
     if request.method == 'GET':
         # data = RFID_object.get_stay_label()
         # print("标签-位置-------", data)
-        data = [[1], [1]]
+        data = [['00000001','00000002'], [2,1]]
         return JsonResponse(Utils.resultData(1, "成功", data))
 
 
