@@ -20,7 +20,7 @@
             <label class="layui-form-label"></label>
             <div class="layui-input-block">
               <select name="clientId" id="clientId">
-                <option value="15b35d30-1cfe-11ec-b75f-009027e3906b">不限</option>
+                <option value=""></option>
               </select>
             </div>
           </div>
@@ -70,6 +70,11 @@
   if(sessionStorage.visitType!=1){
     $(".will-hide").hide();
   }
+  $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
+      $(obj.data).each(function (index, data) {
+          $("#clientId").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+      });
+  });
   layui.use(['index', 'table'], function () {
     var table = layui.table
       , form = layui.form;
@@ -178,12 +183,8 @@
         var tr = $(obj.tr);
 
         if (waitUseList.length != 0) {
-          if (data.CellPositionCode != waitUseList[0].CellPositionCode) {
-            LayerErrorMsg("钥匙柜和货架试剂不能同时领用！");
-            return;
-          }
-          if (data.CellPositionCode == 100 && data.Place != waitUseList[0].Place) {
-            LayerErrorMsg("只能同时领用同一个钥匙柜格子的试剂！");
+          if (data.ClientId != waitUseList[0].ClientId) {
+            LayerErrorMsg("不同柜子试剂不能同时领用！");
             return;
           }
         }

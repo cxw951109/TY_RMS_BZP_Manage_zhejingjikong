@@ -84,15 +84,15 @@
     $(function () {
         $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
 
-$(obj.data).each(function (index, data) {
-    $("#cabinetSelect").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
-});
-$(".chosen-select").chosen({
-    no_results_text: "没有找到",
-    disable_search: true,
-    allow_single_deselect: true
-});
-});
+        $(obj.data).each(function (index, data) {
+            $("#cabinetSelect").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+        });
+        $(".chosen-select").chosen({
+            no_results_text: "没有找到",
+            disable_search: true,
+            allow_single_deselect: true
+        });
+        });
         $('#navTitle', window.parent.document).text('库存盘点');
         $('#btn_click').click(function () {
              var tag = 0;
