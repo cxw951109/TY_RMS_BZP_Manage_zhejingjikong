@@ -15,13 +15,16 @@ class AccuLockTcpServer:
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
     server.bind(('127.0.0.1', 9527))
-    server.listen(5)
+    server.listen(30)
+    socketList=[]
     acceptClientFlag=False
     monitorLockFlag=True
     Data={"terminal":"","mes":""}
-    deviceSetList={
-        '127.0.0.1':'1号终端',
-    }
+    # deviceSetList={
+    #     '127.0.0.1':'1号终端',
+    #     '192.168.10.175':'2号终端'
+    # }
+    deviceSetList=['1号终端','2号终端']
 
     @classmethod
     def startAcceptClient(cls):
@@ -47,9 +50,11 @@ class AccuLockTcpServer:
         while cls.acceptClientFlag:
             try:
                 sock, addr = cls.server.accept()
+                print(sock,addr)
                 sock.settimeout(10)
-                terminal = cls.deviceSetList[addr[0]]
-                threading.Thread(target=cls.monitorLockFun(sock,terminal)).start()
+                # terminal = cls.deviceSetList[addr[0]]
+                cls.socketList.append(sock)
+                threading.Thread(target=cls.monitorLockFun).start()
             except Exception as e:
                 print('监听客户端加入错误:',str(e))
 
@@ -103,46 +108,50 @@ class AccuLockTcpServer:
 
 
     @classmethod
-    def monitorLockFun(cls,clientSock,terminal):
+    def monitorLockFun(cls):
         """
         监听用户
         """
-        last_result = []
-        client_obj = BllClient().findEntity(EntityClient.ClientName == terminal)
-        if client_obj:
-            clientId =client_obj.ClientId
-        print("clientId:", clientId)
-        while cls.monitorLockFlag and clientId:
-            try:
-                if cls.Data["terminal"]== terminal and cls.Data["mes"] !="clockopen":
-                    clientSock.send(cls.Data["mes"].encode())
-                    cls.clear_data()
-                clientSock.send('dooropen'.encode())
-                door_status =clientSock.recv(cls.BUFSIZ)#获取门状态1开门0关门
-                print("获取"+terminal+"门状态:",door_status.decode())
-                if door_status.decode() =='1':
-                    clientSock.send('getrfiddata'.encode())
-                    result_data=clientSock.recv(cls.BUFSIZ)
-                    result_data1 =re.findall('.{8}',result_data.decode())
-                    if last_result !=[]:
-                        diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1)) if result_data1[i] != last_result[i]]
-                    else:
-                        diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1))]
-                    print("RFID diff:",diff)
-                    if diff:
-                        cls.get_data(diff,clientId,clientSock)
-                    #与上次结果对比,RMS_Medicament入库
-                    last_result =result_data1
-                else:
-                    if cls.Data["terminal"] == terminal and cls.Data["mes"] == "clockopen":
-                        clientSock.send("clockopen".encode())
-                        print(terminal,"开锁")
-                        cls.clear_data()
-
-            except Exception as e:
-                print('监听' + terminal + '错误:', str(e))
-                if e.errno == 10053 or e.errno ==10038:
-                    break
+        while cls.monitorLockFlag:
+            num =0
+            for clientSock in cls.socketList:
+                num =num+1
+                last_result = []
+                # terminal =cls.deviceSetList[clientSock.getsockname()[0]]
+                terminal = cls.deviceSetList[num-1]
+                client_obj = BllClient().findEntity(EntityClient.ClientName == terminal)
+                if client_obj:
+                    clientId =client_obj.ClientId
+                    try:
+                        if cls.Data["terminal"]== terminal and cls.Data["mes"] !="clockopen":
+                            clientSock.send(cls.Data["mes"].encode())
+                            cls.clear_data()
+                        clientSock.send('dooropen'.encode())
+                        door_status =clientSock.recv(cls.BUFSIZ)#获取门状态1开门0关门
+                        print("获取"+terminal+"门状态:",door_status.decode())
+                        if door_status.decode() =='1':
+                            clientSock.send('getrfiddata'.encode())
+                            result_data=clientSock.recv(cls.BUFSIZ)
+                            result_data1 =re.findall('.{8}',result_data.decode())
+                            if last_result !=[]:
+                                diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1)) if result_data1[i] != last_result[i]]
+                            else:
+                                diff =[{"index":i,"rfid":result_data1[i]} for i in range(len(result_data1))]
+                            print("RFID diff:",diff)
+                            if diff:
+                                cls.get_data(diff,clientId,clientSock)
+                            #与上次结果对比,RMS_Medicament入库
+                            last_result =result_data1
+                        else:
+                            if cls.Data["terminal"] == terminal and cls.Data["mes"] == "clockopen":
+                                clientSock.send("clockopen".encode())
+                                print(terminal,"开锁")
+                                cls.clear_data()
+                    except Exception as e:
+                        # print('监听' + terminal + '错误:', str(e))
+                        if e.errno == 10053 or e.errno ==10038:
+                            cls.socketList.remove(clientSock)
+                            break
 
 
 AccuLockTcpServer().startAcceptClient()

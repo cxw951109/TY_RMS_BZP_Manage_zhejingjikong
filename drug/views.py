@@ -593,7 +593,7 @@ def drugPutInView(request):
             drugEntity.Status = DrugStatus.Normal
 
             client_obj = BllClient().findEntity(clientId)
-            datalist = BllMedicament().get_boxlist(clientId,type='up')
+            datalist = BllMedicament().get_boxlist(clientId,type='up',num=1)
             if datalist != False:
                 BllMedicament().drugPutIn(drugEntity, clientEntity, BllUser().findEntity(userInfo.get('UserId')))
                 AccuLockTcpServer.Data={"terminal":client_obj.ClientName,"mes":'lighton'+'~'.join(datalist)}
@@ -676,8 +676,8 @@ def drugReturnView(request):
         try:
             re={"terminal":'',"result":[]}
             for drugId in drugIdList:
-                # drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
-                # client_obj = BllClient().findEntity(drugEntity.ClientId)
+                drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
+                client_obj = BllClient().findEntity(drugEntity.ClientId)
                 if (drugEntity is None):
                     retrunData = Utils.resultData(1, '药剂条码无效！')
                 elif (drugEntity.Status != DrugStatus.Out):

@@ -207,8 +207,6 @@ class BllMedicament(Repository):
 
     #获取推荐货道
     def get_boxlist(self,clientId,type,num=0):
-        if type =='up':
-            num = self.findCount(EntityMedicament.ClientId ==clientId,EntityMedicament.Status ==DrugStatus.Normal,EntityMedicament.Place =='')+1
         query = self.session.query(EntityMedicament.Place).filter(EntityMedicament.ClientId ==clientId, EntityMedicament.Place != '').all()
         query =[int(i[0]) for i in query]
         null_place =['%s' %i for i in range(1,31) if i not in query]
