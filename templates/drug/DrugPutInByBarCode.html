@@ -19,12 +19,64 @@
     th,td{
         white-space:nowrap;
     }
+    .flowdrugBlock {
+        display: flex;
+        margin-bottom: 6px;
+    }
+
+    .flowdrugBlock-left {
+        width: 80px;
+        height: 80px;
+        /* line-height: 80px; */
+        text-align: center;
+        background-color: rgb(231, 227, 227);
+
+        border-radius: 40px;
+        /* margin-right: 5px; */
+        /* color: #171116; */
+        font-size: 20px;
+        cursor: pointer;
+        border: 1px solid #000000;
+    }
+
+    .flowdrugBlock-right {
+        height: 80px;
+        line-height: 80px;
+    }
+
+    .flowdrugBlock-name {
+        font-size: 18px;
+        height: 60px;
+        line-height: 70px;
+        display: none;
+    }
+    .flowdrugBlock-position2 {
+            font-size: 15px;
+            line-height: 80px;
+    }
+    .flowdrugBlock-position1{
+        font-size: 15px;
+        line-height: 80px;
+        color: red;
+    }
+    .flowdrugShow{
+        width: 740px;
+        height: 440px;
+        display:none;
+        position: fixed;
+        background-color: white;
+        top:68px;
+        box-shadow: 10px 10px 5px #888888;
+        border:1px solid gray;
+        z-index: 1;
+    }
 
 
 </style>
 
 <div class="ibox float-e-margins">
     <div style="text-align: center;line-height: 60px;font-size: 20px;">条码试剂入库</div>
+    <div class ="flowdrugShow" id ="flowdrugShow"></div>
     <form class="form-horizontal myForm" role="form">
           {% if not template_obj %}
         <div class="form-group">
@@ -61,7 +113,7 @@
                             <th>生产日期</th>
                             <th>保质期（天）</th>
                             <th>价格（元）</th>
-                            <th>状态</th>
+                            <th>位置</th>
                             <th>生产厂商</th>
                             <th>销售商</th>
                             <th>价格（元）</th>
@@ -84,7 +136,7 @@
                                         <td style="width:75px;text-align: center">{% firstof template_content1.ProductionDate '' %}</td>
                                         <td>{% firstof template_content1.ShelfLife '' %}</td>
                                         <td>{% firstof template_content1.Price '' %}</td>
-                                        <td>未入库</td>
+                                        <td onmouseover="show_addr(this.parentNode.rowIndex)" onmouseleave="hidden_addr()"></td>
                                         <td>{% firstof template_content1.Manufacturer '' %}</td>
                                         <td>{% firstof template_content1.Distributor '' %}</td>
                                         <td>{% firstof template_content1.Price '' %}</td>
@@ -122,9 +174,61 @@
                 <script src="{% static 'js/warning.js' %}"></script>
 
 <script type="text/javascript">
+    let rowCount = 5;
+    let columnCount = 6;
     var staticPath="{% static '/' %}";
-
-
+    function show_addr(num){
+        var res =document.getElementById('dataTableModel').rows[num].cells[7].innerHTML
+        var flowdrugShow=document.getElementById("flowdrugShow")
+        if (res){
+            flowdrugShow.style.display='flex'
+            let postionHtml = '';
+            for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                let columnStyle = "";
+                switch (columnIndex) {
+                    case 0:
+                        columnStyle = "margin-right:60px";
+                        break;
+                    case 1:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 2:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 3:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 4:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 5:
+                        columnStyle = "";
+                        break;
+                }
+                postionHtml += '<div class="flowdrugColumn" style="' + columnStyle + '">'
+                for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                    let postionStr = (rowIndex + 1) + (columnIndex *5);
+                    let classStr = "flowdrugBlock-left ";
+                    if(res == postionStr){
+                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                        '<div class="flowdrugBlock-position1">';
+                    }else{
+                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                        '<div class="flowdrugBlock-position2">';
+                    }
+                    postionHtml += postionStr;
+                    postionHtml += '</div></div><div class="flowdrugBlock-right"></div></div>';
+                    putFlag = true;
+                }
+                postionHtml += '</div>'
+            }
+            $(".flowdrugShow").html(postionHtml);
+        }
+    }
+    function hidden_addr(res){
+            var flowdrugShow=document.getElementById("flowdrugShow");
+            flowdrugShow.style.display='none'
+        }
 
     // flag_status 用来RFID入库禁止频繁弹窗
     var flag_status = true;
@@ -157,8 +261,7 @@
 
                             if(data.status == 0){
                                 flag_status = true;
-                                 document.getElementById('dataTableModel').
-                                     rows[template_index + 1].cells[7].innerHTML = '已入库';
+                                 document.getElementById('dataTableModel').rows[template_index + 1].cells[7].innerHTML = data.data;
                                  layer.close(index);
                             if(template_index == 0){
                                 $('.gradeA:first-child').css('color', 'red');
@@ -169,51 +272,8 @@
                                 $('.gradeA:nth-child(' + (template_index+1) + ')').css('font-weight', 700);
                                 $('.gradeA:nth-child(' + (template_index+1) + ')').css('background-color', '#DCDCDC');
                             }
-                        template_index += 1
-                            layer.open({
-                                    type: 2
-                                    ,title: '标准品证书拍照上传（编号：'+barCode+'）'
-                                    ,content: "{% url 'standard:photographForm' %}"
-                                    ,area: ['800px', '630px']
-                                    ,shade: [0.1, '#000']
-                                    ,offset: '2px'
-                                    ,btn: ['保存', '取消']
-                                    ,yes: function(index, layero){
-                                        var iframeWindow = window['layui-layer-iframe'+ index]
-                                        var submitID = 'LAY-user-front-submit'
-                                        ,submit = layero.find('iframe').contents().find('#'+ submitID);
-
-                                        submit.trigger('click');
-                                    }
-                                    ,end:function(){
-                                        if(sessionStorage.getItem("photographDataSrc")=="")
-                                        {
-                                            new $.flavr({ content : '设置失败！',
-                                                autoclose : true, timeout : 800 });
-                                                return false;
-                                        }
-                                        var psrc=staticPath+sessionStorage.getItem("photographDataSrc");
-                                        $.post("{% url 'drug:setDrugImageUrl' %}", { MedicamentId: data.data,ImageUrl: psrc}, function (obj) {
-                                            sessionStorage.removeItem("photographDataSrc")
-                                            if (obj.status == 1) {
-                                                new $.flavr({ content : '设置成功！',
-                                                autoclose : true, timeout : 800 });
-                                                tableModel.draw(false);
-                                                location.href = "{% url 'drug_index' %}";
-                                                return false;
-                                            }
-                                            else {
-                                                new $.flavr({ content : obj.message,
-                                                autoclose : true, timeout : 2000 });
-                                                return false;
-                                            }
-                                        });
-                                        $(".dataTables_scrollBody").scrollTop((template_index*35)-15);
-
-                                    }        
-                                }); 
+                            template_index += 1
                             }else{
-
                                 layer.close(index);
                                 new $.flavr({
                                          modal: false,

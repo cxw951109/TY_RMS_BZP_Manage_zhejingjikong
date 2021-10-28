@@ -24,7 +24,7 @@ class AccuLockTcpServer:
     #     '127.0.0.1':'1号终端',
     #     '192.168.10.175':'2号终端'
     # }
-    deviceSetList=['1号终端','2号终端']
+    deviceSetList=['1号终端','2号终端','3号终端']
 
     @classmethod
     def startAcceptClient(cls):

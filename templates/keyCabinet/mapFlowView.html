@@ -152,11 +152,27 @@
             display: none;
         }
 
-        .flowdrugBlock-position {
+        .flowdrugBlock-position2 {
             font-size: 15px;
             line-height: 80px;
-            {#color: #0a0707;#}
         }
+        .flowdrugBlock-position1{
+            font-size: 15px;
+            line-height: 80px;
+            color: red;
+        }
+
+        .flowdrugShow{
+            width: 740px;
+            height: 440px;
+            display:none;
+            position: fixed;
+            background-color: white;
+            top:80px;
+            box-shadow: 10px 10px 5px #888888;
+            border:1px solid gray;
+        }
+
     </style>
     <form class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 0 0 0;width: 100%;">
         <div style="display: flex; justify-content: center;width: 100%;">
@@ -168,7 +184,7 @@
 {#                    <div class="flowdrugListShow">#}
 {#                    </div>#}
 {#                </div>#}
-
+                <div class ="flowdrugShow" id ="flowdrugShow"></div>
 
             </div>
             <div class="layui-form-item layui-hide">
@@ -236,6 +252,61 @@
             getData();
         });
 
+        function show_addr(res){
+
+            var flowdrugShow=document.getElementById("flowdrugShow");
+            flowdrugShow.style.display='flex'
+            let postionHtml = '';
+            for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                let columnStyle = "";
+                switch (columnIndex) {
+                    case 0:
+                        columnStyle = "margin-right:60px";
+                        break;
+                    case 1:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 2:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 3:
+                        columnStyle = "margin-right:5px";
+                        break;
+                    case 4:
+                        columnStyle = "margin-right:70px";
+                        break;
+                    case 5:
+                        columnStyle = "";
+                        break;
+                }
+                postionHtml += '<div class="flowdrugColumn" style="' + columnStyle + '">'
+                for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                    let postionStr = (rowIndex + 1) + (columnIndex *5);
+                    {#let postionStr = (rowIndex + 1) + '_' + (columnIndex + 1);#}
+                    let classStr = "flowdrugBlock-left ";
+                    if(res == postionStr){
+                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                        '<div class="flowdrugBlock-position1">';
+                    }else{
+                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                        '<div class="flowdrugBlock-position2">';
+                    }
+                    postionHtml += postionStr;
+                    postionHtml += '</div></div><div class="flowdrugBlock-right"></div></div>';
+                    putFlag = true;
+                }
+
+                postionHtml += '</div>'
+
+            }
+            $(".flowdrugShow").html(postionHtml);
+
+        }
+
+        function hidden_addr(res){
+            var flowdrugShow=document.getElementById("flowdrugShow");
+            flowdrugShow.style.display='none'
+        }
 
         function getData() {
             console.log("***********************0",selectList,useDrugList,returnDrugIdList,showType)
@@ -280,22 +351,21 @@
             }
         }
 
-
         function createPositionBoxMap(re){
             {#let result ={"terminal":"1号柜","data":[{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"琥珀","Place":"5"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"},{"Name":"巴豆酸己酯","Place":"2"},{"Name":"琥珀","Place":"5"},{"Name":"双苯并咪唑H33342三盐酸盐","Place":"1"}]}#}
             let postionHtml = `<div class="cabinetTitle">
                                     ${re.terminal}
                                 </div>`
             $(".flowListTitle").html(postionHtml)
-            postionHtml ='<table class="layui-table" style="width: 900px"><tr><th>名称</th><th>英文名称</th><th>位置</th><th>条码编号</th><th>CAS码</th><th>试剂余量</th></tr>'
+            postionHtml ='<table class="layui-table" style="width: 900px"><tr><th>名称</th><th>英文名称</th><th>条码编号</th><th>CAS码</th><th>试剂余量</th><th>位置</th></tr>'
             re.result.forEach(e => {
                 postionHtml += `<tr>
                                     <td>${e.Name}</td>
                                     <td>${e.EnglishName}</td>
-                                    <td>${e.Place}</td>
                                     <td>${e.BarCode}</td>
                                     <td>${e.CASNumber}</td>
                                     <td>${e.Remain}</td>
+                                    <td onmouseover="show_addr(${e.Place})" onmouseleave="hidden_addr(${e.Place})">${e.Place}</td>
                                 </tr>`
             })
             postionHtml +='</table>'

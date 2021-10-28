@@ -2,8 +2,6 @@
 <style type="text/css">
     .layui-form-item {
         width: 10px;
-        height: ;
-
     }
 
 </style>
@@ -119,27 +117,26 @@
 
         });
         function do_guihuan(){
-
-top.layer.open({
-type: 2
-, title: '试剂归还存放示意'
-, content: "{% url 'keyCabinet:mapFlowView' %}"
-, area: ['1100px', '600px']
-, btn: []
-//   , yes: function (index, layero) {
-//     // var submitID = 'LAY-user-front-submit'
-//     //   , submit = layero.find('iframe').contents().find('#' + submitID);
-//     // submit.trigger('click');
-//     layero.find('iframe')[0].contentWindow.location.reload(true);
-//   },cancel:function(){
-//     // alert("fdfdf1");
-//   }
-, end: function () {
-waitUseList = [];
-table.reload('LAY-datatable'); //数据刷新
-table.reload('LAY-datatable-use', { data: waitUseList });
-}
-});
+            top.layer.open({
+                type: 2
+                , title: '试剂归还存放示意'
+                , content: "{% url 'keyCabinet:mapFlowView' %}"
+                , area: ['1100px', '600px']
+                , btn: []
+                //   , yes: function (index, layero) {
+                //     // var submitID = 'LAY-user-front-submit'
+                //     //   , submit = layero.find('iframe').contents().find('#' + submitID);
+                //     // submit.trigger('click');
+                //     layero.find('iframe')[0].contentWindow.location.reload(true);
+                //   },cancel:function(){
+                //     // alert("fdfdf1");
+                //   }
+                , end: function () {
+                waitUseList = [];
+                table.reload('LAY-datatable'); //数据刷新
+                table.reload('LAY-datatable-use', { data: waitUseList });
+            }
+            });
 }
     </script>
 

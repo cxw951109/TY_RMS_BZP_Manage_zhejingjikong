@@ -255,9 +255,8 @@ def drug_GetDrugListJson(request):
         drug_list = BllMedicament().getAllDrugList(name, PageParam(1, 0),clientId)
         if(status =='1'):
             drug_list=[x for x in drug_list if x.get("Status")!=2 and x.get("Place") != '']
-        else:
+        if(status =='2'):
             drug_list = [x for x in drug_list if x.get("Status") == 2 and x.get("Place") == '']
-
         if(isMyUse=='1'):
             drug_list=[x for x in drug_list if x.get("ByUserId")==user["UserId"]]
         return JsonResponse({'data': drug_list,'code' : 0,'msg':'','count':len(drug_list)})

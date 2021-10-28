@@ -598,7 +598,7 @@ def drugPutInView(request):
                 BllMedicament().drugPutIn(drugEntity, clientEntity, BllUser().findEntity(userInfo.get('UserId')))
                 AccuLockTcpServer.Data={"terminal":client_obj.ClientName,"mes":'lighton'+'~'.join(datalist)}
                 print('入库亮灯:','lighton'+"~".join(datalist))
-                retrunData = Utils.resultData(0, '试剂入库成功！', data=drugId)
+                retrunData = Utils.resultData(0, '试剂入库成功！', data=datalist[0])
             else:
                 retrunData = Utils.resultData(1, '柜子已满！', data=[])
 
@@ -700,6 +700,8 @@ def drugReturnView(request):
 
             null_place = BllMedicament().get_boxlist(clientId, type='back',num =len(re["result"]))
             if null_place != False:
+                for i in range(len(null_place)):
+                    re["result"][i]["Place"] =null_place[i]
                 AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + '~'.join(null_place)}
                 print('归还亮灯:', 'lighton' + "~".join(null_place))
                 re["terminal"] = client_obj.ClientName
