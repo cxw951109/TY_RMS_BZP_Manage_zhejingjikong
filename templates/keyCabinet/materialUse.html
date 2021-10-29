@@ -79,7 +79,6 @@
     var table = layui.table
       , form = layui.form;
 
-
     var tableConfig={
       elem: '#LAY-datatable'
       , url: "{% url 'drug_GetDrugListJson' %}?status=1"
@@ -178,10 +177,9 @@
     table.on('tool(LAY-datatable)', function (obj) {
       var data = obj.data;
       if (obj.event === 'del') {
-
+        console.log('del')
       } else if (obj.event === 'addUseList') {
         var tr = $(obj.tr);
-
         if (waitUseList.length != 0) {
           if (data.ClientId != waitUseList[0].ClientId) {
             LayerErrorMsg("不同柜子试剂不能同时领用！");
@@ -227,7 +225,6 @@
       }
       var placeList = JSLINQ(waitUseList).Select("Place").toArray();
       sessionStorage.setItem("selectList", JSON.stringify(placeList));
-
       sessionStorage.setItem("useDrugIdList", JSON.stringify(JSLINQ(waitUseList).Select("MedicamentId").toArray()));
       top.layer.open({
               type: 2

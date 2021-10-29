@@ -84,11 +84,11 @@ class AccuLockTcpServer:
         """
         接收数据入库
         """
-        data_list =[]
+        # data_list =[]
         for i in data:
             barcode =str(i["rfid"])
             index =i["index"]+1
-            data_list.append(str(index))
+            # data_list.append(str(index))
             data_list2= []
             if barcode =='00000000':
                 medicament_obj = BllMedicament().findEntity(and_(EntityMedicament.ClientId ==clientId,EntityMedicament.Place == index))
@@ -124,6 +124,7 @@ class AccuLockTcpServer:
                     clientId =client_obj.ClientId
                     try:
                         if cls.Data["terminal"]== terminal and cls.Data["mes"] !="clockopen":
+                            print(terminal, "开锁")
                             clientSock.send(cls.Data["mes"].encode())
                             cls.clear_data()
                         clientSock.send('dooropen'.encode())
@@ -144,8 +145,8 @@ class AccuLockTcpServer:
                             last_result =result_data1
                         else:
                             if cls.Data["terminal"] == terminal and cls.Data["mes"] == "clockopen":
-                                clientSock.send("clockopen".encode())
                                 print(terminal,"开锁")
+                                clientSock.send("clockopen".encode())
                                 cls.clear_data()
                     except Exception as e:
                         # print('监听' + terminal + '错误:', str(e))
