@@ -29,7 +29,12 @@
           <div class="layui-inline">
             <label class="layui-form-label">所属终端</label>
             <div class="layui-input-block">
-              <div class="layui-xmselect" id="ClientId" style="width: 180px;" lay-data='{"url":"/cabinet/getSelectClientListJson/"}' name="ClientId"></div>
+                <select name="ClientId" id="ClientId" style="width: 180px;">
+                    <option value=""></option>
+                </select>
+{#              <div class="layui-xmselect" id="ClientId" style="width: 180px;" lay-data='{"url":"/cabinet/getSelectClientListJson/"}' name="ClientId">#}
+{##}
+{#              </div>#}
 
             </div>
           </div>
@@ -48,7 +53,7 @@
         <table id="LAY-datatable" lay-filter="LAY-datatable"></table>
         <script type="text/html" id="progressTpl">
           {% verbatim %} 
-          <div class="layui-progress layuiadmin-order-progress" lay-filter="progress-"+ {{ d.PeriodCheckId }} +"">
+          <div class="layui-progress layuiadmin-order-progress" lay-filter="progress-"+ {{ d.PeriodCheckId }}>
             <div class="layui-progress-bar layui-bg-blue" lay-percent= "{{ d.PeriodCheckTotalCount / d.PeriodCurrentDrugCount * 100  }}%" style="width: {{ d.PeriodCheckTotalCount / d.PeriodCurrentDrugCount * 100  }}%;"></div>
           </div>
           {% endverbatim %} 
@@ -99,11 +104,14 @@
     </div>
   </div>
   <script>
-
+  $.get('{% url 'dataReport:getClientListJson' %}', function (obj) {
+      $(obj.data).each(function (index, data) {
+          $("#ClientId").append("<option value='" + data.ClientId + "' hassubinfo='true'>" + data.ClientName + "</option>");
+      });
+  });
   layui.use(['index', 'table'], function(){
     var table = layui.table
     ,form = layui.form;
-
     //列表数据
     table.render({
         elem: '#LAY-datatable'

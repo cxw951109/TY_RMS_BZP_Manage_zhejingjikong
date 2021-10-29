@@ -29,11 +29,11 @@
         
             <div class="layui-form-item">
                 <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">生产厂商:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Manufacturer '' %}</spen></label>
-                <label class="layui-form-label" style="padding: 0 10px 0 0;">经&ensp;销&ensp;商:<spen style="font-weight:normal; padding-left:10px; display: inline-block;"></spen></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">经&ensp;销&ensp;商:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Distributor '' %}</spen></label>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">入库时间:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.PutInDate '' %}</spen></label>
-                <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">出库状态</spen>&nbsp;&nbsp;&nbsp;<button type="button" onclick="do_guihuan()" class="btn btn-default">点击归还</button></label>
+                <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Place '' %}</spen></label>
             </div>
 
         </form>
@@ -120,7 +120,7 @@
             top.layer.open({
                 type: 2
                 , title: '试剂归还存放示意'
-                , content: "{% url 'keyCabinet:mapFlowView' %}"
+                , content: "{% url 'keyCabinet:mapFlowView' %}?showType=3"
                 , area: ['1100px', '600px']
                 , btn: []
                 //   , yes: function (index, layero) {
