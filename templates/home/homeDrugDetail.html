@@ -33,9 +33,14 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label" style="padding: 0 0 10px 0;width: 450px;">入库时间:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.PutInDate '' %}</spen></label>
+{#{% if drug_obj.Place == '' %}#}
+{#                <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Place '' %}</spen>&nbsp;&nbsp;&nbsp;<button type="button" onclick="do_guihuan()" class="btn btn-default">点击归还</button></label>#}
+{#{% else %}#}
+{#                <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Place '' %}</spen></label>#}
+{#{% endif %}#}
+{#            </div>#}
                 <label class="layui-form-label" style="padding: 0 10px 0 0;">位&emsp;&emsp;置:<spen style="font-weight:normal; padding-left:10px; display: inline-block;">{% firstof drug_obj.Place '' %}</spen></label>
             </div>
-
         </form>
         <hr>
         <h3>药剂流转记录</h3>
