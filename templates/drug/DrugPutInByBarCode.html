@@ -1,349 +1,366 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
-<style type="text/css">
-    body {
-        background-color: #FFF !important;
-    }
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'layuiadmin/layui/css/layui.css' %}" media="all">
+    <style type="text/css">
+        body {
+            background-color: #FFF !important;
+        }
 
+        .ibox {
+            padding-left: 25px;
+            padding-right: 25px;
+        }
 
-    .ibox{
-        padding-left: 25px;
-        padding-right: 25px;
-    }
-    .dataTables_wrapper{
-        padding-bottom: 0px !important;
-    }
-    th,td{
-        white-space:nowrap;
-    }
-    .flowdrugBlock {
-        display: flex;
-        margin-bottom: 6px;
-    }
+        .dataTables_wrapper {
+            padding-bottom: 0px !important;
+        }
 
-    .flowdrugBlock-left {
-        width: 80px;
-        height: 80px;
-        /* line-height: 80px; */
-        text-align: center;
-        background-color: rgb(231, 227, 227);
+        th, td {
+            white-space: nowrap;
+        }
 
-        border-radius: 40px;
-        /* margin-right: 5px; */
-        /* color: #171116; */
-        font-size: 20px;
-        cursor: pointer;
-        border: 1px solid #000000;
-    }
+        .flowdrugBlock {
+            display: flex;
+            margin-bottom: 6px;
+        }
 
-    .flowdrugBlock-right {
-        height: 80px;
-        line-height: 80px;
-    }
+        .flowdrugBlock-left {
+            width: 80px;
+            height: 80px;
+            /* line-height: 80px; */
+            text-align: center;
+            background-color: rgb(231, 227, 227);
 
-    .flowdrugBlock-name {
-        font-size: 18px;
-        height: 60px;
-        line-height: 70px;
-        display: none;
-    }
-    .flowdrugBlock-position2 {
+            border-radius: 40px;
+            /* margin-right: 5px; */
+            /* color: #171116; */
+            font-size: 20px;
+            cursor: pointer;
+            border: 1px solid #000000;
+        }
+
+        .flowdrugBlock-right {
+            height: 80px;
+            line-height: 80px;
+        }
+
+        .flowdrugBlock-name {
+            font-size: 18px;
+            height: 60px;
+            line-height: 70px;
+            display: none;
+        }
+
+        .flowdrugBlock-position2 {
             font-size: 15px;
             line-height: 80px;
-    }
-    .flowdrugBlock-position1{
-        font-size: 15px;
-        line-height: 80px;
-        color: red;
-    }
-    .flowdrugShow{
-        width: 740px;
-        height: 440px;
-        display:none;
-        position: fixed;
-        background-color: white;
-        top:68px;
-        box-shadow: 10px 10px 5px #888888;
-        border:1px solid gray;
-        z-index: 1;
-    }
+        }
+
+        .flowdrugBlock-position1 {
+            font-size: 15px;
+            line-height: 80px;
+            color: red;
+        }
+
+        .flowdrugShow {
+            width: 740px;
+            height: 440px;
+            display: none;
+            position: fixed;
+            background-color: white;
+            top: 68px;
+            box-shadow: 10px 10px 5px #888888;
+            border: 1px solid gray;
+            z-index: 1;
+        }
 
 
-</style>
+    </style>
 
-<div class="ibox float-e-margins">
-    <div style="text-align: center;line-height: 60px;font-size: 20px;">条码试剂入库</div>
-    <div class ="flowdrugShow" id ="flowdrugShow"></div>
-    <form class="form-horizontal myForm" role="form">
-          {% if not template_obj %}
-        <div class="form-group">
-            <div class="col-sm-12">
-                <table id="dataTableModel" style="height: 400px;" class="table table-striped table-bordered table-hover dataTables-example">
-                    <thead>
-                        <tr>
-                            <th>类型ID1</th>
-                            <th>类型名称</th>
-                            <th>EnglishName</th>
-                            <th>纯度</th>
-                            <th>CAS码</th>
-                            <th>生产日期</th>
-                            <th>保质期（天）</th>
-                            <th>价格（元）</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+    <div class="ibox float-e-margins">
+        <div style="text-align: center;line-height: 60px;font-size: 20px;">条码试剂入库</div>
+        <div class="flowdrugShow" id="flowdrugShow"></div>
+        <form class="form-horizontal myForm" role="form">
+            {% if not template_obj %}
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <table id="dataTableModel" style="height: 400px;"
+                               class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>类型ID1</th>
+                                <th>类型名称</th>
+                                <th>EnglishName</th>
+                                <th>纯度</th>
+                                <th>CAS码</th>
+                                <th>生产日期</th>
+                                <th>保质期（天）</th>
+                                <th>价格（元）</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        <table id="dataTableModel"
+                               class="table table-striped table-bordered table-hover dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>类型ID</th>
+                                <th>类型名称</th>
+                                <th>EnglishName</th>
+                                <th>纯度</th>
+                                <th>CAS码</th>
+                                <th>生产日期</th>
+                                <th>保质期（天）</th>
+                                <th>价格（元）</th>
+                                <th>位置</th>
+                                <th>生产厂商</th>
+                                <th>销售商</th>
+                                <th>价格（元）</th>
+                                <th>规格</th>
+                                <th>单位</th>
+                                <th>规格单位</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            {# 加载自定过滤器 #}
+                            {% load myfilter %}
+                            {% for template_content1 in all_children_template_list %}
+                                <tr class="gradeA" id="">
+                                    <td>{% firstof template_content1.VarietyId '' %} </td> <!--种类id-->
+                                    <td>{% firstof template_content1.Name '' %}</td> <!--中文名称 Name-->
+                                    <td>{% firstof template_content1.EnglishName '' %}</td><!--英文名称 EenglistName-->
+                                    <td>{% firstof template_content1.Purity '' %}</td><!--纯度-->
+                                    <td>{% firstof template_content1.CASNumber '' %}</td>
+                                    <td style="width:75px;text-align: center">{% firstof template_content1.ProductionDate '' %}</td>
+                                    <td>{% firstof template_content1.ShelfLife '' %}</td>
+                                    <td>{% firstof template_content1.Price '' %}</td>
+                                    <td onmouseover="show_addr(this.parentNode.rowIndex)"
+                                        onmouseleave="hidden_addr()"></td>
+                                    <td>{% firstof template_content1.Manufacturer '' %}</td>
+                                    <td>{% firstof template_content1.Distributor '' %}</td>
+                                    <td>{% firstof template_content1.Price '' %}</td>
+                                    <td>{% firstof template_content1.Speci '' %}</td>
+                                    <td>{% firstof template_content1.Unit '' %}</td>
+                                    <td>{% firstof template_content1.SpeciUnit '' %}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            {% endif %}
+
+
+            <div class="form-group" style="position:fixed; left:15px; bottom:20px;width:900px">
+
+                <!-- <div class="col-md-1 col-md-offset-11">
+                    <button class="btn btn-white" type="button" id="closeForm">关闭</button>
+                </div> -->
             </div>
+            <!--  隐藏client_id -->
+            <input type="hidden" name="" value="{{ client_id }}" id="client_id">
+            <input type="hidden" name="" value="{{ CustomerId }}" id="CustomerId">
+
+        </form>
+        <div style="line-height: 80px;font-size: 18px;text-align: center;" class="approve-status layui-bg-orange">
+            请扫描试剂条码
         </div>
-        {% else %}
-          <div class="form-group">
-            <div class="col-sm-12">
-                <table id="dataTableModel" class="table table-striped table-bordered table-hover dataTables-example">
-                    <thead>
-                        <tr>
-                            <th>类型ID</th>
-                            <th>类型名称</th>
-                            <th>EnglishName</th>
-                            <th>纯度</th>
-                            <th>CAS码</th>
-                            <th>生产日期</th>
-                            <th>保质期（天）</th>
-                            <th>价格（元）</th>
-                            <th>位置</th>
-                            <th>生产厂商</th>
-                            <th>销售商</th>
-                            <th>价格（元）</th>
-                            <th>规格</th>
-                            <th>单位</th>
-                            <th>规格单位</th>
-                        </tr>
-
-                    </thead>
-                    <tbody>
-                    {# 加载自定过滤器 #}
-                    {% load myfilter %}
-                    {% for template_content1 in all_children_template_list %}
-                                    <tr class="gradeA" id="">
-                                        <td>{% firstof template_content1.VarietyId '' %} </td> <!--种类id-->
-                                        <td>{% firstof template_content1.Name '' %}</td> <!--中文名称 Name-->
-                                        <td>{% firstof template_content1.EnglishName '' %}</td><!--英文名称 EenglistName-->
-                                        <td>{% firstof template_content1.Purity '' %}</td><!--纯度-->
-                                        <td>{% firstof template_content1.CASNumber '' %}</td>
-                                        <td style="width:75px;text-align: center">{% firstof template_content1.ProductionDate '' %}</td>
-                                        <td>{% firstof template_content1.ShelfLife '' %}</td>
-                                        <td>{% firstof template_content1.Price '' %}</td>
-                                        <td onmouseover="show_addr(this.parentNode.rowIndex)" onmouseleave="hidden_addr()"></td>
-                                        <td>{% firstof template_content1.Manufacturer '' %}</td>
-                                        <td>{% firstof template_content1.Distributor '' %}</td>
-                                        <td>{% firstof template_content1.Price '' %}</td>
-                                        <td>{% firstof template_content1.Speci '' %}</td>
-                                        <td>{% firstof template_content1.Unit '' %}</td>
-                                        <td>{% firstof template_content1.SpeciUnit '' %}</td>
-                                    </tr>
-{% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    </div>
 
 
-        {% endif %}
+    {% load static %}
+    <script src="{% static 'js/warning.js' %}"></script>
 
+    <script type="text/javascript">
+        let rowCount = 5;
+        let columnCount = 6;
+        var staticPath = "{% static '/' %}";
 
-        <div class="form-group" style="position:fixed; left:15px; bottom:20px;width:900px">
-
-            <!-- <div class="col-md-1 col-md-offset-11">
-                <button class="btn btn-white" type="button" id="closeForm">关闭</button>
-            </div> -->
-        </div>
-     <!--  隐藏client_id -->
-        <input type="hidden" name="" value="{{ client_id }}" id="client_id">
-        <input type="hidden" name="" value="{{ CustomerId }}" id="CustomerId">
-
-    </form>
-    <div style="line-height: 80px;font-size: 18px;text-align: center;" class="approve-status layui-bg-orange">
-        请扫描试剂条码</div>
-</div>
-
-
-{% load static %}
-                <script src="{% static 'js/warning.js' %}"></script>
-
-<script type="text/javascript">
-    let rowCount = 5;
-    let columnCount = 6;
-    var staticPath="{% static '/' %}";
-    function show_addr(num){
-        var res =document.getElementById('dataTableModel').rows[num].cells[7].innerHTML
-        var flowdrugShow=document.getElementById("flowdrugShow")
-        if (res){
-            flowdrugShow.style.display='flex'
-            let postionHtml = '';
-            for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
-                let columnStyle = "";
-                switch (columnIndex) {
-                    case 0:
-                        columnStyle = "margin-right:60px";
-                        break;
-                    case 1:
-                        columnStyle = "margin-right:5px";
-                        break;
-                    case 2:
-                        columnStyle = "margin-right:70px";
-                        break;
-                    case 3:
-                        columnStyle = "margin-right:5px";
-                        break;
-                    case 4:
-                        columnStyle = "margin-right:70px";
-                        break;
-                    case 5:
-                        columnStyle = "";
-                        break;
+        function show_addr(num) {
+            var res = document.getElementById('dataTableModel').rows[num].cells[7].innerHTML
+            var flowdrugShow = document.getElementById("flowdrugShow")
+            res = Number(res)
+            if (res) {
+                while (res > 30) {
+                    res = res - 30
                 }
-                postionHtml += '<div class="flowdrugColumn" style="' + columnStyle + '">'
-                for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
-                    let postionStr = (rowIndex + 1) + (columnIndex *5);
-                    let classStr = "flowdrugBlock-left ";
-                    if(res == postionStr){
-                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
-                        '<div class="flowdrugBlock-position1">';
-                    }else{
-                        postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
-                        '<div class="flowdrugBlock-position2">';
+                flowdrugShow.style.display = 'flex'
+                let postionHtml = '';
+                for (let columnIndex = 0; columnIndex < columnCount; columnIndex++) {
+                    let columnStyle = "";
+                    switch (columnIndex) {
+                        case 0:
+                            columnStyle = "margin-right:60px";
+                            break;
+                        case 1:
+                            columnStyle = "margin-right:5px";
+                            break;
+                        case 2:
+                            columnStyle = "margin-right:70px";
+                            break;
+                        case 3:
+                            columnStyle = "margin-right:5px";
+                            break;
+                        case 4:
+                            columnStyle = "margin-right:70px";
+                            break;
+                        case 5:
+                            columnStyle = "";
+                            break;
                     }
-                    postionHtml += postionStr;
-                    postionHtml += '</div></div><div class="flowdrugBlock-right"></div></div>';
-                    putFlag = true;
+                    postionHtml += '<div class="flowdrugColumn" style="' + columnStyle + '">'
+                    for (let rowIndex = 0; rowIndex < rowCount; rowIndex++) {
+                        let postionStr = (rowIndex + 1) + (columnIndex * 5);
+                        let classStr = "flowdrugBlock-left ";
+                        if (res == postionStr) {
+                            postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                                '<div class="flowdrugBlock-position1">';
+                        } else {
+                            postionHtml += '<div class="flowdrugBlock" val="' + postionStr + '"><div class="' + classStr.trim() + '"><div class="flowdrugBlock-name"></div>' +
+                                '<div class="flowdrugBlock-position2">';
+                        }
+                        postionHtml += postionStr;
+                        postionHtml += '</div></div><div class="flowdrugBlock-right"></div></div>';
+                        putFlag = true;
+                    }
+                    postionHtml += '</div>'
                 }
-                postionHtml += '</div>'
+                $(".flowdrugShow").html(postionHtml);
             }
-            $(".flowdrugShow").html(postionHtml);
-        }
-    }
-    function hidden_addr(res){
-            var flowdrugShow=document.getElementById("flowdrugShow");
-            flowdrugShow.style.display='none'
         }
 
-    // flag_status 用来RFID入库禁止频繁弹窗
-    var flag_status = true;
-    
-    window.focus();   // 当前页面获得焦点用来RFID扫描
-    var template_index = 0;
+        function hidden_addr(res) {
+            var flowdrugShow = document.getElementById("flowdrugShow");
+            flowdrugShow.style.display = 'none'
+        }
+
+        // flag_status 用来RFID入库禁止频繁弹窗
+        var flag_status = true;
+
+        window.focus();   // 当前页面获得焦点用来RFID扫描
+        var template_index = 0;
         //挂钩jquery插件，实现条码识别
         $(document).barCodeScanerModeEnter(function (barCode) {
-            if(barCode){
-                    if(flag_status){
-                        var index = layer.load(2, {shade: 0.01});
-                        flag_status = false;
-                    
+            if (barCode) {
+                if (flag_status) {
+                    var index = layer.load(2, {shade: 0.01});
+                    flag_status = false;
+
                     //获取该一维码对应指定行数据，准备到表单中提交后台入库
                     var data_list = ["VarietyId", "Name", "EnglishName", "Purity", "CASNumber", "ProductionDate", "ShelfLife", "Price", "", "", "", ""]
                     $("find-barCode");
-                           // 引入flavr 弹窗插件
-                // 触发ajax  提交绑定表单
-                        $.ajax({
+                    // 引入flavr 弹窗插件
+                    // 触发ajax  提交绑定表单
+                    $.ajax({
 
-                            type: 'POST',
-                            url: '{% url 'drug:drugPutInView' %}',
-                            data: {template_index:template_index,
-                                client_id:$('#client_id').val(),
-                                CustomerId: $('#CustomerId').val(),
-                                barCode: barCode,
-                            },
-                            success:function (data) {
-                                //  改变datatable指定列的值
+                        type: 'POST',
+                        url: '{% url 'drug:drugPutInView' %}',
+                        data: {
+                            template_index: template_index,
+                            client_id: $('#client_id').val(),
+                            CustomerId: $('#CustomerId').val(),
+                            barCode: barCode,
+                        },
+                        success: function (data) {
+                            //  改变datatable指定列的值
 
-                            if(data.status == 0){
+                            if (data.status == 0) {
                                 flag_status = true;
-                                 document.getElementById('dataTableModel').rows[template_index + 1].cells[7].innerHTML = data.data;
-                                 layer.close(index);
-                            if(template_index == 0){
-                                $('.gradeA:first-child').css('color', 'red');
-                                $('.gradeA:first-child').css('font-weight', 700);
-                                $('.gradeA:first-child').css('background-color', '#DCDCDC');
-                            }else{
-                                $('.gradeA:nth-child(' + (template_index+1) + ')').css('color', 'red');
-                                $('.gradeA:nth-child(' + (template_index+1) + ')').css('font-weight', 700);
-                                $('.gradeA:nth-child(' + (template_index+1) + ')').css('background-color', '#DCDCDC');
-                            }
-                            template_index += 1
-                            }else{
+                                document.getElementById('dataTableModel').rows[template_index + 1].cells[7].innerHTML = data.data;
+                                layer.close(index);
+                                if (template_index == 0) {
+                                    $('.gradeA:first-child').css('color', 'red');
+                                    $('.gradeA:first-child').css('font-weight', 700);
+                                    $('.gradeA:first-child').css('background-color', '#DCDCDC');
+                                } else {
+                                    $('.gradeA:nth-child(' + (template_index + 1) + ')').css('color', 'red');
+                                    $('.gradeA:nth-child(' + (template_index + 1) + ')').css('font-weight', 700);
+                                    $('.gradeA:nth-child(' + (template_index + 1) + ')').css('background-color', '#DCDCDC');
+                                }
+                                template_index += 1
+                            } else {
                                 layer.close(index);
                                 new $.flavr({
-                                         modal: false,
-                                        autoclose: false,
-                                        timeout: 2000,
-                                        buttons: {OK: {
-                                        text: '确认',
-                                        style: 'danger',
-                                        addClass: null,
-                                        action: function (e) {
+                                    modal: false,
+                                    autoclose: false,
+                                    timeout: 2000,
+                                    buttons: {
+                                        OK: {
+                                            text: '确认',
+                                            style: 'danger',
+                                            addClass: null,
+                                            action: function (e) {
 
-                                           flag_status = true;
-                                            // socket.send('123123');
-                                        }
-                                    },},
+                                                flag_status = true;
+                                                // socket.send('123123');
+                                            }
+                                        },
+                                    },
                                     content: data.message
                                 });
                             }
-                            },
-                            error: function () {
-                                alert('数据异常！');
-                                flag_status = true;
-                                layer.close(index);
-                                // socket.send('886');
-                            }
-                        });
-              
-                    }else{
+                        },
+                        error: function () {
+                            alert('数据异常！');
+                            flag_status = true;
+                            layer.close(index);
+                            // socket.send('886');
+                        }
+                    });
 
-
-                    }
+                } else {
 
 
                 }
+
+
+            }
         });
 
 
-            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
 
 
+        var index = parent.layer.getFrameIndex(window.name);
+        $(function () {
+            var tableModel = $('#dataTableModel').DataTable({
+                searching: false,
+                lengthChange: false,
+                select: true,
+                "bPaginate": false,
+                'scrollX': false,
+                'autoWidth': true,
+                'scrollY': true,
+                "ordering": false,
+                "scrollY": "380px",
+                // "scrollCollapse": true,
+                columnDefs: [{
+                    "targets": [0, 9, 10, 11, 12, 13, 14],
+                    "visible": false
+                }],
+            });
 
-    var index = parent.layer.getFrameIndex(window.name);
-    $(function () {
-        var tableModel = $('#dataTableModel').DataTable({
-            searching: false,
-            lengthChange: false,
-            select: true,
-            "bPaginate": false,
-            'scrollX': false,
-            'autoWidth': true,
-            'scrollY': true,
-            "ordering": false,
-            "scrollY": "380px",
-            // "scrollCollapse": true,
-            columnDefs: [{
-                "targets": [0, 9, 10, 11, 12, 13, 14],
-                "visible": false
-            }],
-        });
 
+            $("#closeForm").click(function () {
+                // socket.send('886');
+                parent.layer.close(index);
+            });
 
-        $("#closeForm").click(function () {
-            // socket.send('886');
-            parent.layer.close(index);
-        });
+        })
 
-    })
-
-</script>
-<!-- <script>
+    </script>
+    <!-- <script>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 client_id = $('#client_id').val();
 CustomerId = $('#CustomerId').val();

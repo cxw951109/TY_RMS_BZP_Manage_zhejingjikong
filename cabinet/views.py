@@ -33,9 +33,9 @@ data_relay = {"1_6": 1, "2_6": 2, "3_6": 3, "4_6": 4, "5_6": 5, "1_5": 6, "2_5":
 @require_http_methods(['GET'])
 def getStayLabelJson(request):
     if request.method == 'GET':
-        # data = RFID_object.get_stay_label()
-        # print("标签-位置-------", data)
-        data = [['00000001','00000002'], [2,1]]
+        data = RFID_object.get_stay_label()
+        print("标签-位置-------", data)
+        # data = [['00000001', '00000002'], [2, 1]]
         return JsonResponse(Utils.resultData(1, "成功", data))
 
 
@@ -58,6 +58,7 @@ def controlSwitch(request):
             return JsonResponse(Utils.resultData(1, data, ""))
         else:
             return JsonResponse(Utils.resultData(0, data, ""))
+
 
 @require_http_methods(['GET'])
 def index(request):
@@ -96,6 +97,7 @@ def getCabinetListJson(request):
             client_list = BllClient().like_ClientId_or_Name(searchValue)
             return JsonResponse({'data': json.loads(Utils.resultAlchemyData(client_list))})
 
+
 @require_http_methods(['GET'])
 def getSelectClientListJson(request):
     if request.method == 'GET':
@@ -108,7 +110,6 @@ def getSelectClientListJson(request):
             return JsonResponse([], safe=False)
 
 
-
 # 更改用户状态 锁定/解锁药柜
 @require_http_methods(['POST'])
 @csrf_exempt
@@ -117,17 +118,41 @@ def lockCabinet(request):
         if request.method == 'POST':
             clientId = request.POST.get('clientId', '')
             if clientId:
-                client_obj = BllClient().findEntity(clientId)
-                if client_obj.IsEnabled == 1:
-                    client_obj.IsEnabled = 0
-                else:
-                    client_obj.IsEnabled = 1
-                BllClient().update(client_obj)
-                return JsonResponse(Utils.resultData('1', '成功'))
+                try:
+                    client_obj = BllClient().findEntity(clientId)
+                    if client_obj.IsEnabled == 1:
+                        # client_obj.IsEnabled = 0
+                        AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                                                  "mes": 'gio1off'}
+                    else:
+                        # client_obj.IsEnabled = 1
+                        AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                                                  "mes": 'gio1on'}
+                    n = 0
+                    result = False
+                    time.sleep(3)
+                    re = BllClient().findEntity(clientId)
+                    if re.IsEnabled != client_obj.IsEnabled:
+                        result = True
+                        if re.IsEnabled == 1:
+                            AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                                                      "mes": 'gio2on'}
+                        else:
+                            AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                                                      "mes": 'gio2off'}
+
+                    if result:
+                        # BllClient().update(client_obj)
+                        return JsonResponse(Utils.resultData('1', '成功'))
+                    else:
+                        return JsonResponse(Utils.resultData('0', '解锁失败！'))
+                except:
+                    return JsonResponse(Utils.resultData('0', '解锁失败！'))
             else:
                 return JsonResponse(Utils.resultData('0', '请选中客户端Id'))
     except Exception as e:
         return JsonResponse(Utils.resultData('0', e))
+
 
 # 清空药柜数据
 @require_http_methods(['POST'])
@@ -137,15 +162,16 @@ def clearCabinet(request):
         if request.method == 'POST':
             clientId = request.POST.get('clientId', '')
             if clientId:
-                BllClient().executeNoParam('delete from RMS_Medicament where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_MedicamentRecord where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_HumitureRecord where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_MedicamentTemplate where ClientId=\''+clientId+'\'')
+                BllClient().executeNoParam('delete from RMS_Medicament where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_MedicamentRecord where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_HumitureRecord where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_MedicamentTemplate where ClientId=\'' + clientId + '\'')
                 return JsonResponse(Utils.resultData('1', '成功'))
             else:
                 return JsonResponse(Utils.resultData('0', '请选中客户端Id'))
     except Exception as e:
         return JsonResponse(Utils.resultData('0', e))
+
 
 # 清空所有药柜数据
 @require_http_methods(['POST'])
@@ -164,6 +190,7 @@ def clearAllCabinet(request):
     except Exception as e:
         return JsonResponse(Utils.resultData('0', e))
 
+
 # 删除药柜
 @require_http_methods(['POST'])
 @csrf_exempt
@@ -172,12 +199,12 @@ def deleteCabinet(request):
         if request.method == 'POST':
             clientId = request.POST.get('clientId', '')
             if clientId:
-                BllClient().executeNoParam('delete from RMS_Medicament where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_MedicamentRecord where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_HumitureRecord where ClientId=\''+clientId+'\'')
-                BllClient().executeNoParam('delete from RMS_MedicamentTemplate where ClientId=\''+clientId+'\'')
+                BllClient().executeNoParam('delete from RMS_Medicament where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_MedicamentRecord where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_HumitureRecord where ClientId=\'' + clientId + '\'')
+                BllClient().executeNoParam('delete from RMS_MedicamentTemplate where ClientId=\'' + clientId + '\'')
 
-                BllClient().executeNoParam('delete from RMS_Client where ClientId=\''+clientId+'\'')
+                BllClient().executeNoParam('delete from RMS_Client where ClientId=\'' + clientId + '\'')
                 return JsonResponse(Utils.resultData('1', '成功'))
             else:
                 return JsonResponse(Utils.resultData('0', '请选中客户端Id'))
@@ -200,6 +227,7 @@ def powerForm(request):
                     client_list.append(client_user_obj.UserId)
             ClientId = ClientId
             return render(request, 'cabinet/powerForm.html', locals())
+
 
 # 分配柜子格子权限给用户
 @require_http_methods(['GET'])
@@ -228,13 +256,16 @@ def saveCellPowerData(request):
         powerValue = request.POST.get('powerValue', '').split(',')
         user_number = 0
         if ClientId and ClientCellCode:
-            BllClientCellUser().delete(and_(EntityClientCellUser.ClientId == ClientId,EntityClientCellUser.ClientCellCode==ClientCellCode))
+            BllClientCellUser().delete(
+                and_(EntityClientCellUser.ClientId == ClientId, EntityClientCellUser.ClientCellCode == ClientCellCode))
             for user_id in powerValue:
                 # client_user_obj = BllClientCellUser().findEntity(and_(EntityClientCellUser.UserId == user_id,
                 #                                                   EntityClientCellUser.ClientId == ClientId))
                 # if client_user_obj:
                 #     continue
-                clientCellUser_obj = EntityClientCellUser(ClientCellId='',ClientCellCode=ClientCellCode,ClientId=ClientId,ClientCode='',UserId=user_id,Id=str(Utils.UUID()))
+                clientCellUser_obj = EntityClientCellUser(ClientCellId='', ClientCellCode=ClientCellCode,
+                                                          ClientId=ClientId, ClientCode='', UserId=user_id,
+                                                          Id=str(Utils.UUID()))
                 BllClientCellUser().insert(clientCellUser_obj)
                 user_number += 1
             return JsonResponse(Utils.resultData('1', '保存成功, 共添加了{}个使用用户'.format(user_number)))
@@ -262,6 +293,7 @@ def savePowerData(request):
             return JsonResponse(Utils.resultData('1', '保存成功, 共添加了{}个禁用用户'.format(user_number)))
         return JSON(Utils.resultData('0', '请选择客户端Id'))
 
+
 # 获取格子权限
 @require_http_methods(['GET'])
 def getCabinetCellPowerListJson(request):
@@ -269,8 +301,9 @@ def getCabinetCellPowerListJson(request):
         ClientId = request.GET.get('clientId', '')
         ClientCellCode = request.GET.get('clientCellCode', '')
         user_list = []
-        if(ClientId and ClientCellCode):
-            client_user_obj_list = BllClientCellUser().findList(and_(EntityClientCellUser.ClientId == ClientId,EntityClientCellUser.ClientCellCode==ClientCellCode)).all()
+        if (ClientId and ClientCellCode):
+            client_user_obj_list = BllClientCellUser().findList(and_(EntityClientCellUser.ClientId == ClientId,
+                                                                     EntityClientCellUser.ClientCellCode == ClientCellCode)).all()
             if client_user_obj_list:
                 for client_user_obj in client_user_obj_list:
                     user_list.append(client_user_obj.UserId)
@@ -292,10 +325,10 @@ def warningSetting(request):
 def saveWarningSetting(request):
     if request.method == 'POST':
         try:
-            client_obj=None
+            client_obj = None
             ClientId = request.POST['ClientId']
             ClientCode = request.POST['ClientCode']
-            xhClient=BllClient().findEntity(EntityClient.ClientCode==ClientCode)
+            xhClient = BllClient().findEntity(EntityClient.ClientCode == ClientCode)
             if ClientId:
                 # TemperatureMaxValue = request.POST['TemperatureMaxValue']
                 # HumidityMaxValue = request.POST['HumidityMaxValue']
@@ -303,27 +336,27 @@ def saveWarningSetting(request):
                 # HumidityMinValue = request.POST['HumidityMinValue']
                 # FilterShelfLifeWarningValue = request.POST['FilterShelfLifeWarningValue']
                 client_obj = BllClient().findEntity(ClientId)
-                if(xhClient is not None and xhClient.ClientId != client_obj.ClientId):
+                if (xhClient is not None and xhClient.ClientId != client_obj.ClientId):
                     return JsonResponse(Utils.resultData('0', '此序号已存在！'))
                 # client_obj.TemperatureMaxValue = TemperatureMaxValue
                 # client_obj.TemperatureMinValue = TemperatureMinValue
                 # client_obj.HumidityMaxValue = HumidityMaxValue
                 # client_obj.HumidityMinValue = HumidityMinValue
             else:
-                if(xhClient is not None):
+                if (xhClient is not None):
                     return JsonResponse(Utils.resultData('0', '此序号已存在！'))
-                client_obj=EntityClient()
-                client_obj.ClientId=Utils.UUID()
-                client_obj.IsEnabled=1
-            client_obj.Place=request.POST['Place']
-            client_obj.ContactPeopleName=request.POST['ContactPeopleName']
-            client_obj.ClientCode=ClientCode
-            client_obj.ClientName=ClientCode+'号终端'
-            client_obj.ClientTitle=request.POST['ClientTitle']
-            client_obj.ClientUseCode=request.POST['ClientUseCode']
-            client_obj.ContactPhone=request.POST['ContactPhone']
-            client_obj.Description=request.POST['Description']
-            client_obj.FilterProductionDate=request.POST['FilterProductionDate']
+                client_obj = EntityClient()
+                client_obj.ClientId = Utils.UUID()
+                client_obj.IsEnabled = 1
+            client_obj.Place = request.POST['Place']
+            client_obj.ContactPeopleName = request.POST['ContactPeopleName']
+            client_obj.ClientCode = ClientCode
+            client_obj.ClientName = ClientCode + '号终端'
+            client_obj.ClientTitle = request.POST['ClientTitle']
+            client_obj.ClientUseCode = request.POST['ClientUseCode']
+            client_obj.ContactPhone = request.POST['ContactPhone']
+            client_obj.Description = request.POST['Description']
+            client_obj.FilterProductionDate = request.POST['FilterProductionDate']
             client_obj.FilterShelfLifeWarningValue = request.POST['FilterShelfLifeWarningValue']
             if ClientId:
                 BllClient().update(client_obj)
@@ -332,6 +365,7 @@ def saveWarningSetting(request):
             return JsonResponse(Utils.resultData('1', '保存成功'))
         except:
             return JsonResponse(Utils.resultData('0', '数据异常，保存失败！'))
+
 
 @require_http_methods(['GET'])
 def openDoor(request):
@@ -346,12 +380,9 @@ def openDoor(request):
         #     RelayControl.Case.doorControl(int(doorIndex),False)
         return JsonResponse(Utils.resultData('1', '开门成功!'))
 
+
 @require_http_methods(['GET'])
 def getOpenDoorList(request):
     if request.method == 'GET':
         openDoorList = []
-        return JsonResponse(Utils.resultData('1', '获取成功!',openDoorList))
-
-
-
-
+        return JsonResponse(Utils.resultData('1', '获取成功!', openDoorList))

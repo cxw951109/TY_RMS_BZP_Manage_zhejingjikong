@@ -529,6 +529,9 @@ def drugPutInView(request):
         barCode = request.POST.get("barCode")
         clientId = request.POST.get("client_id")
         clientEntity = BllClient().findEntity(EntityClient.ClientId == clientId)
+        if len(set(AccuLockTcpServer.lig_list[clientEntity.ClientName])) > 60:
+            retrunData = Utils.resultData(1, '柜子最多亮灯60,录入失败！', data=[])
+            return JsonResponse(retrunData)
         # 获取存储的session  template_list 根据前段传来的值判断取第几个模板
         if (int(template_index) >= len(request.session['template_list'])):
             retrunData = Utils.resultData(1, '该模板已被全部绑定！')
@@ -552,7 +555,7 @@ def drugPutInView(request):
             drugEntity.MedicamentId = drugId
             drugEntity.VarietyId = drugVariety.VarietyId
             # drugEntity.BarCode = barCode
-            drugEntity.BarCode =str(random.randint(10000000,99999999))
+            drugEntity.BarCode = str(random.randint(10000000, 99999999))
             drugEntity.CustomerId = customerId
             drugEntity.ClientId = clientEntity.ClientId
             drugEntity.ClientCode = clientEntity.ClientCode
@@ -566,8 +569,8 @@ def drugPutInView(request):
             drugEntity.ProductionDate = productionDate[:10]
             drugEntity.ShelfLife = int(drugInfo.get('ShelfLife') or '6000')
             drugEntity.ExpirationDate = (
-                        datetime.datetime.strptime(productionDate[:10], "%Y-%m-%d") + datetime.timedelta(
-                    days=drugEntity.ShelfLife)).strftime("%Y-%m-%d %H:%M:%S")
+                    datetime.datetime.strptime(productionDate[:10], "%Y-%m-%d") + datetime.timedelta(
+                days=drugEntity.ShelfLife)).strftime("%Y-%m-%d %H:%M:%S")
             drugEntity.InventoryWarningValue = 10
             drugEntity.ShelfLifeWarningValue = 10
             drugEntity.UseDaysWarningValue = 10
@@ -593,11 +596,12 @@ def drugPutInView(request):
             drugEntity.Status = DrugStatus.Normal
 
             client_obj = BllClient().findEntity(clientId)
-            datalist = BllMedicament().get_boxlist(clientId,type='up',num=1)
+            datalist = BllMedicament().get_boxlist(clientId, type='up', num=1)
             if datalist != False:
                 BllMedicament().drugPutIn(drugEntity, clientEntity, BllUser().findEntity(userInfo.get('UserId')))
-                AccuLockTcpServer.Data={"terminal":client_obj.ClientName,"mes":'lighton'+'~'.join(datalist)}
-                print('入库亮灯:','lighton'+"~".join(datalist))
+                AccuLockTcpServer.lig_list[client_obj.ClientName].extend(datalist)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lig~' + '~'.join(
+                    AccuLockTcpServer.lig_list[client_obj.ClientName]) + '~'}
                 retrunData = Utils.resultData(0, '试剂入库成功！', data=datalist[0])
             else:
                 retrunData = Utils.resultData(1, '柜子已满！', data=[])
@@ -618,16 +622,20 @@ def drugUseView(request):
         retrunData = ''
         userInfo = request.session['login_user']
         try:
-            re={"terminal":'',"result":[]}
+            re = {"terminal": '', "result": []}
             for drugId in drugIdList:
                 drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
                 client_obj = BllClient().findEntity(drugEntity.ClientId)
+                if (60 - len(set(AccuLockTcpServer.lig_list[client_obj.ClientName]))) < len(drugIdList):
+                    re["terminal"] = client_obj.ClientName
+                    retrunData = Utils.resultData(1, '柜子最多亮灯60，请刷新后重新领用！', data=re)
+                    return JsonResponse(retrunData)
                 # if (drugEntity.Status != DrugStatus.Normal and drugEntity.Status != DrugStatus.Empty and drugEntity.Place !=''):
                 #     continue
                 # elif (drugEntity.Status == DrugStatus.Empty and drugEntity.Place !=''):
                 #     continue
 
-                if drugEntity.Place !='':
+                if drugEntity.Place != '':
                     try:
                         customerId = drugEntity.CustomerId
                         clientId = drugEntity.ClientId
@@ -638,15 +646,18 @@ def drugUseView(request):
                         drugEntity.Status = DrugStatus.Out
                         BllMedicament().drugUse(drugEntity, BllClient().findEntity(clientId),
                                                 BllUser().findEntity(userInfo.get('UserId')))
-                        re["result"].append({"Name":drugEntity.Name,"Place":drugEntity.Place,"EnglishName":drugEntity.EnglishName,"CASNumber":drugEntity.CASNumber,"BarCode":drugEntity.BarCode,"Remain":drugEntity.Remain})
+                        re["result"].append(
+                            {"Name": drugEntity.Name, "Place": drugEntity.Place, "EnglishName": drugEntity.EnglishName,
+                             "CASNumber": drugEntity.CASNumber, "BarCode": drugEntity.BarCode,
+                             "Remain": drugEntity.Remain})
                     except Exception as e:
                         print(e)
             if re["result"]:
-                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + '~'.join([i["Place"] for i in re["result"]])}
-
-                print('领用亮灯:', 'lighton' + "~".join([i["Place"] for i in re["result"]]))
-                re["terminal"] =client_obj.ClientName
-                retrunData = Utils.resultData(0, '试剂领用成功！',re)
+                datalist = [i["Place"] for i in re["result"]]
+                AccuLockTcpServer.lig_list[client_obj.ClientName].extend(datalist)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lig~' + '~'.join(datalist) + '~'}
+                re["terminal"] = client_obj.ClientName
+                retrunData = Utils.resultData(0, '试剂领用成功！', re)
             else:
                 retrunData = Utils.resultData(1, '试剂领用失败！', re)
 
@@ -671,13 +682,17 @@ def drugReturnView(request):
             client_obj = BllClient().findEntity(drugEntity.ClientId)
             null_place = BllMedicament().get_boxlist(drugEntity.ClientId, type='back', num=len(drugIdList))
             if null_place == False:
-                retrunData = Utils.resultData(1, '柜子余位不足！', data={"terminal":client_obj.ClientName,"result":[]})
+                retrunData = Utils.resultData(1, '柜子余位不足！', data={"terminal": client_obj.ClientName, "result": []})
                 return JsonResponse(retrunData)
         try:
-            re={"terminal":'',"result":[]}
+            re = {"terminal": '', "result": []}
             for drugId in drugIdList:
                 drugEntity = BllMedicament().findEntity(EntityMedicament.MedicamentId == drugId)
                 client_obj = BllClient().findEntity(drugEntity.ClientId)
+                if (60 - len(set(AccuLockTcpServer.lig_list[client_obj.ClientName]))) < len(drugIdList):
+                    re["terminal"] = client_obj.ClientName
+                    retrunData = Utils.resultData(1, '柜子最多亮灯60，请刷新后重新选择归还！', data=re)
+                    return JsonResponse(retrunData)
                 if (drugEntity is None):
                     retrunData = Utils.resultData(1, '药剂条码无效！')
                 elif (drugEntity.Status != DrugStatus.Out):
@@ -698,14 +713,14 @@ def drugReturnView(request):
                     except Exception as e:
                         print(e)
 
-            null_place = BllMedicament().get_boxlist(clientId, type='back',num =len(re["result"]))
+            null_place = BllMedicament().get_boxlist(clientId, type='back', num=len(re["result"]))
             if null_place != False:
                 for i in range(len(null_place)):
-                    re["result"][i]["Place"] =null_place[i]
-                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lighton' + '~'.join(null_place)}
-                print('归还亮灯:', 'lighton' + "~".join(null_place))
+                    re["result"][i]["Place"] = null_place[i]
+                AccuLockTcpServer.lig_list[client_obj.ClientName].extend(null_place)
+                AccuLockTcpServer.Data = {"terminal": client_obj.ClientName, "mes": 'lig~' + '~'.join(null_place) + '~'}
                 re["terminal"] = client_obj.ClientName
-                retrunData = Utils.resultData(0, '试剂归还成功！',data=re)
+                retrunData = Utils.resultData(0, '试剂归还成功！', data=re)
             else:
                 retrunData = Utils.resultData(1, '柜子已满！', data=re)
 
