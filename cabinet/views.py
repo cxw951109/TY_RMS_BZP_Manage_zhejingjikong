@@ -128,26 +128,25 @@ def lockCabinet(request):
                         # client_obj.IsEnabled = 1
                         AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
                                                   "mes": 'gio1on'}
-                    n = 0
                     result = False
                     time.sleep(3)
                     re = BllClient().findEntity(clientId)
                     if re.IsEnabled != client_obj.IsEnabled:
                         result = True
-                        if re.IsEnabled == 1:
-                            AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
-                                                      "mes": 'gio2on'}
-                        else:
-                            AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
-                                                      "mes": 'gio2off'}
+                        # if re.IsEnabled == 1:
+                        #     AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                        #                               "mes": 'gio2on'}
+                        # else:
+                        #     AccuLockTcpServer.Data = {"terminal": client_obj.ClientName,
+                        #                               "mes": 'gio2off'}
 
                     if result:
                         # BllClient().update(client_obj)
                         return JsonResponse(Utils.resultData('1', '成功'))
                     else:
-                        return JsonResponse(Utils.resultData('0', '解锁失败！'))
+                        return JsonResponse(Utils.resultData('0', '失败！'))
                 except:
-                    return JsonResponse(Utils.resultData('0', '解锁失败！'))
+                    return JsonResponse(Utils.resultData('0', '失败！'))
             else:
                 return JsonResponse(Utils.resultData('0', '请选中客户端Id'))
     except Exception as e:
